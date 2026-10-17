@@ -27,6 +27,15 @@
   --ok-soft: #ddefe2;
   --fel: #b4432f;
   --fel-soft: #f6e0da;
+  --c-lyssna: #2b6cb0; --c-lyssna-soft: #e1ecf8;
+  --c-aha: #c98a0c; --c-aha-soft: #fbf0d4;
+  --c-testa: #2f855a; --c-testa-soft: #dcf0e4;
+  --c-saga: #d0583a; --c-saga-soft: #fae3dc;
+  --c-ord: #7556c2; --c-ord-soft: #ebe5f8;
+  --g-en: #1d63c9; --g-ett: #c4470f;
+  --o-verb: #c53030; --o-subst: #1d63c9; --o-adj: #2f855a; --o-pron: #7556c2;
+  --p-erik: #0e7c7b; --p-karin: #b83280; --p-kassoren: #64748b; --p-elsa: #b7791f; --p-olle: #4c51bf;
+  --k1: #4c51bf; --k2: #2f855a;
   --radius: 16px;
   --serif: "Fraunces", Georgia, serif;
   --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -36,12 +45,24 @@
     --paper: #15171b; --card: #1e2127; --ink: #ecebe7; --muted: #a3a6ad; --line: #32363e;
     --accent: #84b3e2; --accent-ink: #0f1a26; --accent-soft: #1f3044;
     --sun: #f0c460; --sun-soft: #3a3020; --ok: #6fc28c; --ok-soft: #1d3326; --fel: #e48a76; --fel-soft: #3d231e;
+    --c-lyssna: #7fb2ea; --c-lyssna-soft: #1e2f44; --c-aha: #f0c460; --c-aha-soft: #3a3020; --c-testa: #6fc28c; --c-testa-soft: #1d3326;
+    --c-saga: #f0907a; --c-saga-soft: #40261f; --c-ord: #b39cf0; --c-ord-soft: #2c2541;
+    --g-en: #7cb4f5; --g-ett: #f5a06b;
+    --o-verb: #f28b8b; --o-subst: #7cb4f5; --o-adj: #6fc28c; --o-pron: #b39cf0;
+    --p-erik: #4fd1c5; --p-karin: #f08fc4; --p-kassoren: #a0aec0; --p-elsa: #f6c26b; --p-olle: #a3a8f5;
+    --k1: #a3a8f5; --k2: #6fc28c;
   }
 }
 :root[data-theme="dark"] {
   --paper: #15171b; --card: #1e2127; --ink: #ecebe7; --muted: #a3a6ad; --line: #32363e;
   --accent: #84b3e2; --accent-ink: #0f1a26; --accent-soft: #1f3044;
   --sun: #f0c460; --sun-soft: #3a3020; --ok: #6fc28c; --ok-soft: #1d3326; --fel: #e48a76; --fel-soft: #3d231e;
+  --c-lyssna: #7fb2ea; --c-lyssna-soft: #1e2f44; --c-aha: #f0c460; --c-aha-soft: #3a3020; --c-testa: #6fc28c; --c-testa-soft: #1d3326;
+  --c-saga: #f0907a; --c-saga-soft: #40261f; --c-ord: #b39cf0; --c-ord-soft: #2c2541;
+  --g-en: #7cb4f5; --g-ett: #f5a06b;
+  --o-verb: #f28b8b; --o-subst: #7cb4f5; --o-adj: #6fc28c; --o-pron: #b39cf0;
+  --p-erik: #4fd1c5; --p-karin: #f08fc4; --p-kassoren: #a0aec0; --p-elsa: #f6c26b; --p-olle: #a3a8f5;
+  --k1: #a3a8f5; --k2: #6fc28c;
 }
 
 * { box-sizing: border-box; }
@@ -249,6 +270,41 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
 .kanlista li.pa .kanbock { background: var(--ok); border-color: var(--ok); color: #fff; }
 .kan-en { font-weight: 600; }
 .kanlista .sv { font-size: 1.15rem; margin: 2px 0 0; }
+
+/* Färger: stegets delar, en/ett eller ordklass, personer, kapitel */
+[data-del="lyssna"] { --c: var(--c-lyssna); --c-soft: var(--c-lyssna-soft); }
+[data-del="aha"] { --c: var(--c-aha); --c-soft: var(--c-aha-soft); }
+[data-del="testa"] { --c: var(--c-testa); --c-soft: var(--c-testa-soft); }
+[data-del="saga"] { --c: var(--c-saga); --c-soft: var(--c-saga-soft); }
+[data-del="ord"] { --c: var(--c-ord); --c-soft: var(--c-ord-soft); }
+.del[data-del] { border-top: 5px solid var(--c); }
+.del[data-del] .del-huvud .nr { background: var(--c-soft); color: var(--c); }
+.del[data-del].aha .del-huvud .nr { background: var(--card); }
+.del[data-del].klar .del-huvud .nr { background: var(--c); color: var(--card); font-size: 0; }
+.del[data-del].klar .del-huvud .nr::after { content: '✓'; font-size: 1rem; }
+.delnav button[data-del] { border-color: var(--c-soft); color: var(--c); }
+.delnav button[data-del].pa { background: var(--c-soft); border-color: var(--c); }
+.delnav button[data-del].pa::after { content: ' ✓'; }
+.genus-pa .g-en { --f: var(--g-en); } .genus-pa .g-ett { --f: var(--g-ett); }
+.klass-pa .k-v { --f: var(--o-verb); } .klass-pa .k-s { --f: var(--o-subst); }
+.klass-pa .k-a { --f: var(--o-adj); } .klass-pa .k-p { --f: var(--o-pron); }
+.genus-pa :is(.g-en, .g-ett), .klass-pa :is(.k-v, .k-s, .k-a, .k-p) { color: var(--f); }
+.genus-pa button.ord:is(.g-en, .g-ett), .klass-pa button.ord:is(.k-v, .k-s, .k-a, .k-p) { border-bottom-color: var(--f); }
+.fargvaxel .lbl { padding: 0 4px 0 12px; font-size: .78rem; font-weight: 600; color: var(--muted); align-self: center; }
+.fargvaxel { align-items: center; }
+.fargvaxel .lag-genus .g-en { color: var(--g-en); } .fargvaxel .lag-genus .g-ett { color: var(--g-ett); }
+.fargvaxel .lag-klass .k-v { color: var(--o-verb); } .fargvaxel .lag-klass .k-s { color: var(--o-subst); }
+.farg-forklaring { display: none; font-size: .85rem; color: var(--muted); margin: 0 0 8px; }
+.genus-pa .farg-forklaring.genus, .klass-pa .farg-forklaring.klass { display: block; }
+.p-erik { --p: var(--p-erik); } .p-karin { --p: var(--p-karin); } .p-kassoren { --p: var(--p-kassoren); }
+.p-elsa { --p: var(--p-elsa); } .p-olle { --p: var(--p-olle); }
+.mening.tal { box-shadow: inset 4px 0 0 var(--p, var(--accent)); padding-left: 14px; }
+.mening.tal .vem { color: var(--p, var(--accent)); }
+.kap-1 { --kap: var(--k1); } .kap-2 { --kap: var(--k2); }
+.kapfarg { color: var(--kap); }
+.kort.kapitel { border-top: 5px solid var(--kap); }
+.kort.kapitel .stapel i { background: var(--kap); }
+.nav-kap h3 span { color: var(--kap, var(--accent)); }
 
 /* Feedback */
 .fb-knapp { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 15; border: 0; border-radius: 999px;
@@ -737,7 +793,7 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
      ],
      "aha": {
       "rubrik": "En or ett? Every noun has a team",
-      "html": "<p>Every Swedish noun belongs to one of two teams: <b>en</b> or <b>ett</b>. Both mean “a/an”.</p><table class='par'><tr><td>en banan</td><td>a banana</td></tr><tr><td>en glass</td><td>an ice cream</td></tr><tr><td>en påse</td><td>a bag</td></tr><tr><td>ett äpple</td><td>an apple</td></tr><tr><td>ett barn</td><td>a child</td></tr></table><p>There is usually no logic to it, so learn every new word <b>together with</b> en or ett, like a first name and a surname. That is why your word bank says <i>en lägenhet</i>, not just <i>lägenhet</i>.</p><p class='tips'>Tip: about three out of four nouns are en-words. If you have to guess, guess <i>en</i>.</p><p class='bonus'><b>Careful:</b> <i>en glass</i> is an ice cream. A drinking glass is <i>ett glas</i>, with a long a. One extra s changes everything!</p>"
+      "html": "<p>Every Swedish noun belongs to one of two teams: <b><span class='g-en'>en</span></b> or <b><span class='g-ett'>ett</span></b>. Both mean “a/an”.</p><table class='par'><tr><td><span class='g-en'>en</span> banan</td><td>a banana</td></tr><tr><td><span class='g-en'>en</span> glass</td><td>an ice cream</td></tr><tr><td><span class='g-en'>en</span> påse</td><td>a bag</td></tr><tr><td><span class='g-ett'>ett</span> äpple</td><td>an apple</td></tr><tr><td><span class='g-ett'>ett</span> barn</td><td>a child</td></tr></table><p>There is usually no logic to it, so learn every new word <b>together with</b> en or ett, like a first name and a surname. That is why your word bank says <i>en lägenhet</i>, not just <i>lägenhet</i>.</p><p class='tips'>Tip: about three out of four nouns are en-words. If you have to guess, guess <i>en</i>.</p><p class='bonus'><b>Careful:</b> <i>en glass</i> is an ice cream. A drinking glass is <i>ett glas</i>, with a long a. One extra s changes everything!</p>"
      },
      "testa": [
       {
@@ -1008,7 +1064,7 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
      ],
      "aha": {
       "rubrik": "Fika, and a look back",
-      "html": "<p><b>Fika</b> is one of the most Swedish words there is. It means having coffee (or tea) with something sweet, and above all taking a break to talk. Fika is both a verb and a noun:</p><table class='par'><tr><td>Ska vi fika?</td><td>Shall we have a fika?</td></tr><tr><td>en fika</td><td>a coffee break</td></tr></table><p>At many workplaces fika is at fixed times, and saying yes is a good way to get to know people.</p><p><b>Look back at chapter 1.</b> You have already met:</p><ul><li>the verb in place two: <i>I trappan <b>träffar</b> han Karin.</i></li><li>en and ett: <i>en banan, ett äpple</i></li><li>numbers and prices: <i>Det blir sextiofem kronor.</i></li><li>gärna and tack: <i>Ja, gärna! Nej tack.</i></li></ul>"
+      "html": "<p><b>Fika</b> is one of the most Swedish words there is. It means having coffee (or tea) with something sweet, and above all taking a break to talk. Fika is both a verb and a noun:</p><table class='par'><tr><td>Ska vi fika?</td><td>Shall we have a fika?</td></tr><tr><td>en fika</td><td>a coffee break</td></tr></table><p>At many workplaces fika is at fixed times, and saying yes is a good way to get to know people.</p><p><b>Look back at chapter 1.</b> You have already met:</p><ul><li>the verb in place two: <i>I trappan <b>träffar</b> han Karin.</i></li><li>en and ett: <i><span class='g-en'>en</span> banan, <span class='g-ett'>ett</span> äpple</i></li><li>numbers and prices: <i>Det blir sextiofem kronor.</i></li><li>gärna and tack: <i>Ja, gärna! Nej tack.</i></li></ul>"
      },
      "testa": [
       {
@@ -1157,10 +1213,12 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
   },
   "jag": {
    "en": "I",
-   "uttal": "often said “ja”"
+   "uttal": "often said “ja”",
+   "klass": "p"
   },
   "heter": {
-   "en": "is called, am called"
+   "en": "is called, am called",
+   "klass": "v"
   },
   "erik": {
    "en": "Erik (a name)"
@@ -1172,7 +1230,8 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
    "en": "Olle (a name)"
   },
   "bor": {
-   "en": "live, lives"
+   "en": "live, lives",
+   "klass": "v"
   },
   "i": {
    "en": "in"
@@ -1181,35 +1240,46 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
    "en": "Sweden"
   },
   "en": {
-   "en": "a, an (for en-words)"
+   "en": "a, an (for en-words)",
+   "genus": "en"
   },
   "lägenhet": {
-   "en": "apartment, flat"
+   "en": "apartment, flat",
+   "genus": "en",
+   "klass": "s"
   },
   "har": {
-   "en": "have, has"
+   "en": "have, has",
+   "klass": "v"
   },
   "två": {
    "en": "two"
   },
   "barn": {
-   "en": "child, children (the same word!)"
+   "en": "child, children (the same word!)",
+   "genus": "ett",
+   "klass": "s"
   },
   "barnen": {
-   "en": "the children"
+   "en": "the children",
+   "genus": "ett",
+   "klass": "s"
   },
   "dricker": {
-   "en": "drink, drinks"
+   "en": "drink, drinks",
+   "klass": "v"
   },
   "mycket": {
    "en": "a lot, much"
   },
   "kaffe": {
-   "en": "coffee"
+   "en": "coffee",
+   "klass": "s"
   },
   "de": {
    "en": "they",
-   "uttal": "said “dom”"
+   "uttal": "said “dom”",
+   "klass": "p"
   },
   "och": {
    "en": "and",
@@ -1217,14 +1287,17 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
   },
   "är": {
    "en": "am, is, are",
-   "uttal": "said “e”"
+   "uttal": "said “e”",
+   "klass": "v"
   },
   "sju": {
    "en": "seven",
    "uttal": "the sj-sound, like a soft “hw”"
   },
   "år": {
-   "en": "year, years"
+   "en": "year, years",
+   "genus": "ett",
+   "klass": "s"
   },
   "fyra": {
    "en": "four"
@@ -1233,35 +1306,48 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
    "en": "on, at · på morgonen = in the morning"
   },
   "morgonen": {
-   "en": "the morning"
+   "en": "the morning",
+   "genus": "en",
+   "klass": "s"
   },
   "äter": {
-   "en": "eat, eats"
+   "en": "eat, eats",
+   "klass": "v"
   },
   "frukost": {
-   "en": "breakfast"
+   "en": "breakfast",
+   "genus": "en",
+   "klass": "s"
   },
   "vad": {
-   "en": "what"
+   "en": "what",
+   "klass": "p"
   },
   "det": {
    "en": "it",
-   "uttal": "often said “de”"
+   "uttal": "often said “de”",
+   "klass": "p"
   },
   "knackar": {
-   "en": "knocks"
+   "en": "knocks",
+   "klass": "v"
   },
   "dörren": {
-   "en": "the door"
+   "en": "the door",
+   "genus": "en",
+   "klass": "s"
   },
   "vem": {
-   "en": "who"
+   "en": "who",
+   "klass": "p"
   },
   "kan": {
-   "en": "can"
+   "en": "can",
+   "klass": "v"
   },
   "vara": {
-   "en": "be"
+   "en": "be",
+   "klass": "v"
   },
   "karin": {
    "en": "Karin (a name)"
@@ -1273,28 +1359,35 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
    "en": "next to"
   },
   "ny": {
-   "en": "new"
+   "en": "new",
+   "klass": "a"
   },
   "trevligt": {
-   "en": "nice · Trevligt att träffas! = Nice to meet you!"
+   "en": "nice · Trevligt att träffas! = Nice to meet you!",
+   "klass": "a"
   },
   "att": {
    "en": "to (also: that)"
   },
   "träffas": {
-   "en": "meet (each other)"
+   "en": "meet (each other)",
+   "klass": "v"
   },
   "detsamma": {
-   "en": "likewise, the same to you"
+   "en": "likewise, the same to you",
+   "klass": "p"
   },
   "vill": {
-   "en": "want, want to"
+   "en": "want, want to",
+   "klass": "v"
   },
   "du": {
-   "en": "you"
+   "en": "you",
+   "klass": "p"
   },
   "ha": {
-   "en": "have · Vill du ha …? = Would you like …?"
+   "en": "have · Vill du ha …? = Would you like …?",
+   "klass": "v"
   },
   "ja": {
    "en": "yes"
@@ -1307,59 +1400,85 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
    "en": "but"
   },
   "ingen": {
-   "en": "no, not any"
+   "en": "no, not any",
+   "klass": "p"
   },
   "mjölk": {
-   "en": "milk"
+   "en": "milk",
+   "genus": "en",
+   "klass": "s"
   },
   "går": {
-   "en": "go, goes, walk"
+   "en": "go, goes, walk",
+   "klass": "v"
   },
   "till": {
    "en": "to, for"
   },
   "affären": {
-   "en": "the shop (en affär)"
+   "en": "the shop (en affär)",
+   "genus": "en",
+   "klass": "s"
   },
   "han": {
-   "en": "he"
+   "en": "he",
+   "klass": "p"
   },
   "köper": {
    "en": "buy, buys",
-   "uttal": "k before ö becomes the soft tj-sound: “tjöper”"
+   "uttal": "k before ö becomes the soft tj-sound: “tjöper”",
+   "klass": "v"
   },
   "bröd": {
-   "en": "bread"
+   "en": "bread",
+   "genus": "ett",
+   "klass": "s"
   },
   "tar": {
-   "en": "take, takes"
+   "en": "take, takes",
+   "klass": "v"
   },
   "banan": {
-   "en": "banana"
+   "en": "banana",
+   "genus": "en",
+   "klass": "s"
   },
   "ett": {
-   "en": "a, an (for ett-words)"
+   "en": "a, an (for ett-words)",
+   "genus": "ett"
   },
   "äpple": {
-   "en": "apple"
+   "en": "apple",
+   "genus": "ett",
+   "klass": "s"
   },
   "äpplet": {
-   "en": "the apple"
+   "en": "the apple",
+   "genus": "ett",
+   "klass": "s"
   },
   "också": {
    "en": "also, too"
   },
   "glass": {
-   "en": "ice cream (not a drinking glass!)"
+   "en": "ice cream (not a drinking glass!)",
+   "genus": "en",
+   "klass": "s"
   },
   "glassen": {
-   "en": "the ice cream"
+   "en": "the ice cream",
+   "genus": "en",
+   "klass": "s"
   },
   "kassören": {
-   "en": "the cashier"
+   "en": "the cashier",
+   "genus": "en",
+   "klass": "s"
   },
   "påse": {
-   "en": "bag"
+   "en": "bag",
+   "genus": "en",
+   "klass": "s"
   },
   "nej": {
    "en": "no"
@@ -1368,39 +1487,48 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
    "en": "thanks · Nej tack = No, thank you"
   },
   "den": {
-   "en": "it (for en-words)"
+   "en": "it (for en-words)",
+   "klass": "p"
   },
   "kostar": {
-   "en": "cost, costs"
+   "en": "cost, costs",
+   "klass": "v"
   },
   "tjugo": {
    "en": "twenty",
    "uttal": "starts with the soft tj-sound"
   },
   "kronor": {
-   "en": "kronor, Swedish money (en krona)"
+   "en": "kronor, Swedish money (en krona)",
+   "genus": "en",
+   "klass": "s"
   },
   "fem": {
    "en": "five"
   },
   "blir": {
-   "en": "becomes · Det blir … = That will be …"
+   "en": "becomes · Det blir … = That will be …",
+   "klass": "v"
   },
   "sextiofem": {
    "en": "sixty-five"
   },
   "ursäkta": {
    "en": "excuse me",
-   "uttal": "rs sounds like “sh”: “u-shäkta”"
+   "uttal": "rs sounds like “sh”: “u-shäkta”",
+   "klass": "v"
   },
   "betala": {
-   "en": "pay"
+   "en": "pay",
+   "klass": "v"
   },
   "med": {
    "en": "with · med kort = by card"
   },
   "kort": {
-   "en": "card"
+   "en": "card",
+   "genus": "ett",
+   "klass": "s"
   },
   "självklart": {
    "en": "of course",
@@ -1410,47 +1538,90 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
    "en": "at home"
   },
   "väntar": {
-   "en": "wait, waits"
+   "en": "wait, waits",
+   "klass": "v"
   },
   "morgon": {
-   "en": "morning"
+   "en": "morning",
+   "genus": "en",
+   "klass": "s"
   },
   "sedan": {
    "en": "then, after that",
    "uttal": "often said “sen”"
   },
   "skolan": {
-   "en": "the school (en skola)"
+   "en": "the school (en skola)",
+   "genus": "en",
+   "klass": "s"
   },
   "förskolan": {
-   "en": "the preschool (en förskola)"
+   "en": "the preschool (en förskola)",
+   "genus": "en",
+   "klass": "s"
   },
   "trappan": {
-   "en": "the stairs (en trappa) · i trappan = on the stairs"
+   "en": "the stairs (en trappa) · i trappan = on the stairs",
+   "genus": "en",
+   "klass": "s"
   },
   "träffar": {
-   "en": "meet, meets"
+   "en": "meet, meets",
+   "klass": "v"
   },
   "ska": {
-   "en": "shall, will · Ska vi …? = Shall we …?"
+   "en": "shall, will · Ska vi …? = Shall we …?",
+   "klass": "v"
   },
   "vi": {
-   "en": "we"
+   "en": "we",
+   "klass": "p"
   },
   "fika": {
-   "en": "have coffee and something sweet, take a break"
+   "en": "have coffee and something sweet, take a break",
+   "klass": "v"
   },
   "nästa": {
-   "en": "next"
+   "en": "next",
+   "klass": "a"
   },
   "kapitel": {
-   "en": "chapter"
+   "en": "chapter",
+   "genus": "ett",
+   "klass": "s"
   },
   "visar": {
-   "en": "show, shows"
+   "en": "show, shows",
+   "klass": "v"
   },
   "sin": {
-   "en": "her, his (own)"
+   "en": "her, his (own)",
+   "klass": "p"
+  },
+  "affär": {
+   "en": "shop",
+   "genus": "en",
+   "klass": "s"
+  },
+  "krona": {
+   "en": "krona (Swedish money)",
+   "genus": "en",
+   "klass": "s"
+  },
+  "skola": {
+   "en": "school",
+   "genus": "en",
+   "klass": "s"
+  },
+  "förskola": {
+   "en": "preschool",
+   "genus": "en",
+   "klass": "s"
+  },
+  "trappa": {
+   "en": "staircase",
+   "genus": "en",
+   "klass": "s"
   }
  }
 }
@@ -1467,7 +1638,7 @@ const INTERVALL = [0, 1, 3, 7, 14, 30]; // dagar till nästa ordrunda, per fack
 const PLAY = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1.5v13l11-6.5z" fill="currentColor"/></svg>';
 
 // ---------- Sparat läge (bara i den här webbläsaren) ----------
-function tomt() { return { steg: {}, ord: {}, visaEn: false, fart: 'normal', sett: false }; }
+function tomt() { return { steg: {}, ord: {}, visaEn: false, fart: 'normal', sett: false, farg: 'klass' }; }
 function las() {
   try {
     const s = JSON.parse(localStorage.getItem(NYCKEL));
@@ -1581,13 +1752,44 @@ function rostInfo() {
     h('p', { class: 'liten' }, 'Everything else works without sound.'));
 }
 
+// ---------- Färger: en/ett eller ordklass, och personer ----------
+const FARGLAGEN = [['av', 'Av'], ['genus', 'en · ett'], ['klass', 'Ordklass']];
+function ordKlasser(ord) {
+  const o = DATA.ordlista[ord.toLowerCase()] || {};
+  return (o.genus ? ' g-' + o.genus : '') + (o.klass ? ' k-' + o.klass : '');
+}
+const personKlass = namn => ' tal p-' + namn.toLowerCase().replace(/å|ä/g, 'a').replace(/ö/g, 'o');
+function farga(text) {
+  return text.split(/([A-Za-zÅÄÖåäöÉé]+)/).filter(Boolean).map(bit => {
+    const k = /[A-Za-zÅÄÖåäö]/.test(bit) && ordKlasser(bit);
+    return k ? h('span', { class: k.trim() }, bit) : bit;
+  });
+}
+function sattFarglage(lage) {
+  S.farg = lage; spara();
+  document.body.classList.toggle('genus-pa', lage === 'genus');
+  document.body.classList.toggle('klass-pa', lage === 'klass');
+  document.querySelectorAll('[data-farglage]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.farglage === lage)));
+}
+function fargKnapp() {
+  const etikett = (lage, text) => lage === 'genus' ? h('span', { class: 'lag-genus' }, h('span', { class: 'g-en' }, 'en'), ' · ', h('span', { class: 'g-ett' }, 'ett'))
+    : lage === 'klass' ? h('span', { class: 'lag-klass' }, h('span', { class: 'k-v' }, 'Ord'), h('span', { class: 'k-s' }, 'klass')) : text;
+  return h('div', { class: 'vaxel fargvaxel', role: 'group', 'aria-label': 'Färger' }, h('span', { class: 'lbl', 'aria-hidden': 'true' }, 'Färger'),
+    FARGLAGEN.map(([lage, text]) => h('button', { 'data-farglage': lage, 'aria-pressed': String((S.farg || 'klass') === lage), 'aria-label': text,
+      onclick: () => sattFarglage(lage) }, etikett(lage, text))));
+}
+const fargForklaring = () => [
+  h('p', { class: 'farg-forklaring genus', lang: 'en' }, 'Colours: ', h('b', { class: 'g-en' }, 'en-words'), ' and ', h('b', { class: 'g-ett' }, 'ett-words'), '.'),
+  h('p', { class: 'farg-forklaring klass', lang: 'en' }, 'Colours: ', h('b', { class: 'k-v' }, 'verbs'), ', ', h('b', { class: 'k-s' }, 'nouns'), ', ',
+    h('b', { class: 'k-a' }, 'adjectives'), ' and ', h('b', { class: 'k-p' }, 'pronouns'), ' (I, you, he …).')];
+
 // ---------- Ord att trycka på ----------
 function ordKnappar(text) {
   return text.split(/([A-Za-zÅÄÖåäöÉé]+)/).filter(Boolean).map(bit => {
     if (!/[A-Za-zÅÄÖåäö]/.test(bit)) return bit;
     const nyckel = bit.toLowerCase();
     if (!DATA.ordlista[nyckel]) return bit;
-    return h('button', { class: 'ord', type: 'button', onclick: e => { e.stopPropagation(); visaOrd(nyckel, bit); } }, bit);
+    return h('button', { class: 'ord' + ordKlasser(nyckel), type: 'button', onclick: e => { e.stopPropagation(); visaOrd(nyckel, bit); } }, bit);
   });
 }
 function visaOrd(nyckel, visad) {
@@ -1597,7 +1799,7 @@ function visaOrd(nyckel, visad) {
     h('div', { class: 'ordruta-inre' },
       h('button', { class: 'spela', 'aria-label': 'Lyssna', html: PLAY, onclick: () => spelaEn(visad.toLowerCase()) }),
       h('div', {},
-        h('div', { class: 'sv-ord', lang: 'sv' }, visad.toLowerCase()),
+        h('div', { class: 'sv-ord', lang: 'sv' }, farga(visad.toLowerCase())),
         h('div', { lang: 'en' }, o.en),
         o.uttal && h('div', { class: 'uttal', lang: 'en' }, 'Sound: ' + o.uttal)),
       h('button', { class: 'stang', 'aria-label': 'Stäng', onclick: stangOrd }, '×')));
@@ -1763,7 +1965,7 @@ function byggNav() {
     ...DATA.kapitel.map(kap => {
       const klara = kap.steg.filter(s => !s.kommer && stegKlart(s.id)).length;
       const allt = kap.steg.length > 0 && klara === kap.steg.length;
-      const d = h('details', { class: 'nav-kap' + (kap.kommer ? ' kommande' : '') + (allt ? ' allt-klart' : ''), open: !kap.kommer && !stangda.includes(kap.nr) },
+      const d = h('details', { class: `nav-kap kap-${kap.nr}` + (kap.kommer ? ' kommande' : '') + (allt ? ' allt-klart' : ''), open: !kap.kommer && !stangda.includes(kap.nr) },
         h('summary', {}, h('h3', {}, h('span', {}, `Kapitel ${kap.nr}`, h('em', {}, kap.kommer ? 'kommer snart' : `${klara}/${kap.steg.length}`)), kap.titel)),
         h('p', { lang: 'en' }, kap.en),
         kap.steg.map(s => {
@@ -1828,10 +2030,10 @@ function visaHem() {
       aterstall()));
 }
 function kapitelKort(kap, nasta) {
-  if (kap.kommer) return h('section', { class: 'kort kommande' },
+  if (kap.kommer) return h('section', { class: `kort kapitel kommande kap-${kap.nr}` },
     h('div', { class: 'kicker' }, `Kapitel ${kap.nr} · kommer snart`), h('h2', {}, kap.titel), h('p', { class: 'liten', lang: 'en' }, kap.en));
   const klara = kap.steg.filter(s => !s.kommer && stegKlart(s.id)).length;
-  return h('section', { class: 'kort' },
+  return h('section', { class: `kort kapitel kap-${kap.nr}` },
     h('div', { class: 'kapitel-huvud' },
       h('div', {}, h('div', { class: 'kicker' }, `Kapitel ${kap.nr}`), h('h2', {}, kap.titel)),
       h('span', { class: 'liten' }, `${klara}/${kap.steg.length}`)),
@@ -1866,7 +2068,7 @@ function visaSteg(steg) {
   fyll(app,
     h('section', { class: 'steghuvud' },
       h('a', { class: 'tillbaka', href: '#' }, '← Kartan'),
-      h('div', { class: 'kicker' }, `Kapitel ${steg.kapitel.nr} · Steg ${steg.nr}`),
+      h('div', { class: `kicker kapfarg kap-${steg.kapitel.nr}` }, `Kapitel ${steg.kapitel.nr} · Steg ${steg.nr}`),
       h('h1', {}, steg.titel),
       h('p', { class: 'en-titel', lang: 'en' }, steg.en),
       h('nav', { class: 'delnav', 'aria-label': 'Delar' }, DELAR.map((d, i) =>
@@ -1891,7 +2093,7 @@ function sektion(del, klass, ...barn) {
 }
 
 function delLyssna(steg) {
-  const rader = steg.meningar.map(m => h('li', { class: 'mening' },
+  const rader = steg.meningar.map(m => h('li', { class: 'mening' + (m.vem ? personKlass(m.vem) : '') },
     h('button', { class: 'spela', 'aria-label': 'Lyssna: ' + m.sv, html: PLAY, onclick: () => spelaEn(m.sv) }),
     h('div', {}, m.vem && h('div', { class: 'vem' }, m.vem), h('p', { class: 'sv', lang: 'sv' }, ordKnappar(m.sv)), h('p', { class: 'en', lang: 'en' }, m.en))));
   const markeraRad = i => rader.forEach((r, j) => r.classList.toggle('nu', i === j));
@@ -1911,7 +2113,8 @@ function delLyssna(steg) {
   } });
   return sektion('lyssna', '',
     delHuvud('lyssna', 1, 'Lyssna och läs', 'Listen and read. Tap a word to see what it means.'),
-    h('div', { class: 'reglage' }, allt, fart, enKnapp),
+    h('div', { class: 'reglage' }, allt, fart, enKnapp, fargKnapp()),
+    fargForklaring(),
     h('ol', { class: 'meningar' }, rader),
     h('div', { class: 'knappar' }, klarknapp(steg, 'lyssna', 'Jag har lyssnat och läst', 'Lyssnat')));
 }
@@ -2009,8 +2212,8 @@ function fraga(q, nasta) {
 }
 
 function delSaga(steg) {
-  const rader = steg.meningar.map(m => h('li', { class: 'mening' },
-    h('div', { style: 'flex:1' }, m.vem && h('div', { class: 'vem' }, m.vem), h('p', { class: 'sv', lang: 'sv' }, m.sv), h('p', { class: 'en', lang: 'en' }, m.en),
+  const rader = steg.meningar.map(m => h('li', { class: 'mening' + (m.vem ? personKlass(m.vem) : '') },
+    h('div', { style: 'flex:1' }, m.vem && h('div', { class: 'vem' }, m.vem), h('p', { class: 'sv', lang: 'sv' }, farga(m.sv)), h('p', { class: 'en', lang: 'en' }, m.en),
       h('div', { class: 'reglage', style: 'margin:8px 0 0' },
         h('button', { class: 'spela text', html: PLAY + 'Långsamt', onclick: () => spelaEn(m.sv, true) }),
         h('button', { class: 'spela text', html: PLAY + 'Normalt', onclick: () => spelaEn(m.sv, false) })))));
@@ -2034,7 +2237,7 @@ function delSaga(steg) {
 function delOrd(steg) {
   const lista = h('ul', { class: 'ordlista' }, steg.ord.map(o => h('li', {},
     h('button', { class: 'spela', 'aria-label': 'Lyssna: ' + o.sv, html: PLAY, onclick: () => spelaEn(o.sv) }),
-    h('div', {}, h('div', { class: 'sv-ord', lang: 'sv' }, o.sv), h('div', { class: 'en-ord', lang: 'en' }, o.en)))));
+    h('div', {}, h('div', { class: 'sv-ord', lang: 'sv' }, farga(o.sv)), h('div', { class: 'en-ord', lang: 'en' }, o.en)))));
   const knapp = h('button', { class: 'knapp', 'data-klarknapp': 'ord', 'data-text': `Spara i ordbanken (+${steg.ord.length} ord)`, 'data-klartext': 'Sparade i ordbanken',
     onclick: () => {
       for (const o of steg.ord) if (!S.ord[o.sv]) S.ord[o.sv] = { en: o.en, fack: 0, due: Date.now() };
@@ -2070,7 +2273,7 @@ function visaKan(kap) {
   }));
   fyll(app,
     h('section', { class: 'steghuvud' }, h('a', { class: 'tillbaka', href: '#' }, '← Kartan'),
-      h('div', { class: 'kicker' }, `Kapitel ${kap.nr} · ${kap.titel}`),
+      h('div', { class: `kicker kapfarg kap-${kap.nr}` }, `Kapitel ${kap.nr} · ${kap.titel}`),
       h('h1', {}, 'Nu kan du …'),
       h('p', { class: 'en-titel', lang: 'en' }, 'Read each sentence aloud. Tick it when you feel you could do it in real life.')),
     rostInfo(),
@@ -2084,12 +2287,13 @@ function visaOrdbank() {
   const vantar = ordSomVantar().length;
   fyll(app,
     h('section', { class: 'steghuvud' }, h('a', { class: 'tillbaka', href: '#' }, '← Kartan'),
-      h('h1', {}, 'Ordbanken'), h('p', { class: 'en-titel', lang: 'en' }, `${ord.length} words so far. The dots show how well each word sits.`)),
+      h('h1', {}, 'Ordbanken'), h('p', { class: 'en-titel', lang: 'en' }, `${ord.length} words so far. The dots show how well each word sits.`),
+      h('div', { class: 'reglage' }, fargKnapp()), fargForklaring()),
     vantar ? h('a', { class: 'knapp primar bred', href: '#runda' }, `Ordrunda: ${vantar} ord väntar`)
       : h('p', { class: 'liten', lang: 'en' }, ord.length ? 'No words to review right now. They will come back in a few days.' : 'Finish the “Nya ord” part of a step to fill your word bank.'),
     ord.length ? h('section', { class: 'kort' }, h('ul', { class: 'ordlista' }, ord.map(([sv, o]) => h('li', {},
       h('button', { class: 'spela', 'aria-label': 'Lyssna: ' + sv, html: PLAY, onclick: () => spelaEn(sv) }),
-      h('div', {}, h('div', { class: 'sv-ord', lang: 'sv' }, sv), h('div', { class: 'en-ord', lang: 'en' }, o.en)),
+      h('div', {}, h('div', { class: 'sv-ord', lang: 'sv' }, farga(sv)), h('div', { class: 'en-ord', lang: 'en' }, o.en)),
       h('span', { class: 'prickar fack', 'aria-label': `nivå ${o.fack} av 5` }, [1, 2, 3, 4, 5].map(n => h('span', { class: o.fack >= n ? 'pa' : '' }))))))) : null);
 }
 function visaRunda() {
@@ -2125,7 +2329,7 @@ function visaRunda() {
     } }, 'Visa svaret');
     knappar.append(visa);
     yta.replaceChildren(h('div', { class: 'raknare' }, `${klara + 1} av ${totalt}`),
-      h('div', { class: 'sv-ord', lang: 'sv' }, sv),
+      h('div', { class: 'sv-ord', lang: 'sv' }, farga(sv)),
       h('button', { class: 'spela', 'aria-label': 'Lyssna', html: PLAY, onclick: () => spelaEn(sv) }),
       svar, knappar);
     spelaEn(sv);
@@ -2139,6 +2343,8 @@ function rita() {
   const app = document.getElementById('app');
   app.replaceChildren();
   app.classList.remove('visa-en');
+  document.body.classList.toggle('genus-pa', S.farg === 'genus');
+  document.body.classList.toggle('klass-pa', (S.farg || 'klass') === 'klass');
   const vag = location.hash.replace(/^#/, '');
   const steg = vag.startsWith('steg/') && hittaSteg(vag.slice(5));
   if (steg && !steg.kommer) visaSteg(steg);
