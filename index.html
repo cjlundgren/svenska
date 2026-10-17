@@ -35,7 +35,7 @@
   --g-en: #1d63c9; --g-ett: #c4470f;
   --o-verb: #c53030; --o-subst: #1d63c9; --o-adj: #2f855a; --o-pron: #7556c2;
   --p-erik: #0e7c7b; --p-karin: #b83280; --p-kassoren: #64748b; --p-elsa: #b7791f; --p-olle: #4c51bf;
-  --k1: #4c51bf; --k2: #2f855a;
+  --k1: #4c51bf; --k2: #2f855a; --k3: #b7791f;
   --radius: 16px;
   --serif: "Fraunces", Georgia, serif;
   --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -50,7 +50,7 @@
     --g-en: #7cb4f5; --g-ett: #f5a06b;
     --o-verb: #f28b8b; --o-subst: #7cb4f5; --o-adj: #6fc28c; --o-pron: #b39cf0;
     --p-erik: #4fd1c5; --p-karin: #f08fc4; --p-kassoren: #a0aec0; --p-elsa: #f6c26b; --p-olle: #a3a8f5;
-    --k1: #a3a8f5; --k2: #6fc28c;
+    --k1: #a3a8f5; --k2: #6fc28c; --k3: #f6c26b;
   }
 }
 :root[data-theme="dark"] {
@@ -62,7 +62,7 @@
   --g-en: #7cb4f5; --g-ett: #f5a06b;
   --o-verb: #f28b8b; --o-subst: #7cb4f5; --o-adj: #6fc28c; --o-pron: #b39cf0;
   --p-erik: #4fd1c5; --p-karin: #f08fc4; --p-kassoren: #a0aec0; --p-elsa: #f6c26b; --p-olle: #a3a8f5;
-  --k1: #a3a8f5; --k2: #6fc28c;
+  --k1: #a3a8f5; --k2: #6fc28c; --k3: #f6c26b;
 }
 
 * { box-sizing: border-box; }
@@ -300,7 +300,7 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
 .p-elsa { --p: var(--p-elsa); } .p-olle { --p: var(--p-olle); }
 .mening.tal { box-shadow: inset 4px 0 0 var(--p, var(--accent)); padding-left: 14px; }
 .mening.tal .vem { color: var(--p, var(--accent)); }
-.kap-1 { --kap: var(--k1); } .kap-2 { --kap: var(--k2); }
+.kap-1 { --kap: var(--k1); } .kap-2 { --kap: var(--k2); } .kap-3 { --kap: var(--k3); }
 .kapfarg { color: var(--kap); }
 .kort.kapitel { border-top: 5px solid var(--kap); }
 .kort.kapitel .stapel i { background: var(--kap); }
@@ -364,7 +364,9 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
   "berattare": "sofie",
   "Erik": "mattias",
   "Karin": "sofie",
-  "Kassören": "sofie"
+  "Kassören": "sofie",
+  "Elsa": "sofie",
+  "Olle": "mattias"
  },
  "kapitel": [
   {
@@ -1209,6 +1211,730 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
    "nr": 2,
    "titel": "Grannen och hemmet",
    "en": "The neighbour and the home",
+   "steg": [
+    {
+     "id": "2-1",
+     "nr": 7,
+     "titel": "Karins lägenhet",
+     "en": "Karin's apartment",
+     "meningar": [
+      {
+       "sv": "Karin bor i lägenheten bredvid.",
+       "en": "Karin lives in the apartment next door."
+      },
+      {
+       "vem": "Karin",
+       "sv": "Välkommen in! Det här är hallen.",
+       "en": "Welcome in! This is the hall."
+      },
+      {
+       "vem": "Karin",
+       "sv": "Och det här är köket.",
+       "en": "And this is the kitchen."
+      },
+      {
+       "vem": "Erik",
+       "sv": "Jag gillar köket!",
+       "en": "I like the kitchen!"
+      },
+      {
+       "vem": "Karin",
+       "sv": "Där är vardagsrummet och sovrummet.",
+       "en": "There's the living room and the bedroom."
+      },
+      {
+       "vem": "Karin",
+       "sv": "Och badrummet är här.",
+       "en": "And the bathroom is here."
+      }
+     ],
+     "aha": {
+      "rubrik": "“The” goes at the end",
+      "html": "<p>In Swedish, “the” is not a separate word. It is glued onto the <b>end</b> of the noun: <b>-en</b> for <span class='g-en'>en</span>-words and <b>-et</b> for <span class='g-ett'>ett</span>-words.</p><table class='par'><tr><td><span class='g-en'>en</span> hall</td><td>hall<b>en</b></td><td>the hall</td></tr><tr><td><span class='g-en'>en</span> lägenhet</td><td>lägenhet<b>en</b></td><td>the apartment</td></tr><tr><td><span class='g-ett'>ett</span> kök</td><td>kök<b>et</b></td><td>the kitchen</td></tr><tr><td><span class='g-ett'>ett</span> rum</td><td>rum<b>met</b></td><td>the room</td></tr></table><p>If the word already ends in a vowel, just add <b>-n</b> or <b>-t</b>: <i><span class='g-en'>en</span> skola → skolan</i>, <i><span class='g-ett'>ett</span> äpple → äpplet</i>.</p><p class='tips'>You have already met lots of these: <i>dörren, affären, glassen, äpplet, morgonen</i>.</p><p class='bonus'><b>Why rum<u>m</u>et?</b> After a short vowel, the last consonant is often doubled: <i>rum → rummet</i>.</p>"
+     },
+     "testa": [
+      {
+       "typ": "val",
+       "fraga": "Jag gillar ___.",
+       "alternativ": [
+        "köket",
+        "köken",
+        "köketen"
+       ],
+       "ratt": "köket",
+       "forklaring": "ett kök → köket (the kitchen)"
+      },
+      {
+       "typ": "val",
+       "fraga": "How do you say “the hall”?",
+       "alternativ": [
+        "hallen",
+        "hallet",
+        "en hall"
+       ],
+       "ratt": "hallen",
+       "forklaring": "en hall → hallen",
+       "svAlt": true
+      },
+      {
+       "typ": "lyssna",
+       "sv": "Och badrummet är här.",
+       "fraga": "What did you hear?",
+       "alternativ": [
+        "And the bathroom is here.",
+        "And the bedroom is there.",
+        "And the kitchen is big."
+       ],
+       "ratt": "And the bathroom is here."
+      },
+      {
+       "typ": "ordna",
+       "ord": [
+        "Det här",
+        "är",
+        "köket"
+       ],
+       "slut": "."
+      },
+      {
+       "typ": "val",
+       "fraga": "Karin bor i ___ bredvid.",
+       "alternativ": [
+        "lägenheten",
+        "lägenhet",
+        "lägenheter"
+       ],
+       "ratt": "lägenheten",
+       "forklaring": "en lägenhet → lägenheten (the apartment)"
+      }
+     ],
+     "ord": [
+      {
+       "sv": "välkommen in",
+       "en": "welcome in, come in"
+      },
+      {
+       "sv": "det här är",
+       "en": "this is"
+      },
+      {
+       "sv": "en hall",
+       "en": "a hall · hallen = the hall"
+      },
+      {
+       "sv": "ett kök",
+       "en": "a kitchen · köket = the kitchen"
+      },
+      {
+       "sv": "ett vardagsrum",
+       "en": "a living room"
+      },
+      {
+       "sv": "ett sovrum",
+       "en": "a bedroom"
+      },
+      {
+       "sv": "ett badrum",
+       "en": "a bathroom"
+      },
+      {
+       "sv": "gillar",
+       "en": "like, likes"
+      }
+     ],
+     "fortsattning": {
+      "sv": "Hur många rum har Karin?",
+      "en": "How many rooms does Karin have?"
+     }
+    },
+    {
+     "id": "2-2",
+     "nr": 8,
+     "titel": "Hur många rum?",
+     "en": "How many rooms?",
+     "meningar": [
+      {
+       "vem": "Erik",
+       "sv": "Hur många rum har du?",
+       "en": "How many rooms do you have?"
+      },
+      {
+       "vem": "Karin",
+       "sv": "Jag har tre rum och kök.",
+       "en": "I have three rooms and a kitchen."
+      },
+      {
+       "vem": "Erik",
+       "sv": "Jag har bara två rum.",
+       "en": "I only have two rooms."
+      },
+      {
+       "vem": "Erik",
+       "sv": "Men vi har två sängar, fyra stolar och ett bord.",
+       "en": "But we have two beds, four chairs and a table."
+      },
+      {
+       "vem": "Karin",
+       "sv": "Var sover barnen?",
+       "en": "Where do the children sleep?"
+      },
+      {
+       "vem": "Erik",
+       "sv": "Barnen sover i sovrummet. Jag sover i vardagsrummet.",
+       "en": "The children sleep in the bedroom. I sleep in the living room."
+      }
+     ],
+     "aha": {
+      "rubrik": "More than one: plural",
+      "html": "<p>Swedish has a few different plural endings. You don't need the rules yet. Just notice the patterns:</p><table class='par'><tr><td><span class='g-en'>en</span> säng</td><td>två säng<b>ar</b></td><td>beds</td></tr><tr><td><span class='g-en'>en</span> stol</td><td>fyra stol<b>ar</b></td><td>chairs</td></tr><tr><td><span class='g-en'>en</span> krona</td><td>tjugo kron<b>or</b></td><td>kronor</td></tr><tr><td><span class='g-en'>en</span> lägenhet</td><td>två lägenhet<b>er</b></td><td>apartments</td></tr><tr><td><span class='g-ett'>ett</span> rum</td><td>tre rum</td><td>rooms</td></tr><tr><td><span class='g-ett'>ett</span> barn</td><td>två barn</td><td>children</td></tr></table><p class='tips'>Many ett-words don't change at all in plural, like English <i>sheep</i>: <i>ett rum, tre rum</i>.</p><p class='bonus'><b>Bra att veta:</b> apartment ads say <i>3 rok</i> = <i>tre rum och kök</i>. Swedes count the rooms, but not the kitchen.</p>"
+     },
+     "testa": [
+      {
+       "typ": "val",
+       "fraga": "En stol, två ___.",
+       "alternativ": [
+        "stolar",
+        "stolor",
+        "stoler"
+       ],
+       "ratt": "stolar",
+       "forklaring": "en stol → två stolar"
+      },
+      {
+       "typ": "val",
+       "fraga": "Ett rum, tre ___.",
+       "alternativ": [
+        "rum",
+        "rummar",
+        "rummen"
+       ],
+       "ratt": "rum",
+       "forklaring": "ett rum → tre rum (no change!)"
+      },
+      {
+       "typ": "lyssna",
+       "sv": "Jag har tre rum och kök.",
+       "fraga": "How many rooms does Karin have?",
+       "alternativ": [
+        "3",
+        "2",
+        "4"
+       ],
+       "ratt": "3"
+      },
+      {
+       "typ": "ordna",
+       "ord": [
+        "Hur många",
+        "rum",
+        "har",
+        "du"
+       ],
+       "slut": "?"
+      },
+      {
+       "typ": "lyssna",
+       "sv": "Barnen sover i sovrummet.",
+       "fraga": "Where do the children sleep?",
+       "alternativ": [
+        "In the bedroom",
+        "In the living room",
+        "In the kitchen"
+       ],
+       "ratt": "In the bedroom"
+      }
+     ],
+     "ord": [
+      {
+       "sv": "hur många",
+       "en": "how many"
+      },
+      {
+       "sv": "ett rum",
+       "en": "a room · tre rum = three rooms"
+      },
+      {
+       "sv": "tre",
+       "en": "three"
+      },
+      {
+       "sv": "bara",
+       "en": "only, just"
+      },
+      {
+       "sv": "en säng",
+       "en": "a bed · två sängar"
+      },
+      {
+       "sv": "en stol",
+       "en": "a chair · fyra stolar"
+      },
+      {
+       "sv": "ett bord",
+       "en": "a table"
+      },
+      {
+       "sv": "sover",
+       "en": "sleep, sleeps"
+      }
+     ],
+     "fortsattning": {
+      "sv": "Men var är nyckeln?",
+      "en": "But where is the key?"
+     }
+    },
+    {
+     "id": "2-3",
+     "nr": 9,
+     "titel": "Var är nyckeln?",
+     "en": "Where is the key?",
+     "meningar": [
+      {
+       "sv": "Erik vill gå hem. Men var är nyckeln?",
+       "en": "Erik wants to go home. But where is the key?"
+      },
+      {
+       "vem": "Erik",
+       "sv": "Är den i jackan? Nej.",
+       "en": "Is it in the jacket? No."
+      },
+      {
+       "vem": "Erik",
+       "sv": "Är den på golvet? Nej.",
+       "en": "Is it on the floor? No."
+      },
+      {
+       "vem": "Karin",
+       "sv": "Titta, den ligger på bordet!",
+       "en": "Look, it's on the table!"
+      },
+      {
+       "vem": "Erik",
+       "sv": "Tack! Och var är mobilen?",
+       "en": "Thanks! And where is the phone?"
+      },
+      {
+       "vem": "Karin",
+       "sv": "Den ligger under stolen.",
+       "en": "It's under the chair."
+      }
+     ],
+     "aha": {
+      "rubrik": "Things “lie” in Swedish",
+      "html": "<p>Three small words for places:</p><table class='par'><tr><td>i</td><td>in</td><td><i>i jackan</i> (in the jacket)</td></tr><tr><td>på</td><td>on</td><td><i>på bordet</i> (on the table)</td></tr><tr><td>under</td><td>under</td><td><i>under stolen</i> (under the chair)</td></tr></table><p>And a Swedish habit: instead of just saying something <i>is</i> somewhere, Swedes often say it <b>lies</b> or <b>stands</b>:</p><ul><li><i>Nyckeln <b>ligger</b> på bordet.</i> (flat things lie)</li><li><i>Lampan <b>står</b> på bordet.</i> (upright things stand)</li></ul><p class='tips'>Don't worry: <i>Nyckeln är på bordet</i> is also fine. But you will hear <i>ligger</i> and <i>står</i> all the time.</p>"
+     },
+     "testa": [
+      {
+       "typ": "val",
+       "fraga": "Nyckeln ligger ___ bordet.",
+       "alternativ": [
+        "på",
+        "i",
+        "under"
+       ],
+       "ratt": "på",
+       "forklaring": "på bordet = on the table"
+      },
+      {
+       "typ": "lyssna",
+       "sv": "Den ligger under stolen.",
+       "fraga": "Where is it?",
+       "alternativ": [
+        "Under the chair",
+        "On the table",
+        "In the jacket"
+       ],
+       "ratt": "Under the chair"
+      },
+      {
+       "typ": "ordna",
+       "ord": [
+        "Var",
+        "är",
+        "nyckeln"
+       ],
+       "slut": "?"
+      },
+      {
+       "typ": "val",
+       "fraga": "Mobilen är ___ jackan.",
+       "alternativ": [
+        "i",
+        "på",
+        "under"
+       ],
+       "ratt": "i",
+       "forklaring": "i jackan = in the jacket"
+      },
+      {
+       "typ": "val",
+       "fraga": "A key is on the table. Which verb do Swedes like to use?",
+       "alternativ": [
+        "ligger",
+        "står",
+        "sover"
+       ],
+       "ratt": "ligger",
+       "forklaring": "Nyckeln ligger på bordet. Flat things lie.",
+       "svAlt": true
+      }
+     ],
+     "ord": [
+      {
+       "sv": "en nyckel",
+       "en": "a key · nyckeln = the key"
+      },
+      {
+       "sv": "var",
+       "en": "where"
+      },
+      {
+       "sv": "en jacka",
+       "en": "a jacket"
+      },
+      {
+       "sv": "ett golv",
+       "en": "a floor"
+      },
+      {
+       "sv": "titta",
+       "en": "look"
+      },
+      {
+       "sv": "ligger",
+       "en": "lie, lies (is lying somewhere)"
+      },
+      {
+       "sv": "under",
+       "en": "under"
+      },
+      {
+       "sv": "en mobil",
+       "en": "a mobile phone"
+      }
+     ],
+     "fortsattning": {
+      "sv": "Imorgon ska Erik tvätta.",
+      "en": "Tomorrow Erik is going to do the laundry."
+     }
+    },
+    {
+     "id": "2-4",
+     "nr": 10,
+     "titel": "Tvättstugan",
+     "en": "The laundry room",
+     "meningar": [
+      {
+       "sv": "Det finns en tvättstuga i huset.",
+       "en": "There is a laundry room in the building."
+      },
+      {
+       "vem": "Erik",
+       "sv": "Hur bokar man tvättstugan?",
+       "en": "How do you book the laundry room?"
+      },
+      {
+       "vem": "Karin",
+       "sv": "Du måste boka en tid. Listan sitter på dörren.",
+       "en": "You have to book a time. The list is on the door."
+      },
+      {
+       "vem": "Karin",
+       "sv": "Du kan tvätta på tisdag klockan sju.",
+       "en": "You can do the laundry on Tuesday at seven."
+      },
+      {
+       "vem": "Erik",
+       "sv": "Bra! Måste jag städa efteråt?",
+       "en": "Good! Do I have to clean afterwards?"
+      },
+      {
+       "vem": "Karin",
+       "sv": "Ja, alltid! Annars blir grannarna arga.",
+       "en": "Yes, always! Otherwise the neighbours get angry."
+      }
+     ],
+     "aha": {
+      "rubrik": "Bra att veta: tvättstugan",
+      "html": "<p>Many Swedish apartment buildings share <b>one laundry room</b>, <i>tvättstugan</i>. You book a time, and you <b>always</b> clean up afterwards. Leaving it dirty is one of the most un-Swedish things you can do. The famous angry notes in stairwells, <i>arga lappar</i>, are very often about the laundry room!</p><p><b>måste</b> (must, have to) and <b>kan</b> (can) work just like in English. The next verb comes right after, with no extra word:</p><table class='par'><tr><td>Du måste boka.</td><td>You must book.</td></tr><tr><td>Du kan tvätta.</td><td>You can wash.</td></tr></table><p class='bonus'><b>Det finns</b> = there is / there are: <i>Det finns en tvättstuga i huset.</i></p>"
+     },
+     "testa": [
+      {
+       "typ": "val",
+       "fraga": "Du ___ boka en tid.",
+       "alternativ": [
+        "måste",
+        "städar",
+        "finns"
+       ],
+       "ratt": "måste",
+       "forklaring": "Du måste boka = You have to book."
+      },
+      {
+       "typ": "lyssna",
+       "sv": "Du kan tvätta på tisdag klockan sju.",
+       "fraga": "When can Erik do the laundry?",
+       "alternativ": [
+        "Tuesday at seven",
+        "Thursday at seven",
+        "Tuesday at two"
+       ],
+       "ratt": "Tuesday at seven"
+      },
+      {
+       "typ": "ordna",
+       "ord": [
+        "Hur",
+        "bokar",
+        "man",
+        "tvättstugan"
+       ],
+       "slut": "?"
+      },
+      {
+       "typ": "val",
+       "fraga": "Det ___ en tvättstuga i huset.",
+       "alternativ": [
+        "finns",
+        "har",
+        "bokar"
+       ],
+       "ratt": "finns",
+       "forklaring": "Det finns = There is."
+      },
+      {
+       "typ": "val",
+       "fraga": "Måste man städa efteråt?",
+       "alternativ": [
+        "Ja, alltid!",
+        "Nej, aldrig!"
+       ],
+       "ratt": "Ja, alltid!",
+       "forklaring": "Always clean the laundry room. Otherwise: arga lappar!",
+       "svAlt": true
+      }
+     ],
+     "ord": [
+      {
+       "sv": "en tvättstuga",
+       "en": "a laundry room"
+      },
+      {
+       "sv": "det finns",
+       "en": "there is, there are"
+      },
+      {
+       "sv": "boka",
+       "en": "book (a time)"
+      },
+      {
+       "sv": "måste",
+       "en": "must, have to"
+      },
+      {
+       "sv": "en tid",
+       "en": "a time, an appointment"
+      },
+      {
+       "sv": "tvätta",
+       "en": "wash, do the laundry"
+      },
+      {
+       "sv": "städa",
+       "en": "clean, tidy up"
+      },
+      {
+       "sv": "en granne",
+       "en": "a neighbour · grannarna = the neighbours"
+      }
+     ],
+     "fortsattning": {
+      "sv": "På kvällen bjuder Karin på middag.",
+      "en": "In the evening, Karin invites them to dinner."
+     }
+    },
+    {
+     "id": "2-5",
+     "nr": 11,
+     "titel": "En kväll hos Karin",
+     "en": "An evening at Karin's",
+     "meningar": [
+      {
+       "sv": "Det är kväll. Erik, Elsa och Olle är hos Karin.",
+       "en": "It is evening. Erik, Elsa and Olle are at Karin's."
+      },
+      {
+       "sv": "Karins lägenhet har tre rum och kök.",
+       "en": "Karin's apartment has three rooms and a kitchen."
+      },
+      {
+       "sv": "De äter middag i köket.",
+       "en": "They eat dinner in the kitchen."
+      },
+      {
+       "sv": "Olle sitter under bordet.",
+       "en": "Olle is sitting under the table."
+      },
+      {
+       "vem": "Karin",
+       "sv": "Vill ni ha mer mat?",
+       "en": "Would you like some more food?"
+      },
+      {
+       "vem": "Elsa",
+       "sv": "Ja tack! Maten är jättegod!",
+       "en": "Yes please! The food is really good!"
+      },
+      {
+       "vem": "Erik",
+       "sv": "Tack för maten, Karin!",
+       "en": "Thank you for the food, Karin!"
+      }
+     ],
+     "aha": {
+      "rubrik": "Tack för maten! And a look back",
+      "html": "<p>After a meal, Swedes always say <b>Tack för maten</b> (thanks for the food), even at home with the family. Children learn it very early.</p><p><b>ni</b> means <i>you</i> when you talk to more than one person: <i>Vill <b>ni</b> ha mer mat?</i> To one person it is <i>du</i>.</p><p><b>Look back at chapter 2.</b> You have met:</p><ul><li>“the” at the end: <i>köket, maten, lägenheten</i></li><li>plural: <i>tre rum, två sängar, fyra stolar</i></li><li>places: <i>i köket, på bordet, under bordet</i></li><li>måste and kan: <i>Du måste boka. Du kan tvätta.</i></li></ul>"
+     },
+     "testa": [
+      {
+       "typ": "ordna",
+       "ord": [
+        "De",
+        "äter",
+        "middag",
+        "i köket"
+       ],
+       "slut": "."
+      },
+      {
+       "typ": "lyssna",
+       "sv": "Olle sitter under bordet.",
+       "fraga": "Where is Olle?",
+       "alternativ": [
+        "Under the table",
+        "On the table",
+        "In the bedroom"
+       ],
+       "ratt": "Under the table"
+      },
+      {
+       "typ": "val",
+       "fraga": "What do you say after a meal in Sweden?",
+       "alternativ": [
+        "Tack för maten!",
+        "Trevligt att träffas!",
+        "Ursäkta!"
+       ],
+       "ratt": "Tack för maten!",
+       "forklaring": "Tack för maten = Thank you for the food.",
+       "svAlt": true
+      },
+      {
+       "typ": "val",
+       "fraga": "En säng, två ___.",
+       "alternativ": [
+        "sängar",
+        "sängor",
+        "säng"
+       ],
+       "ratt": "sängar",
+       "forklaring": "en säng → två sängar"
+      },
+      {
+       "typ": "lyssna",
+       "sv": "Karins lägenhet har tre rum och kök.",
+       "fraga": "How many rooms does Karin have?",
+       "alternativ": [
+        "3",
+        "2",
+        "5"
+       ],
+       "ratt": "3"
+      },
+      {
+       "typ": "val",
+       "fraga": "Karin talks to Erik, Elsa and Olle. Vill ___ ha mer mat?",
+       "alternativ": [
+        "ni",
+        "du",
+        "han"
+       ],
+       "ratt": "ni",
+       "forklaring": "ni = you (more than one person)",
+       "svAlt": true
+      }
+     ],
+     "ord": [
+      {
+       "sv": "en kväll",
+       "en": "an evening"
+      },
+      {
+       "sv": "hos",
+       "en": "at (someone's place) · hos Karin = at Karin's"
+      },
+      {
+       "sv": "en middag",
+       "en": "a dinner"
+      },
+      {
+       "sv": "sitter",
+       "en": "sit, sits"
+      },
+      {
+       "sv": "ni",
+       "en": "you (more than one person)"
+      },
+      {
+       "sv": "mer",
+       "en": "more"
+      },
+      {
+       "sv": "mat",
+       "en": "food · maten = the food"
+      },
+      {
+       "sv": "tack för maten",
+       "en": "thank you for the food (said after every meal)"
+      }
+     ],
+     "fortsattning": {
+      "sv": "Nästa kapitel: en dag på förskolan.",
+      "en": "Next chapter: a day at preschool."
+     }
+    }
+   ],
+   "nuKanDu": [
+    {
+     "en": "Describe your home",
+     "sv": "Jag har två rum och kök."
+    },
+    {
+     "en": "Show someone around",
+     "sv": "Välkommen in! Det här är köket."
+    },
+    {
+     "en": "Say where things are",
+     "sv": "Nyckeln ligger på bordet."
+    },
+    {
+     "en": "Ask how things work in the building",
+     "sv": "Hur bokar man tvättstugan?"
+    },
+    {
+     "en": "Say what you must and can do",
+     "sv": "Jag måste städa. Du kan tvätta på tisdag."
+    },
+    {
+     "en": "Thank someone for a meal",
+     "sv": "Tack för maten!"
+    }
+   ]
+  },
+  {
+   "nr": 3,
+   "titel": "Förskolan",
+   "en": "Preschool",
    "kommer": true,
    "steg": []
   }
@@ -1626,6 +2352,352 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
   },
   "trappa": {
    "en": "staircase",
+   "genus": "en",
+   "klass": "s"
+  },
+  "lägenheten": {
+   "en": "the apartment (en lägenhet)",
+   "genus": "en",
+   "klass": "s"
+  },
+  "välkommen": {
+   "en": "welcome"
+  },
+  "in": {
+   "en": "in, inside · Välkommen in! = Come in!"
+  },
+  "hallen": {
+   "en": "the hall (en hall)",
+   "genus": "en",
+   "klass": "s"
+  },
+  "hall": {
+   "en": "hall",
+   "genus": "en",
+   "klass": "s"
+  },
+  "köket": {
+   "en": "the kitchen (ett kök)",
+   "genus": "ett",
+   "klass": "s"
+  },
+  "kök": {
+   "en": "kitchen · tre rum och kök = three rooms and a kitchen",
+   "genus": "ett",
+   "klass": "s"
+  },
+  "gillar": {
+   "en": "like, likes",
+   "klass": "v"
+  },
+  "där": {
+   "en": "there"
+  },
+  "vardagsrummet": {
+   "en": "the living room (ett vardagsrum)",
+   "genus": "ett",
+   "klass": "s"
+  },
+  "vardagsrum": {
+   "en": "living room",
+   "genus": "ett",
+   "klass": "s"
+  },
+  "sovrummet": {
+   "en": "the bedroom (ett sovrum)",
+   "genus": "ett",
+   "klass": "s"
+  },
+  "sovrum": {
+   "en": "bedroom",
+   "genus": "ett",
+   "klass": "s"
+  },
+  "badrummet": {
+   "en": "the bathroom (ett badrum)",
+   "genus": "ett",
+   "klass": "s"
+  },
+  "badrum": {
+   "en": "bathroom",
+   "genus": "ett",
+   "klass": "s"
+  },
+  "hur": {
+   "en": "how"
+  },
+  "var": {
+   "en": "where"
+  },
+  "många": {
+   "en": "many · hur många = how many"
+  },
+  "rum": {
+   "en": "room, rooms (the same word!)",
+   "genus": "ett",
+   "klass": "s"
+  },
+  "tre": {
+   "en": "three"
+  },
+  "bara": {
+   "en": "only, just"
+  },
+  "sängar": {
+   "en": "beds (en säng)",
+   "genus": "en",
+   "klass": "s"
+  },
+  "säng": {
+   "en": "bed",
+   "genus": "en",
+   "klass": "s"
+  },
+  "stolar": {
+   "en": "chairs (en stol)",
+   "genus": "en",
+   "klass": "s"
+  },
+  "stol": {
+   "en": "chair",
+   "genus": "en",
+   "klass": "s"
+  },
+  "bord": {
+   "en": "table",
+   "genus": "ett",
+   "klass": "s"
+  },
+  "bordet": {
+   "en": "the table (ett bord)",
+   "genus": "ett",
+   "klass": "s"
+  },
+  "sover": {
+   "en": "sleep, sleeps",
+   "klass": "v"
+  },
+  "nyckeln": {
+   "en": "the key (en nyckel)",
+   "genus": "en",
+   "klass": "s"
+  },
+  "nyckel": {
+   "en": "key",
+   "genus": "en",
+   "klass": "s"
+  },
+  "gå": {
+   "en": "go, walk",
+   "klass": "v"
+  },
+  "hem": {
+   "en": "home · gå hem = go home"
+  },
+  "jackan": {
+   "en": "the jacket (en jacka)",
+   "genus": "en",
+   "klass": "s"
+  },
+  "jacka": {
+   "en": "jacket",
+   "genus": "en",
+   "klass": "s"
+  },
+  "golvet": {
+   "en": "the floor (ett golv)",
+   "genus": "ett",
+   "klass": "s"
+  },
+  "golv": {
+   "en": "floor",
+   "genus": "ett",
+   "klass": "s"
+  },
+  "titta": {
+   "en": "look",
+   "klass": "v"
+  },
+  "ligger": {
+   "en": "lie, lies (is lying somewhere)",
+   "klass": "v"
+  },
+  "mobilen": {
+   "en": "the mobile phone (en mobil)",
+   "genus": "en",
+   "klass": "s"
+  },
+  "mobil": {
+   "en": "mobile phone",
+   "genus": "en",
+   "klass": "s"
+  },
+  "under": {
+   "en": "under"
+  },
+  "stolen": {
+   "en": "the chair (en stol)",
+   "genus": "en",
+   "klass": "s"
+  },
+  "imorgon": {
+   "en": "tomorrow"
+  },
+  "tvätta": {
+   "en": "wash, do the laundry",
+   "klass": "v"
+  },
+  "finns": {
+   "en": "is, are (exists) · det finns = there is",
+   "klass": "v"
+  },
+  "tvättstuga": {
+   "en": "laundry room",
+   "genus": "en",
+   "klass": "s"
+  },
+  "tvättstugan": {
+   "en": "the laundry room (en tvättstuga)",
+   "genus": "en",
+   "klass": "s"
+  },
+  "huset": {
+   "en": "the house, the building (ett hus)",
+   "genus": "ett",
+   "klass": "s"
+  },
+  "hus": {
+   "en": "house, building",
+   "genus": "ett",
+   "klass": "s"
+  },
+  "bokar": {
+   "en": "book, books (a time)",
+   "klass": "v"
+  },
+  "boka": {
+   "en": "book (a time)",
+   "klass": "v"
+  },
+  "man": {
+   "en": "you, one (people in general) · Hur bokar man …? = How do you book …?",
+   "klass": "p"
+  },
+  "måste": {
+   "en": "must, have to",
+   "klass": "v"
+  },
+  "tid": {
+   "en": "time, appointment",
+   "genus": "en",
+   "klass": "s"
+  },
+  "listan": {
+   "en": "the list (en lista)",
+   "genus": "en",
+   "klass": "s"
+  },
+  "lista": {
+   "en": "list",
+   "genus": "en",
+   "klass": "s"
+  },
+  "sitter": {
+   "en": "sit, sits (also: is attached somewhere)",
+   "klass": "v"
+  },
+  "tisdag": {
+   "en": "Tuesday",
+   "genus": "en",
+   "klass": "s"
+  },
+  "klockan": {
+   "en": "the clock · klockan sju = at seven o'clock",
+   "genus": "en",
+   "klass": "s"
+  },
+  "bra": {
+   "en": "good, well",
+   "klass": "a"
+  },
+  "städa": {
+   "en": "clean, tidy up",
+   "klass": "v"
+  },
+  "efteråt": {
+   "en": "afterwards"
+  },
+  "alltid": {
+   "en": "always"
+  },
+  "annars": {
+   "en": "otherwise"
+  },
+  "grannarna": {
+   "en": "the neighbours (en granne)",
+   "genus": "en",
+   "klass": "s"
+  },
+  "granne": {
+   "en": "neighbour",
+   "genus": "en",
+   "klass": "s"
+  },
+  "arga": {
+   "en": "angry",
+   "klass": "a"
+  },
+  "kvällen": {
+   "en": "the evening · på kvällen = in the evening",
+   "genus": "en",
+   "klass": "s"
+  },
+  "kväll": {
+   "en": "evening",
+   "genus": "en",
+   "klass": "s"
+  },
+  "bjuder": {
+   "en": "invite, treat · bjuder på middag = invites to dinner",
+   "klass": "v"
+  },
+  "middag": {
+   "en": "dinner",
+   "genus": "en",
+   "klass": "s"
+  },
+  "hos": {
+   "en": "at (someone's place)"
+  },
+  "karins": {
+   "en": "Karin's"
+  },
+  "ni": {
+   "en": "you (more than one person)",
+   "klass": "p"
+  },
+  "mer": {
+   "en": "more"
+  },
+  "mat": {
+   "en": "food",
+   "genus": "en",
+   "klass": "s"
+  },
+  "maten": {
+   "en": "the food (en mat)",
+   "genus": "en",
+   "klass": "s"
+  },
+  "jättegod": {
+   "en": "really good, delicious (jätte- = very)",
+   "klass": "a"
+  },
+  "för": {
+   "en": "for · tack för maten = thanks for the food"
+  },
+  "dag": {
+   "en": "day",
    "genus": "en",
    "klass": "s"
   }
