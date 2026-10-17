@@ -360,6 +360,12 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
 
 <script type="application/json" id="data">
 {
+ "roster": {
+  "berattare": "sofie",
+  "Erik": "mattias",
+  "Karin": "sofie",
+  "Kassören": "sofie"
+ },
  "kapitel": [
   {
    "nr": 1,
@@ -1627,6 +1633,7 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
 }
 </script>
 
+<script src="ljud/ljud.js"></script>
 <script>
 'use strict';
 const DATA = JSON.parse(document.getElementById('data').textContent);
@@ -1685,9 +1692,10 @@ function blanda(a) {
   return a;
 }
 
-// ---------- Tal: bara lokala svenska röster (inga anrop till andra tjänster) ----------
+// ---------- Tal: färdiga ljudfiler (ljud/ljud.js, skapas av verktyg/ljud.py), annars enhetens egen ----------
+// lokala svenska röst. Inga anrop till andra tjänster.
 const Tal = {
-  rost: null, klar: false,
+  rost: null, klar: false, ljud: null, avbryt: null,
   init() {
     if (!('speechSynthesis' in window)) { this.klar = true; uppdateraRost(); return; }
     const valj = () => {
@@ -1702,9 +1710,39 @@ const Tal = {
     speechSynthesis.addEventListener('voiceschanged', valj);
     setTimeout(() => { this.klar = true; valj(); uppdateraRost(); }, 1500);
   },
-  finns() { return !!this.rost; },
-  stopp() { if ('speechSynthesis' in window) speechSynthesis.cancel(); },
-  saga(text, langsam) {
+  finns() { return !!this.rost || !!window.LJUD; },
+  stopp() {
+    if ('speechSynthesis' in window) speechSynthesis.cancel();
+    if (this.ljud) this.ljud.pause();
+    if (this.avbryt) this.avbryt();
+  },
+  fil(text, vem) {
+    const L = window.LJUD, r = DATA.roster || {};
+    if (!L) return null;
+    const t = text.trim();
+    return L[(r[vem] || r.berattare) + '|' + t] || L[r.berattare + '|' + t] || null;
+  },
+  spelaFil(fil, langsam) {
+    if (this.avbryt) this.avbryt();
+    if ('speechSynthesis' in window) speechSynthesis.cancel();
+    return new Promise(res => {
+      const a = this.ljud || (this.ljud = new Audio());
+      let t0 = 0, klar = false;
+      const slut = ok => { if (klar) return; klar = true; this.avbryt = null; res(ok && t0 ? performance.now() - t0 : 0); };
+      this.avbryt = () => slut(false);
+      a.pause();
+      a.src = fil;
+      a.defaultPlaybackRate = a.playbackRate = langsam ? 0.75 : 1;
+      a.preservesPitch = true; a.webkitPreservesPitch = true;
+      a.onplaying = () => { if (!t0) t0 = performance.now(); };
+      a.onended = () => slut(true);
+      a.onerror = () => slut(false);
+      a.play().catch(() => slut(false));
+    });
+  },
+  saga(text, langsam, vem) {
+    const fil = this.fil(text, vem);
+    if (fil) return this.spelaFil(fil, langsam);
     return new Promise(res => {
       if (!this.rost) { res(0); return; }
       speechSynthesis.cancel();
@@ -1721,23 +1759,28 @@ const Tal = {
 };
 let korning = 0;
 function stoppaAllt() { korning++; Tal.stopp(); }
-function spelaEn(text, langsam) { stoppaAllt(); return Tal.saga(text, langsam ?? S.fart === 'langsam'); }
+function spelaEn(text, langsam, vem) { stoppaAllt(); return Tal.saga(text, langsam ?? S.fart === 'langsam', vem); }
 async function spelaSekvens(texter, { markera, efter, loop = false, langsam } = {}) {
   if (!Tal.finns()) return false;
   const id = ++korning;
   Tal.stopp();
+  const avbruten = () => { markera && markera(-1); return false; };
   do {
     for (let i = 0; i < texter.length; i++) {
-      if (id !== korning) return false;
+      if (id !== korning) return avbruten();
       markera && markera(i);
-      const tid = await Tal.saga(texter[i], langsam);
-      if (id !== korning) return false;
-      await vanta(efter ? efter(tid) : 500);
+      const t = texter[i];
+      const tid = await Tal.saga(t.sv ?? t, langsam, t.vem);
+      // pausen kollas var 100:e ms så att Stopp märks direkt
+      const slut = performance.now() + (efter ? efter(tid) : 500);
+      while (id === korning && performance.now() < slut) await vanta(100);
+      if (id !== korning) return avbruten();
     }
   } while (loop && id === korning);
   markera && markera(-1);
   return id === korning;
 }
+const STOPP = '<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="3" width="10" height="10" rx="1.5" fill="currentColor"/></svg>';
 function uppdateraRost() {
   document.body.classList.toggle('ingen-rost', Tal.klar && !Tal.finns());
   const ruta = document.getElementById('rostinfo');
@@ -2097,7 +2140,7 @@ function sektion(del, klass, ...barn) {
 
 function delLyssna(steg) {
   const rader = steg.meningar.map(m => h('li', { class: 'mening' + (m.vem ? personKlass(m.vem) : '') },
-    h('button', { class: 'spela', 'aria-label': 'Lyssna: ' + m.sv, html: PLAY, onclick: () => spelaEn(m.sv) }),
+    h('button', { class: 'spela', 'aria-label': 'Lyssna: ' + m.sv, html: PLAY, onclick: () => spelaEn(m.sv, undefined, m.vem) }),
     h('div', {}, m.vem && h('div', { class: 'vem' }, m.vem), h('p', { class: 'sv', lang: 'sv' }, ordKnappar(m.sv)), h('p', { class: 'en', lang: 'en' }, m.en))));
   const markeraRad = i => rader.forEach((r, j) => r.classList.toggle('nu', i === j));
   const fart = h('div', { class: 'vaxel', role: 'group', 'aria-label': 'Fart' },
@@ -2111,7 +2154,10 @@ function delLyssna(steg) {
     document.querySelectorAll('[data-en-knapp]').forEach(b => b.setAttribute('aria-pressed', String(S.visaEn)));
   }, 'data-en-knapp': '' }, 'English'));
   const allt = h('button', { class: 'spela text', html: PLAY + 'Spela allt', onclick: async () => {
-    const klar = await spelaSekvens(steg.meningar.map(m => m.sv), { markera: markeraRad, langsam: S.fart === 'langsam', efter: () => 600 });
+    if (allt.dataset.pa) { stoppaAllt(); return; }
+    allt.dataset.pa = '1'; allt.innerHTML = STOPP + 'Stopp';
+    const klar = await spelaSekvens(steg.meningar, { markera: markeraRad, langsam: S.fart === 'langsam', efter: () => 600 });
+    delete allt.dataset.pa; allt.innerHTML = PLAY + 'Spela allt';
     if (klar) markera(steg, 'lyssna');
   } });
   return sektion('lyssna', '',
@@ -2218,13 +2264,14 @@ function delSaga(steg) {
   const rader = steg.meningar.map(m => h('li', { class: 'mening' + (m.vem ? personKlass(m.vem) : '') },
     h('div', { style: 'flex:1' }, m.vem && h('div', { class: 'vem' }, m.vem), h('p', { class: 'sv', lang: 'sv' }, farga(m.sv)), h('p', { class: 'en', lang: 'en' }, m.en),
       h('div', { class: 'reglage', style: 'margin:8px 0 0' },
-        h('button', { class: 'spela text', html: PLAY + 'Långsamt', onclick: () => spelaEn(m.sv, true) }),
-        h('button', { class: 'spela text', html: PLAY + 'Normalt', onclick: () => spelaEn(m.sv, false) })))));
+        h('button', { class: 'spela text', html: PLAY + 'Långsamt', onclick: () => spelaEn(m.sv, true, m.vem) }),
+        h('button', { class: 'spela text', html: PLAY + 'Normalt', onclick: () => spelaEn(m.sv, false, m.vem) })))));
   const markeraRad = i => rader.forEach((r, j) => r.classList.toggle('nu', i === j));
-  const loopKnapp = h('button', { class: 'knapp kraver-rost', onclick: () => {
-    if (loopKnapp.dataset.pa) { stoppaAllt(); markeraRad(-1); loopKnapp.textContent = '∞ Lyssna och säg efter'; delete loopKnapp.dataset.pa; return; }
+  const loopKnapp = h('button', { class: 'knapp kraver-rost', onclick: async () => {
+    if (loopKnapp.dataset.pa) { stoppaAllt(); return; }
     loopKnapp.dataset.pa = '1'; loopKnapp.textContent = '■ Stopp';
-    spelaSekvens(steg.meningar.map(m => m.sv), { markera: markeraRad, loop: true, langsam: S.fart === 'langsam', efter: tid => tid * 1.3 + 900 });
+    await spelaSekvens(steg.meningar, { markera: markeraRad, loop: true, langsam: S.fart === 'langsam', efter: tid => tid * 1.3 + 900 });
+    delete loopKnapp.dataset.pa; loopKnapp.textContent = '∞ Lyssna och säg efter';
   } }, '∞ Lyssna och säg efter');
   return sektion('saga', '',
     delHuvud('saga', 4, 'Säg det', 'Say it out loud.'),
