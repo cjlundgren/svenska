@@ -1,0 +1,990 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex, nofollow">
+<title>Små steg</title>
+<link rel="icon" href="data:,">
+<style>
+@font-face { font-family: "Fraunces"; src: url("lib/fonts/fraunces.woff2") format("woff2"); font-weight: 500 700; font-display: swap; }
+@font-face { font-family: "Inter"; src: url("lib/fonts/inter.woff2") format("woff2"); font-weight: 400 700; font-display: swap; }
+
+:root {
+  --paper: #f6f2ea;
+  --card: #ffffff;
+  --ink: #1d1f24;
+  --muted: #676a72;
+  --line: #e3ddd1;
+  --accent: #2b5c8a;
+  --accent-ink: #ffffff;
+  --accent-soft: #e2ecf5;
+  --sun: #d99a1b;
+  --sun-soft: #fbf0d4;
+  --ok: #2f7a4a;
+  --ok-soft: #ddefe2;
+  --fel: #b4432f;
+  --fel-soft: #f6e0da;
+  --radius: 16px;
+  --serif: "Fraunces", Georgia, serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #15171b; --card: #1e2127; --ink: #ecebe7; --muted: #a3a6ad; --line: #32363e;
+    --accent: #84b3e2; --accent-ink: #0f1a26; --accent-soft: #1f3044;
+    --sun: #f0c460; --sun-soft: #3a3020; --ok: #6fc28c; --ok-soft: #1d3326; --fel: #e48a76; --fel-soft: #3d231e;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #15171b; --card: #1e2127; --ink: #ecebe7; --muted: #a3a6ad; --line: #32363e;
+  --accent: #84b3e2; --accent-ink: #0f1a26; --accent-soft: #1f3044;
+  --sun: #f0c460; --sun-soft: #3a3020; --ok: #6fc28c; --ok-soft: #1d3326; --fel: #e48a76; --fel-soft: #3d231e;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.55 var(--sans); }
+h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.2; margin: 0; }
+p { margin: 0 0 .7em; }
+a { color: var(--accent); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+
+.topp { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.topp-inre { max-width: 640px; min-height: 56px; margin: 0 auto; padding: 8px 16px; display: flex; align-items: center; gap: 12px; }
+.logga { font-family: var(--serif); font-weight: 700; font-size: 1.2rem; color: var(--ink); text-decoration: none; margin-right: auto; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: var(--card);
+  border: 1px solid var(--line); color: var(--ink); text-decoration: none; font-size: .9rem; font-weight: 600; }
+.badge { background: var(--sun); color: #1d1f24; border-radius: 999px; padding: 0 7px; font-size: .8rem; font-weight: 700; }
+#stegval { display: none; flex: 1; min-width: 0; height: 38px; padding: 0 8px; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--card); color: var(--ink); font: 600 .92rem var(--sans); }
+
+/* Sidomeny (dator) och stegval i toppen (mobil) */
+.sidebar { display: none; }
+.nav-verktyg { display: flex; gap: 12px; margin: 0 8px 12px; font-size: .78rem; }
+.nav-verktyg button { border: 0; background: none; padding: 0; color: var(--muted); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+.nav-verktyg button:hover { color: var(--ink); }
+.nav-topp { display: grid; gap: 2px; margin-bottom: 16px; }
+.nav-item { display: grid; grid-template-columns: 30px 1fr auto; align-items: center; gap: 6px; padding: 7px 8px; border-radius: 9px;
+  text-decoration: none; color: var(--ink); font-size: .92rem; }
+.nav-item:hover { background: color-mix(in srgb, var(--line) 65%, transparent); }
+.nav-item .nid { font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.nav-item .prog { font-size: .78rem; color: var(--muted); font-weight: 600; }
+.nav-item.klar .nid, .nav-item.klar .prog { color: var(--ok); }
+.nav-item.aktiv { background: var(--ink); color: var(--paper); }
+.nav-item.aktiv .nid { color: var(--sun); }
+.nav-item.aktiv .prog { color: inherit; }
+.nav-item.kommer { opacity: .45; cursor: default; }
+.nav-item.kommer:hover { background: none; }
+.nav-kap { margin: 0 0 16px; }
+.nav-kap > summary { list-style: none; cursor: pointer; display: flex; gap: 9px; align-items: flex-start; padding: 4px 6px; border-radius: 8px; }
+.nav-kap > summary::-webkit-details-marker { display: none; }
+.nav-kap > summary:hover { background: color-mix(in srgb, var(--line) 65%, transparent); }
+.nav-kap > summary::before { content: ''; flex: none; width: 7px; height: 7px; margin-top: 24px; border-right: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted); transform: rotate(-45deg); transition: transform .15s; }
+.nav-kap[open] > summary::before { transform: rotate(45deg); }
+.nav-kap h3 { font-size: 1.08rem; }
+.nav-kap h3 span { display: block; margin-bottom: 2px; font: 600 .7rem var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.nav-kap h3 em { font-style: normal; color: var(--muted); margin-left: 6px; }
+.nav-kap.allt-klart h3, .nav-kap.allt-klart h3 span { color: var(--ok); }
+.nav-kap > p { margin: 2px 6px 8px 22px; font-size: .8rem; color: var(--muted); }
+.nav-kap.kommande { opacity: .5; }
+@media (max-width: 899px) {
+  #stegval { display: block; }
+  .logga { margin-right: 0; }
+}
+@media (min-width: 900px) {
+  .topp-inre { max-width: none; padding: 8px 24px; }
+  .layout { display: grid; grid-template-columns: 290px minmax(0, 1fr); align-items: start; }
+  .sidebar { display: block; position: sticky; top: 57px; height: calc(100vh - 57px); overflow-y: auto;
+    padding: 18px 14px 40px; border-right: 1px solid var(--line); }
+}
+
+main { max-width: 640px; margin: 0 auto; padding: 8px 16px 96px; }
+.liten { font-size: .9rem; color: var(--muted); }
+.kicker { font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+.knapp { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 20px;
+  border-radius: 999px; border: 1.5px solid var(--line); background: var(--card); font-weight: 600; cursor: pointer;
+  text-decoration: none; color: var(--ink); }
+.knapp.primar { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+.knapp.klar { background: var(--ok-soft); border-color: transparent; color: var(--ok); }
+.knapp:disabled { opacity: .5; cursor: default; }
+.knapp.bred { width: 100%; }
+.knappar { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+
+.kort { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 18px; margin: 16px 0; }
+
+/* Hem */
+.hjalte { padding: 28px 0 8px; }
+.hjalte h1 { font-size: 2.3rem; }
+.hjalte p { color: var(--muted); margin-top: 6px; }
+.siffror { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+.siffra { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; text-decoration: none; color: var(--ink); }
+.siffra b { display: block; font-family: var(--serif); font-size: 1.9rem; line-height: 1.1; }
+.siffra span { font-size: .9rem; color: var(--muted); }
+.siffra.vantar { border-color: var(--sun); background: var(--sun-soft); }
+.intro ul { padding-left: 1.2em; margin: .4em 0 0; }
+.intro li { margin: .3em 0; }
+.kapitel-huvud { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.stapel { height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; margin: 12px 0 6px; }
+.stapel i { display: block; height: 100%; background: var(--ok); border-radius: 99px; transition: width .4s; }
+.stegrader { list-style: none; margin: 8px 0 0; padding: 0; }
+.stegrad a, .stegrad div.las { display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; align-items: center; padding: 12px 4px;
+  border-top: 1px solid var(--line); text-decoration: none; color: var(--ink); }
+.stegrad .titel { font-weight: 600; }
+.stegrad .titel small { display: block; font-weight: 400; color: var(--muted); font-size: .88rem; }
+.ring { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: .95rem;
+  border: 2px solid var(--line); color: var(--muted); }
+.stegrad.nasta .ring { border-color: var(--accent); color: var(--accent); }
+.stegrad.klart .ring { background: var(--ok); border-color: var(--ok); color: #fff; }
+.stegrad.kommer { opacity: .5; }
+.prickar { display: inline-flex; gap: 5px; }
+.prickar span { width: 9px; height: 9px; border-radius: 50%; background: var(--line); }
+.prickar span.pa { background: var(--ok); }
+.kommande { opacity: .55; }
+.fot { margin-top: 32px; font-size: .88rem; color: var(--muted); }
+.fot button { background: none; border: 0; padding: 0; color: var(--muted); text-decoration: underline; cursor: pointer; }
+.varning { background: var(--sun-soft); border-color: transparent; }
+.varning ul { margin: .4em 0 0; padding-left: 1.2em; }
+
+/* Steg */
+.steghuvud { padding: 16px 0 4px; }
+.tillbaka { display: inline-block; margin-bottom: 12px; text-decoration: none; font-weight: 600; }
+.steghuvud h1 { font-size: 2rem; margin-top: 4px; }
+.steghuvud .en-titel { color: var(--muted); margin: 4px 0 12px; }
+.delnav { display: flex; gap: 6px; flex-wrap: wrap; }
+.delnav button { border: 1.5px solid var(--line); background: var(--card); border-radius: 999px; padding: 5px 11px; font-size: .82rem;
+  font-weight: 600; cursor: pointer; color: var(--muted); }
+.delnav button.pa { background: var(--ok-soft); border-color: transparent; color: var(--ok); }
+
+.del { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 18px; margin: 16px 0; scroll-margin-top: 70px; }
+.del-huvud { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+.del-huvud .nr { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 700;
+  background: var(--accent-soft); color: var(--accent); }
+.del.klar .del-huvud .nr { background: var(--ok); color: #fff; }
+.del-huvud h2 { font-size: 1.3rem; }
+.del-huvud h2 small { display: block; font-family: var(--sans); font-size: .85rem; font-weight: 400; color: var(--muted); }
+.del.aha { background: var(--sun-soft); border-color: transparent; }
+.del.aha .del-huvud .nr { background: var(--sun); color: #1d1f24; }
+.del.aha.klar .del-huvud .nr { background: var(--ok); color: #fff; }
+.aha h3 { font-size: 1.35rem; margin-bottom: 10px; }
+.aha table.par { border-collapse: collapse; margin: 6px 0 12px; }
+.aha table.par td { padding: 4px 18px 4px 0; }
+.aha table.par td:first-child { font-family: var(--serif); font-size: 1.15rem; font-weight: 600; }
+.aha ul { padding-left: 1.2em; }
+.aha li { margin: .35em 0; }
+.aha .tips, .aha .bonus { border-left: 3px solid var(--sun); padding-left: 12px; }
+.v2 { display: flex; flex-wrap: wrap; gap: 4px; margin: 10px 0; counter-reset: plats; }
+.v2 span { position: relative; background: var(--card); border-radius: 10px; padding: 16px 9px 6px; font-family: var(--serif); font-size: 1.02rem; }
+.v2 span::before { counter-increment: plats; content: counter(plats); position: absolute; top: 2px; left: 9px; font: 600 .7rem var(--sans); color: var(--muted); }
+.v2 span.verb { background: var(--sun); color: #1d1f24; }
+.v2 span.verb::before { color: #1d1f24; }
+
+.reglage { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; }
+.vaxel { display: inline-flex; border: 1.5px solid var(--line); border-radius: 999px; overflow: hidden; }
+.vaxel button { border: 0; background: none; padding: 8px 12px; font-size: .88rem; font-weight: 600; cursor: pointer; color: var(--muted); min-height: 40px; }
+.vaxel button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); }
+
+.meningar { list-style: none; margin: 0; padding: 0; }
+.mening { display: flex; gap: 12px; align-items: flex-start; padding: 10px 8px; border-top: 1px solid var(--line); border-radius: 10px; transition: background .2s; }
+.mening.nu { background: var(--sun-soft); }
+.sv { font-family: var(--serif); font-size: 1.4rem; line-height: 1.35; margin: 4px 0 0; }
+.en { display: none; color: var(--muted); margin: 2px 0 0; font-size: .95rem; }
+.visa-en .en { display: block; }
+button.ord { all: unset; cursor: pointer; border-bottom: 1.5px dotted color-mix(in srgb, var(--muted) 60%, transparent); }
+button.ord:hover { color: var(--accent); }
+button.ord:focus-visible { outline: 2px solid var(--accent); }
+
+.spela { flex: none; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--accent-soft); color: var(--accent);
+  display: inline-grid; place-items: center; cursor: pointer; }
+.spela svg { width: 16px; height: 16px; margin-left: 2px; }
+.spela.text { width: auto; padding: 0 14px; border-radius: 999px; gap: 6px; display: inline-flex; align-items: center; font-weight: 600; font-size: .88rem; height: 40px; }
+.spela.text svg { width: 12px; height: 12px; }
+.ingen-rost .spela, .ingen-rost .kraver-rost { opacity: .35; pointer-events: none; }
+
+.testyta { min-height: 140px; }
+.fraga { font-family: var(--serif); font-size: 1.3rem; margin: 6px 0 14px; }
+.fraga .lucka { display: inline-block; min-width: 3.5em; border-bottom: 2px solid var(--ink); }
+.alternativ { display: grid; gap: 10px; }
+.alt { text-align: left; padding: 12px 16px; min-height: 52px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--card); cursor: pointer; font-size: 1.05rem; }
+.alt.sv-alt { font-family: var(--serif); font-size: 1.2rem; }
+.alt.ratt { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); font-weight: 600; }
+.alt.fel { background: var(--fel-soft); border-color: var(--fel); color: var(--fel); animation: skak .35s; }
+.alt:disabled { cursor: default; }
+@keyframes skak { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+.respons { margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: var(--ok-soft); }
+.respons.fel { background: var(--fel-soft); }
+.svarsrad { display: flex; flex-wrap: wrap; gap: 8px; min-height: 60px; padding: 8px; border: 2px dashed var(--line); border-radius: 12px; margin-bottom: 12px; }
+.svarsrad.ratt { border-style: solid; border-color: var(--ok); background: var(--ok-soft); }
+.svarsrad.fel { border-color: var(--fel); animation: skak .35s; }
+.brickor { display: flex; flex-wrap: wrap; gap: 8px; min-height: 48px; }
+.bricka { padding: 9px 14px; border-radius: 10px; border: 1.5px solid var(--line); background: var(--card); font-family: var(--serif); font-size: 1.2rem; cursor: pointer; }
+.svarsrad .bricka { background: var(--accent-soft); border-color: transparent; }
+.raknare { font-size: .85rem; color: var(--muted); font-weight: 600; }
+.lyssnaknapp { display: inline-flex; align-items: center; gap: 10px; }
+
+.ordlista { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.ordlista li { display: flex; align-items: center; gap: 12px; padding: 8px 10px; border-radius: 12px; background: var(--paper); }
+.ordlista .sv-ord { font-family: var(--serif); font-size: 1.2rem; font-weight: 600; }
+.ordlista .en-ord { color: var(--muted); font-size: .95rem; }
+.ordlista .fack { margin-left: auto; }
+
+.forts { text-align: center; padding: 24px 18px; }
+.forts .sv { font-size: 1.3rem; }
+.forts .en { display: block; }
+
+/* Ordruta (tryck på ett ord) */
+.ordruta { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--card); border-top: 1px solid var(--line);
+  border-radius: 20px 20px 0 0; box-shadow: 0 -8px 30px rgb(0 0 0 / .15); padding: 18px 16px calc(18px + env(safe-area-inset-bottom)); }
+.ordruta-inre { max-width: 640px; margin: 0 auto; display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; }
+.ordruta .sv-ord { font-family: var(--serif); font-size: 1.6rem; font-weight: 600; }
+.ordruta .uttal { font-size: .9rem; color: var(--sun); font-weight: 600; }
+.ordruta .stang { border: 0; background: none; font-size: 1.6rem; cursor: pointer; color: var(--muted); width: 44px; height: 44px; }
+
+/* Ordrunda */
+.flashkort { text-align: center; padding: 36px 18px; }
+.flashkort .sv-ord { font-family: var(--serif); font-size: 2.4rem; font-weight: 600; margin: 8px 0 14px; }
+.flashkort .svar { font-size: 1.2rem; margin: 14px 0 0; min-height: 1.6em; }
+
+/* Fest */
+.fest { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; background: rgb(0 0 0 / .4); padding: 16px; }
+.fest-kort { background: var(--card); border-radius: 22px; padding: 28px 22px; max-width: 380px; width: 100%; text-align: center; animation: upp .35s ease-out; }
+.fest-kort .stor { font-size: 3rem; line-height: 1; }
+.fest-kort h2 { font-size: 1.8rem; margin: 10px 0 4px; }
+.bit { position: fixed; left: 50%; top: 42%; width: 9px; height: 14px; border-radius: 2px; z-index: 31; pointer-events: none;
+  animation: flyg 1.5s cubic-bezier(.15,.6,.3,1) forwards; }
+@keyframes flyg { to { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity: 0; } }
+@keyframes upp { from { transform: translateY(16px) scale(.96); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .bit { display: none; } .fest-kort, .alt.fel, .svarsrad.fel { animation: none; } }
+</style>
+</head>
+<body>
+<header class="topp"><div class="topp-inre">
+  <a href="#" class="logga">Små steg</a>
+  <select id="stegval" aria-label="Välj steg"></select>
+  <a href="#ord" class="chip" id="ordchip"></a>
+</div></header>
+<div class="layout">
+  <aside class="sidebar" id="nav" aria-label="Kapitel och steg"></aside>
+  <main id="app"></main>
+</div>
+
+<script type="application/json" id="data">
+{
+  "kapitel": [
+    {
+      "nr": 1,
+      "titel": "Erik och familjen",
+      "en": "Erik and his family",
+      "steg": [
+        {
+          "id": "1-1", "nr": 1, "titel": "Hej!", "en": "Erik says hello",
+          "meningar": [
+            { "sv": "Hej!", "en": "Hi!" },
+            { "sv": "Jag heter Erik.", "en": "My name is Erik. (Word for word: I am called Erik.)" },
+            { "sv": "Jag bor i Sverige.", "en": "I live in Sweden." },
+            { "sv": "Jag bor i en lägenhet.", "en": "I live in an apartment." },
+            { "sv": "Jag har två barn.", "en": "I have two children." },
+            { "sv": "Jag dricker mycket kaffe.", "en": "I drink a lot of coffee." }
+          ],
+          "aha": {
+            "rubrik": "Swedish is English’s cousin",
+            "html": "<p>Say these words out loud. Many of them are cousins of English words:</p><table class='par'><tr><td>har</td><td>have, has</td></tr><tr><td>två</td><td>two</td></tr><tr><td>kaffe</td><td>coffee</td></tr><tr><td>dricker</td><td>drink, drinks</td></tr><tr><td>i</td><td>in</td></tr></table><p>Some cousins are hidden a little deeper:</p><ul><li><b>barn</b> (child) is still used in Scotland, where a <i>bairn</i> is a child.</li><li><b>bor</b> (lives) hides inside English <i>neigh<u>bour</u></i>: the one who lives near.</li><li><b>heter</b> (is called) is related to old English <i>hight</i>, “named”.</li></ul><p class='tips'>Tip: when you meet a new word, say it aloud and ask yourself: does it sound like an English word?</p>"
+          },
+          "testa": [
+            { "typ": "val", "fraga": "Jag ___ Erik.", "alternativ": ["heter", "har", "bor"], "ratt": "heter", "forklaring": "Jag heter Erik = My name is Erik." },
+            { "typ": "lyssna", "sv": "Jag bor i en lägenhet.", "fraga": "What did you hear?", "alternativ": ["I live in an apartment.", "I have two children.", "I drink a lot of coffee."], "ratt": "I live in an apartment." },
+            { "typ": "ordna", "ord": ["Jag", "har", "två", "barn"], "slut": "." },
+            { "typ": "val", "fraga": "Which word means “live”?", "alternativ": ["bor", "har", "heter"], "ratt": "bor", "forklaring": "Like neigh-bour: the one who lives near.", "svAlt": true }
+          ],
+          "ord": [
+            { "sv": "heter", "en": "is called, am called" },
+            { "sv": "bor", "en": "live, lives" },
+            { "sv": "en lägenhet", "en": "an apartment, a flat" },
+            { "sv": "har", "en": "have, has" },
+            { "sv": "två", "en": "two" },
+            { "sv": "ett barn", "en": "a child · två barn = two children" },
+            { "sv": "dricker", "en": "drink, drinks" },
+            { "sv": "kaffe", "en": "coffee" }
+          ],
+          "fortsattning": { "sv": "Erik har två barn. Vad heter de?", "en": "Erik has two children. What are their names?" }
+        },
+        {
+          "id": "1-2", "nr": 2, "titel": "En vanlig morgon", "en": "An ordinary morning",
+          "meningar": [
+            { "sv": "Erik har två barn.", "en": "Erik has two children." },
+            { "sv": "De heter Elsa och Olle.", "en": "Their names are Elsa and Olle." },
+            { "sv": "Elsa är sju år.", "en": "Elsa is seven (years old)." },
+            { "sv": "Olle är fyra år.", "en": "Olle is four." },
+            { "sv": "På morgonen dricker Erik kaffe.", "en": "In the morning, Erik drinks coffee." },
+            { "sv": "Barnen äter frukost.", "en": "The children eat breakfast." }
+          ],
+          "aha": {
+            "rubrik": "The verb is always number two",
+            "html": "<p>Swedish has one strong rule: in a normal sentence, <b>the verb comes second</b>.</p><div class='v2'><span>Erik</span><span class='verb'>dricker</span><span>kaffe på morgonen.</span></div><div class='v2'><span>På morgonen</span><span class='verb'>dricker</span><span>Erik kaffe.</span></div><p>When a sentence starts with a time word like <i>på morgonen</i>, the verb still takes place number two. So it jumps <b>in front of</b> Erik. Word for word: “In the morning <b>drinks</b> Erik coffee.” Strange in English, but exactly right in Swedish.</p><p class='bonus'><b>Good news:</b> Swedish verbs never change for the person. <i>Jag dricker, Erik dricker, de dricker.</i> English has <i>I drink</i> but <i>he drinks</i>.</p>"
+          },
+          "testa": [
+            { "typ": "ordna", "ord": ["På morgonen", "dricker", "Erik", "kaffe"], "slut": "." },
+            { "typ": "val", "fraga": "Which sentence is correct?", "alternativ": ["På morgonen dricker Erik kaffe.", "På morgonen Erik dricker kaffe."], "ratt": "På morgonen dricker Erik kaffe.", "forklaring": "The verb (dricker) comes second, right after På morgonen.", "svAlt": true },
+            { "typ": "val", "fraga": "Elsa ___ sju år.", "alternativ": ["är", "har", "heter"], "ratt": "är", "forklaring": "Elsa är sju år = Elsa is seven years old." },
+            { "typ": "lyssna", "sv": "Olle är fyra år.", "fraga": "How old is Olle?", "alternativ": ["4", "7", "2"], "ratt": "4" },
+            { "typ": "val", "fraga": "Barnen ___ frukost.", "alternativ": ["äter", "heter", "bor"], "ratt": "äter", "forklaring": "Barnen äter frukost = The children eat breakfast." }
+          ],
+          "ord": [
+            { "sv": "de", "en": "they (sounds like “dom”)" },
+            { "sv": "är", "en": "am, is, are (sounds like “e”)" },
+            { "sv": "sju", "en": "seven" },
+            { "sv": "fyra", "en": "four" },
+            { "sv": "ett år", "en": "a year · sju år = seven years" },
+            { "sv": "på morgonen", "en": "in the morning" },
+            { "sv": "äter", "en": "eat, eats" },
+            { "sv": "frukost", "en": "breakfast" }
+          ],
+          "fortsattning": { "sv": "Det knackar på dörren. Vem kan det vara?", "en": "Someone knocks on the door. Who can it be?" }
+        },
+        { "id": "1-3", "nr": 3, "titel": "Grannen", "en": "The neighbour", "kommer": true },
+        { "id": "1-4", "nr": 4, "titel": "I affären", "en": "At the shop", "kommer": true },
+        { "id": "1-5", "nr": 5, "titel": "Vad kostar det?", "en": "What does it cost?", "kommer": true },
+        { "id": "1-6", "nr": 6, "titel": "En helt vanlig dag", "en": "A completely ordinary day", "kommer": true }
+      ]
+    },
+    { "nr": 2, "titel": "På vårdcentralen", "en": "At the health centre", "kommer": true, "steg": [] }
+  ],
+  "ordlista": {
+    "hej": { "en": "hi, hello" },
+    "jag": { "en": "I", "uttal": "often said “ja”" },
+    "heter": { "en": "is called, am called" },
+    "erik": { "en": "Erik (a name)" },
+    "elsa": { "en": "Elsa (a name)" },
+    "olle": { "en": "Olle (a name)" },
+    "bor": { "en": "live, lives" },
+    "i": { "en": "in" },
+    "sverige": { "en": "Sweden" },
+    "en": { "en": "a, an (for en-words)" },
+    "lägenhet": { "en": "apartment, flat" },
+    "har": { "en": "have, has" },
+    "två": { "en": "two" },
+    "barn": { "en": "child, children (the same word!)" },
+    "barnen": { "en": "the children" },
+    "dricker": { "en": "drink, drinks" },
+    "mycket": { "en": "a lot, much" },
+    "kaffe": { "en": "coffee" },
+    "de": { "en": "they", "uttal": "said “dom”" },
+    "och": { "en": "and", "uttal": "often said “o”" },
+    "är": { "en": "am, is, are", "uttal": "said “e”" },
+    "sju": { "en": "seven", "uttal": "the sj-sound, like a soft “hw”" },
+    "år": { "en": "year, years" },
+    "fyra": { "en": "four" },
+    "på": { "en": "on, at · på morgonen = in the morning" },
+    "morgonen": { "en": "the morning" },
+    "äter": { "en": "eat, eats" },
+    "frukost": { "en": "breakfast" },
+    "vad": { "en": "what" },
+    "det": { "en": "it", "uttal": "often said “de”" },
+    "knackar": { "en": "knocks" },
+    "dörren": { "en": "the door" },
+    "vem": { "en": "who" },
+    "kan": { "en": "can" },
+    "vara": { "en": "be" }
+  }
+}
+</script>
+
+<script>
+'use strict';
+const DATA = JSON.parse(document.getElementById('data').textContent);
+const NYCKEL = 'smasteg.v1';
+const DELAR = ['lyssna', 'aha', 'testa', 'saga', 'ord'];
+const DELNAMN = { lyssna: 'Lyssna', aha: 'Aha!', testa: 'Testa', saga: 'Säg det', ord: 'Nya ord' };
+const DAG = 86400000;
+const INTERVALL = [0, 1, 3, 7, 14, 30]; // dagar till nästa ordrunda, per fack
+const PLAY = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1.5v13l11-6.5z" fill="currentColor"/></svg>';
+
+// ---------- Sparat läge (bara i den här webbläsaren) ----------
+function tomt() { return { steg: {}, ord: {}, visaEn: false, fart: 'normal', sett: false }; }
+function las() {
+  try {
+    const s = JSON.parse(localStorage.getItem(NYCKEL));
+    if (s && typeof s === 'object') return Object.assign(tomt(), s);
+  } catch (e) {}
+  return tomt();
+}
+function spara() { try { localStorage.setItem(NYCKEL, JSON.stringify(S)); } catch (e) {} }
+let S = las();
+
+const allaSteg = DATA.kapitel.flatMap(k => k.steg.map(s => Object.assign({ kapitel: k }, s)));
+const byggda = allaSteg.filter(s => !s.kommer);
+const hittaSteg = id => allaSteg.find(s => s.id === id);
+const delarKlara = id => DELAR.filter(d => (S.steg[id] || {})[d]).length;
+const stegKlart = id => delarKlara(id) === DELAR.length;
+const nastaSteg = () => byggda.find(s => !stegKlart(s.id));
+const antalOrd = () => Object.keys(S.ord).length;
+const ordSomVantar = () => Object.entries(S.ord).filter(([, o]) => o.due <= Date.now()).map(([sv]) => sv);
+
+// ---------- Små hjälpare ----------
+function h(tag, attrs, ...barn) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v == null || v === false) continue;
+    if (k === 'class') el.className = v;
+    else if (k === 'html') el.innerHTML = v;
+    else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+    else el.setAttribute(k, v === true ? '' : v);
+  }
+  for (const b of barn.flat()) {
+    if (b == null || b === false) continue;
+    el.append(b instanceof Node ? b : document.createTextNode(b));
+  }
+  return el;
+}
+function fyll(el, ...barn) { el.append(...barn.flat().filter(b => b != null && b !== false)); }
+const vanta = ms => new Promise(r => setTimeout(r, ms));
+function blanda(a) {
+  a = [...a];
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+
+// ---------- Tal: bara lokala svenska röster (inga anrop till andra tjänster) ----------
+const Tal = {
+  rost: null, klar: false,
+  init() {
+    if (!('speechSynthesis' in window)) { this.klar = true; uppdateraRost(); return; }
+    const valj = () => {
+      const roster = speechSynthesis.getVoices().filter(v => v.localService && /^sv([-_]|$)/i.test(v.lang));
+      this.rost = roster.find(v => /^sv[-_]SE/i.test(v.lang)) || roster[0] || null;
+      if (this.rost || this.klar) { this.klar = true; uppdateraRost(); }
+    };
+    valj();
+    speechSynthesis.addEventListener('voiceschanged', valj);
+    setTimeout(() => { this.klar = true; valj(); uppdateraRost(); }, 1500);
+  },
+  finns() { return !!this.rost; },
+  stopp() { if ('speechSynthesis' in window) speechSynthesis.cancel(); },
+  saga(text, langsam) {
+    return new Promise(res => {
+      if (!this.rost) { res(0); return; }
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.voice = this.rost; u.lang = this.rost.lang;
+      u.rate = langsam ? 0.65 : 0.95;
+      let t0 = 0;
+      u.onstart = () => { t0 = performance.now(); };
+      u.onend = () => res(t0 ? performance.now() - t0 : 1200);
+      u.onerror = () => res(0);
+      speechSynthesis.speak(u);
+    });
+  }
+};
+let korning = 0;
+function stoppaAllt() { korning++; Tal.stopp(); }
+function spelaEn(text, langsam) { stoppaAllt(); return Tal.saga(text, langsam ?? S.fart === 'langsam'); }
+async function spelaSekvens(texter, { markera, efter, loop = false, langsam } = {}) {
+  if (!Tal.finns()) return false;
+  const id = ++korning;
+  Tal.stopp();
+  do {
+    for (let i = 0; i < texter.length; i++) {
+      if (id !== korning) return false;
+      markera && markera(i);
+      const tid = await Tal.saga(texter[i], langsam);
+      if (id !== korning) return false;
+      await vanta(efter ? efter(tid) : 500);
+    }
+  } while (loop && id === korning);
+  markera && markera(-1);
+  return id === korning;
+}
+function uppdateraRost() {
+  document.body.classList.toggle('ingen-rost', Tal.klar && !Tal.finns());
+  const ruta = document.getElementById('rostinfo');
+  if (ruta) ruta.replaceWith(rostInfo());
+}
+function rostInfo() {
+  if (!Tal.klar || Tal.finns()) return h('div', { id: 'rostinfo' });
+  return h('div', { id: 'rostinfo', class: 'kort varning' },
+    h('p', {}, h('b', {}, 'No Swedish voice on this device yet. '),
+      'Sound in this prototype comes from your device’s own built-in voice (nothing is sent anywhere). You can add one:'),
+    h('ul', {},
+      h('li', {}, 'iPhone/iPad: Settings → Accessibility → Spoken Content → Voices → Swedish.'),
+      h('li', {}, 'Android: Settings → Text-to-speech → Google → install Swedish.'),
+      h('li', {}, 'Windows: Settings → Time & language → Speech → add Swedish. Microsoft Edge often works best.')),
+    h('p', { class: 'liten' }, 'Everything else works without sound.'));
+}
+
+// ---------- Ord att trycka på ----------
+function ordKnappar(text) {
+  return text.split(/([A-Za-zÅÄÖåäöÉé]+)/).filter(Boolean).map(bit => {
+    if (!/[A-Za-zÅÄÖåäö]/.test(bit)) return bit;
+    const nyckel = bit.toLowerCase();
+    if (!DATA.ordlista[nyckel]) return bit;
+    return h('button', { class: 'ord', type: 'button', onclick: e => { e.stopPropagation(); visaOrd(nyckel, bit); } }, bit);
+  });
+}
+function visaOrd(nyckel, visad) {
+  stangOrd();
+  const o = DATA.ordlista[nyckel];
+  const ruta = h('div', { class: 'ordruta', id: 'ordruta', role: 'dialog', 'aria-label': visad },
+    h('div', { class: 'ordruta-inre' },
+      h('button', { class: 'spela', 'aria-label': 'Lyssna', html: PLAY, onclick: () => spelaEn(visad.toLowerCase()) }),
+      h('div', {},
+        h('div', { class: 'sv-ord', lang: 'sv' }, visad.toLowerCase()),
+        h('div', { lang: 'en' }, o.en),
+        o.uttal && h('div', { class: 'uttal', lang: 'en' }, 'Sound: ' + o.uttal)),
+      h('button', { class: 'stang', 'aria-label': 'Stäng', onclick: stangOrd }, '×')));
+  document.body.append(ruta);
+  spelaEn(visad.toLowerCase());
+}
+function stangOrd() { document.getElementById('ordruta')?.remove(); }
+document.addEventListener('click', e => { if (!e.target.closest('#ordruta')) stangOrd(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { stangOrd(); stangFest(); } });
+
+// ---------- Fest ----------
+function konfetti() {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const farger = ['#2b5c8a', '#e9b23c', '#2f7a4a', '#d0603f', '#84b3e2'];
+  for (let i = 0; i < 46; i++) {
+    const v = Math.random() * Math.PI * 2, r = 120 + Math.random() * 220;
+    const bit = h('span', { class: 'bit' });
+    bit.style.cssText = `--dx:${Math.cos(v) * r}px;--dy:${Math.sin(v) * r - 80}px;--rot:${Math.random() * 720}deg;background:${farger[i % farger.length]}`;
+    document.body.append(bit);
+    setTimeout(() => bit.remove(), 1600);
+  }
+}
+function fest({ stor, rubrik, text, knapp, href }) {
+  stangFest();
+  const lager = h('div', { class: 'fest', id: 'fest', onclick: e => { if (e.target.id === 'fest') stangFest(); } },
+    h('div', { class: 'fest-kort', role: 'dialog', 'aria-label': rubrik },
+      h('div', { class: 'stor', 'aria-hidden': 'true' }, stor),
+      h('h2', {}, rubrik),
+      h('p', {}, text),
+      h('div', { class: 'knappar', style: 'justify-content:center' },
+        href ? h('a', { class: 'knapp primar', href, onclick: stangFest }, knapp) : null,
+        h('button', { class: 'knapp', onclick: stangFest }, href ? 'Stanna här' : 'Fortsätt'))));
+  document.body.append(lager);
+  konfetti();
+}
+function stangFest() { document.getElementById('fest')?.remove(); }
+
+// ---------- Framsteg ----------
+function markera(steg, del) {
+  const st = S.steg[steg.id] || (S.steg[steg.id] = {});
+  if (st[del]) return;
+  const fore = stegKlart(steg.id);
+  st[del] = true;
+  spara();
+  uppdateraDelar(steg);
+  if (!fore && stegKlart(steg.id)) {
+    const kap = steg.kapitel;
+    const kapKlart = kap.steg.every(s => !s.kommer && stegKlart(s.id));
+    const nasta = nastaSteg();
+    setTimeout(() => fest(kapKlart
+      ? { stor: '🏆', rubrik: `Kapitel ${kap.nr} klart!`, text: `You finished “${kap.titel}”. Fantastiskt!`, knapp: 'Till kartan', href: '#' }
+      : { stor: '🎉', rubrik: `Steg ${steg.nr} klart!`, text: `Bra jobbat! You have ${antalOrd()} words in your word bank now.`,
+          knapp: nasta ? `Nästa: ${nasta.titel} →` : 'Till kartan', href: nasta ? '#steg/' + nasta.id : '#' }), 350);
+  }
+}
+function uppdateraDelar(steg) {
+  const st = S.steg[steg.id] || {};
+  document.querySelectorAll('[data-del]').forEach(el => el.classList.toggle(el.matches('.del') ? 'klar' : 'pa', !!st[el.dataset.del]));
+  document.querySelectorAll('[data-klarknapp]').forEach(b => {
+    const klar = !!st[b.dataset.klarknapp];
+    b.classList.toggle('klar', klar);
+    b.classList.toggle('primar', !klar);
+    b.textContent = klar ? '✓ ' + b.dataset.klartext : b.dataset.text;
+  });
+  uppdateraChip();
+}
+function klarknapp(steg, del, text, klartext) {
+  return h('button', { class: 'knapp', 'data-klarknapp': del, 'data-text': text, 'data-klartext': klartext,
+    onclick: () => markera(steg, del) }, text);
+}
+function uppdateraChip() {
+  const chip = document.getElementById('ordchip');
+  const vantar = ordSomVantar().length;
+  chip.replaceChildren(`${antalOrd()} ord`, vantar ? h('span', { class: 'badge', 'aria-label': `${vantar} att repetera` }, vantar) : '');
+  byggNav();
+}
+
+// ---------- Sidomenyn och stegvalet ----------
+function byggNav() {
+  const nav = document.getElementById('nav');
+  const scroll = nav.scrollTop;
+  const vag = location.hash.replace(/^#/, '');
+  const vantar = ordSomVantar().length;
+  const stangda = S.navStangd || [];
+  const satt = stangd => { S.navStangd = stangd; spara(); byggNav(); };
+  const rad = (href, id, nid, titel, prog, extra) => h('a', { href, class: 'nav-item' + (vag === id ? ' aktiv' : '') + (extra || '') },
+    h('span', { class: 'nid', 'aria-hidden': 'true' }, nid), h('span', { class: 'nt' }, titel), h('span', { class: 'prog' }, prog || ''));
+  nav.replaceChildren(
+    h('div', { class: 'nav-verktyg' },
+      h('button', { onclick: () => satt(DATA.kapitel.map(k => k.nr)) }, 'Fäll ihop alla'),
+      h('button', { onclick: () => satt([]) }, 'Fäll ut alla')),
+    h('div', { class: 'nav-topp' },
+      rad('#', '', '★', 'Kartan'),
+      rad('#ord', 'ord', '◆', 'Ordbanken', String(antalOrd())),
+      rad('#runda', 'runda', '↻', 'Ordrunda', vantar ? h('span', { class: 'badge' }, vantar) : '')),
+    ...DATA.kapitel.map(kap => {
+      const klara = kap.steg.filter(s => !s.kommer && stegKlart(s.id)).length;
+      const allt = kap.steg.length > 0 && klara === kap.steg.length;
+      const d = h('details', { class: 'nav-kap' + (kap.kommer ? ' kommande' : '') + (allt ? ' allt-klart' : ''), open: !kap.kommer && !stangda.includes(kap.nr) },
+        h('summary', {}, h('h3', {}, h('span', {}, `Kapitel ${kap.nr}`, h('em', {}, kap.kommer ? 'kommer snart' : `${klara}/${kap.steg.length}`)), kap.titel)),
+        h('p', { lang: 'en' }, kap.en),
+        kap.steg.map(s => {
+          if (s.kommer) return h('div', { class: 'nav-item kommer' }, h('span', { class: 'nid' }, s.nr), h('span', { class: 'nt' }, s.titel), h('span', { class: 'prog' }));
+          const n = delarKlara(s.id), klart = n === DELAR.length;
+          return rad('#steg/' + s.id, 'steg/' + s.id, s.nr, s.titel, klart ? '✓' : n ? `${n}/5` : '', klart ? ' klar' : '');
+        }));
+      d.addEventListener('toggle', () => {
+        const set = new Set(S.navStangd || []);
+        if (d.open) set.delete(kap.nr); else set.add(kap.nr);
+        S.navStangd = [...set]; spara();
+      });
+      return d;
+    }));
+  nav.scrollTop = scroll;
+
+  const sel = document.getElementById('stegval');
+  sel.replaceChildren(
+    h('option', { value: '' }, '★ Kartan'),
+    h('option', { value: 'ord' }, `◆ Ordbanken (${antalOrd()})`),
+    h('option', { value: 'runda' }, '↻ Ordrunda' + (vantar ? ` (${vantar} väntar)` : '')),
+    ...DATA.kapitel.filter(k => !k.kommer).map(kap => h('optgroup', { label: `Kapitel ${kap.nr} · ${kap.titel}` },
+      kap.steg.map(s => h('option', { value: 'steg/' + s.id, disabled: !!s.kommer },
+        `${s.nr}  ${s.titel}` + (s.kommer ? ' (kommer snart)' : stegKlart(s.id) ? '  ✓' : ''))))));
+  sel.value = vag;
+}
+document.getElementById('stegval').addEventListener('change', e => { location.hash = '#' + e.target.value; });
+
+// ---------- Hem: kartan ----------
+function visaHem() {
+  const app = document.getElementById('app');
+  const klara = byggda.filter(s => stegKlart(s.id)).length;
+  const vantar = ordSomVantar().length;
+  const nasta = nastaSteg();
+
+  fyll(app,
+    h('section', { class: 'hjalte' },
+      h('h1', {}, 'Små steg'),
+      h('p', { lang: 'en' }, 'Swedish, one small step at a time.')),
+    !S.sett && h('section', { class: 'kort intro', lang: 'en' },
+      h('h2', {}, 'How it works'),
+      h('ul', {},
+        h('li', {}, 'Each step is a short scene from a story, about 5–15 minutes.'),
+        h('li', {}, 'Every step has the same five parts: listen and read · aha! · test yourself · say it · new words.'),
+        h('li', {}, 'Tap any Swedish word to see what it means. Do a step whenever you feel like it.'),
+        h('li', {}, 'Words you save come back in a short word round after a few days, so they stick.')),
+      h('div', { class: 'knappar' }, h('button', { class: 'knapp primar', onclick: e => { S.sett = true; spara(); e.target.closest('section').remove(); } }, 'Got it'))),
+    rostInfo(),
+    h('div', { class: 'siffror' },
+      h('a', { class: 'siffra', href: '#ord' }, h('b', {}, antalOrd()), h('span', {}, 'ord i ordbanken')),
+      vantar
+        ? h('a', { class: 'siffra vantar', href: '#runda' }, h('b', {}, vantar), h('span', {}, 'ord att repetera →'))
+        : h('div', { class: 'siffra' }, h('b', {}, `${klara}/${byggda.length}`), h('span', {}, 'steg klara'))),
+    nasta
+      ? h('a', { class: 'knapp primar bred', href: '#steg/' + nasta.id }, klara ? `Fortsätt: Steg ${nasta.nr} · ${nasta.titel}` : 'Börja: Steg 1 · Hej!')
+      : h('p', { class: 'kort', lang: 'en' }, 'You have done every step so far. New steps are coming soon!'),
+    ...DATA.kapitel.map(kap => kapitelKort(kap, nasta)),
+    h('div', { class: 'fot', lang: 'en' },
+      h('p', {}, 'Your progress is saved only on this device. No accounts, nothing is sent anywhere.'),
+      aterstall()));
+}
+function kapitelKort(kap, nasta) {
+  if (kap.kommer) return h('section', { class: 'kort kommande' },
+    h('div', { class: 'kicker' }, `Kapitel ${kap.nr} · kommer snart`), h('h2', {}, kap.titel), h('p', { class: 'liten', lang: 'en' }, kap.en));
+  const klara = kap.steg.filter(s => !s.kommer && stegKlart(s.id)).length;
+  return h('section', { class: 'kort' },
+    h('div', { class: 'kapitel-huvud' },
+      h('div', {}, h('div', { class: 'kicker' }, `Kapitel ${kap.nr}`), h('h2', {}, kap.titel)),
+      h('span', { class: 'liten' }, `${klara}/${kap.steg.length}`)),
+    h('div', { class: 'stapel' }, h('i', { style: `width:${100 * klara / kap.steg.length}%` })),
+    h('ol', { class: 'stegrader' }, kap.steg.map(s => {
+      const klart = !s.kommer && stegKlart(s.id);
+      const klass = 'stegrad' + (s.kommer ? ' kommer' : klart ? ' klart' : nasta && nasta.id === s.id ? ' nasta' : '');
+      const innehall = [
+        h('span', { class: 'ring' }, klart ? '✓' : s.nr),
+        h('span', { class: 'titel' }, s.titel, h('small', { lang: 'en' }, s.kommer ? 'coming soon' : s.en)),
+        s.kommer ? h('span') : h('span', { class: 'prickar', 'aria-label': `${delarKlara(s.id)} av 5 delar klara` },
+          DELAR.map(d => h('span', { class: (S.steg[s.id] || {})[d] ? 'pa' : '' })))];
+      return h('li', { class: klass }, s.kommer ? h('div', { class: 'las' }, innehall) : h('a', { href: '#steg/' + s.id }, innehall));
+    })));
+}
+function aterstall() {
+  const knapp = h('button', { onclick: () => {
+    if (knapp.dataset.saker) { try { localStorage.removeItem(NYCKEL); } catch (e) {} S = tomt(); rita(); return; }
+    knapp.dataset.saker = '1';
+    knapp.textContent = 'Tap again to delete all progress and words';
+  } }, 'Start over');
+  return knapp;
+}
+
+// ---------- Ett steg ----------
+function visaSteg(steg) {
+  const app = document.getElementById('app');
+  if (S.visaEn) app.classList.add('visa-en');
+  fyll(app,
+    h('section', { class: 'steghuvud' },
+      h('a', { class: 'tillbaka', href: '#' }, '← Kartan'),
+      h('div', { class: 'kicker' }, `Kapitel ${steg.kapitel.nr} · Steg ${steg.nr}`),
+      h('h1', {}, steg.titel),
+      h('p', { class: 'en-titel', lang: 'en' }, steg.en),
+      h('nav', { class: 'delnav', 'aria-label': 'Delar' }, DELAR.map((d, i) =>
+        h('button', { 'data-del': d, onclick: () => document.getElementById('del-' + d).scrollIntoView({ behavior: 'smooth' }) }, `${i + 1} ${DELNAMN[d]}`)))),
+    rostInfo(),
+    delLyssna(steg), delAha(steg), delTesta(steg), delSaga(steg), delOrd(steg),
+    steg.fortsattning && h('section', { class: 'kort forts' },
+      h('div', { class: 'kicker' }, 'Fortsättning följer …'),
+      h('p', { class: 'sv', lang: 'sv' }, ordKnappar(steg.fortsattning.sv)),
+      h('p', { class: 'en', lang: 'en' }, steg.fortsattning.en),
+      (() => { const n = byggda[byggda.indexOf(steg) + 1]; return n
+        ? h('a', { class: 'knapp primar', href: '#steg/' + n.id, style: 'margin-top:12px' }, `Nästa steg: ${n.titel} →`)
+        : h('p', { class: 'liten', lang: 'en', style: 'margin-top:12px' }, 'The next step is coming soon.'); })()));
+  uppdateraDelar(steg);
+}
+function delHuvud(del, nr, titel, en) {
+  return h('div', { class: 'del-huvud' }, h('span', { class: 'nr', 'aria-hidden': 'true' }, nr),
+    h('h2', {}, titel, h('small', { lang: 'en' }, en)));
+}
+function sektion(del, klass, ...barn) {
+  return h('section', { class: 'del ' + (klass || ''), id: 'del-' + del, 'data-del': del }, ...barn);
+}
+
+function delLyssna(steg) {
+  const rader = steg.meningar.map(m => h('li', { class: 'mening' },
+    h('button', { class: 'spela', 'aria-label': 'Lyssna: ' + m.sv, html: PLAY, onclick: () => spelaEn(m.sv) }),
+    h('div', {}, h('p', { class: 'sv', lang: 'sv' }, ordKnappar(m.sv)), h('p', { class: 'en', lang: 'en' }, m.en))));
+  const markeraRad = i => rader.forEach((r, j) => r.classList.toggle('nu', i === j));
+  const fart = h('div', { class: 'vaxel', role: 'group', 'aria-label': 'Fart' },
+    ['langsam', 'normal'].map(f => h('button', { 'aria-pressed': String(S.fart === f), onclick: e => {
+      S.fart = f; spara();
+      e.target.parentNode.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b === e.target)));
+    } }, f === 'langsam' ? 'Långsamt' : 'Normalt')));
+  const enKnapp = h('div', { class: 'vaxel' }, h('button', { 'aria-pressed': String(S.visaEn), onclick: e => {
+    S.visaEn = !S.visaEn; spara();
+    document.getElementById('app').classList.toggle('visa-en', S.visaEn);
+    document.querySelectorAll('[data-en-knapp]').forEach(b => b.setAttribute('aria-pressed', String(S.visaEn)));
+  }, 'data-en-knapp': '' }, 'English'));
+  const allt = h('button', { class: 'spela text', html: PLAY + 'Spela allt', onclick: async () => {
+    const klar = await spelaSekvens(steg.meningar.map(m => m.sv), { markera: markeraRad, langsam: S.fart === 'langsam', efter: () => 600 });
+    if (klar) markera(steg, 'lyssna');
+  } });
+  return sektion('lyssna', '',
+    delHuvud('lyssna', 1, 'Lyssna och läs', 'Listen and read. Tap a word to see what it means.'),
+    h('div', { class: 'reglage' }, allt, fart, enKnapp),
+    h('ol', { class: 'meningar' }, rader),
+    h('div', { class: 'knappar' }, klarknapp(steg, 'lyssna', 'Jag har lyssnat och läst', 'Lyssnat')));
+}
+
+function delAha(steg) {
+  return sektion('aha', 'aha',
+    delHuvud('aha', 2, 'Aha!', 'Something to notice'),
+    h('h3', { lang: 'en' }, steg.aha.rubrik),
+    h('div', { lang: 'en', html: steg.aha.html }),
+    h('div', { class: 'knappar' }, klarknapp(steg, 'aha', 'Aha! Jag fattar', 'Aha!')));
+}
+
+function delTesta(steg) {
+  const yta = h('div', { class: 'testyta', 'aria-live': 'polite' });
+  let i = (S.steg[steg.id] || {}).testa ? steg.testa.length : 0;
+  const rita = () => {
+    yta.replaceChildren();
+    if (i >= steg.testa.length) {
+      markera(steg, 'testa');
+      yta.append(h('p', { class: 'respons' }, h('b', {}, 'Snyggt! '), h('span', { lang: 'en' }, 'All done. Every answer right in the end.')),
+        h('div', { class: 'knappar' }, h('button', { class: 'knapp', onclick: () => { i = 0; rita(); } }, 'Gör om')));
+      return;
+    }
+    yta.append(h('div', { class: 'raknare' }, `Fråga ${i + 1} av ${steg.testa.length}`),
+      fraga(steg.testa[i], () => { i++; rita(); }));
+  };
+  rita();
+  return sektion('testa', '', delHuvud('testa', 3, 'Testa', 'Test yourself. Mistakes are fine, just try again.'), yta);
+}
+function fraga(q, nasta) {
+  const box = h('div');
+  const nastaKnapp = () => h('div', { class: 'knappar' }, h('button', { class: 'knapp primar', onclick: nasta }, 'Nästa →'));
+  if (q.typ === 'ordna') {
+    const svar = q.ord.join(' ') + (q.slut || '');
+    let ordning = blanda(q.ord.map((o, k) => k));
+    while (q.ord.length > 1 && ordning.every((k, j) => k === j)) ordning = blanda(ordning);
+    const valda = [];
+    const rad = h('div', { class: 'svarsrad', 'aria-label': 'Din mening' });
+    const brickor = h('div', { class: 'brickor' });
+    const respons = h('div');
+    const ritaOm = () => {
+      rad.replaceChildren(...valda.map((k, pos) => h('button', { class: 'bricka', lang: 'sv', onclick: () => { valda.splice(pos, 1); rad.classList.remove('fel'); ritaOm(); } }, q.ord[k])));
+      brickor.replaceChildren(...ordning.filter(k => !valda.includes(k)).map(k =>
+        h('button', { class: 'bricka', lang: 'sv', onclick: () => { valda.push(k); ritaOm(); kolla(); } }, q.ord[k])));
+    };
+    const kolla = () => {
+      if (valda.length < q.ord.length) return;
+      if (valda.every((k, j) => k === j)) {
+        rad.classList.add('ratt');
+        rad.replaceChildren(h('span', { class: 'fraga', lang: 'sv', style: 'margin:4px' }, svar));
+        brickor.remove();
+        spelaEn(svar);
+        respons.replaceChildren(h('p', { class: 'respons' }, h('b', {}, 'Rätt! '), h('span', { lang: 'en' }, 'Say it out loud once.')), nastaKnapp());
+      } else {
+        rad.classList.remove('fel'); void rad.offsetWidth; rad.classList.add('fel');
+        respons.replaceChildren(h('p', { class: 'respons fel', lang: 'en' }, 'Not quite. Tap a word to move it back and try again.'));
+      }
+    };
+    ritaOm();
+    box.append(h('p', { class: 'fraga', lang: 'en', style: 'font-family:var(--sans);font-size:1rem' }, 'Put the words in the right order:'), rad, brickor, respons);
+    return box;
+  }
+  // val och lyssna
+  if (q.typ === 'lyssna') {
+    const visaText = h('button', { class: 'knapp', style: 'min-height:40px', onclick: e => { e.target.replaceWith(h('span', { class: 'fraga', lang: 'sv' }, q.sv)); } }, 'Visa texten');
+    fyll(box, h('div', { class: 'lyssnaknapp' },
+      h('button', { class: 'spela text', html: PLAY + 'Lyssna', onclick: () => spelaEn(q.sv) }),
+      h('button', { class: 'spela text', html: PLAY + 'Långsamt', onclick: () => spelaEn(q.sv, true) })),
+      h('p', { class: 'fraga', lang: 'en', style: 'margin-top:14px' }, q.fraga),
+      Tal.finns() ? null : h('p', {}, visaText));
+    setTimeout(() => { if (box.isConnected) spelaEn(q.sv); }, 300);
+  } else {
+    const delar = q.fraga.split('___');
+    box.append(h('p', { class: 'fraga', lang: delar.length > 1 ? 'sv' : 'en', style: delar.length > 1 ? '' : 'font-family:var(--sans);font-size:1.1rem' },
+      delar.length > 1 ? [delar[0], h('span', { class: 'lucka' }, ' '), delar[1]] : q.fraga));
+  }
+  const respons = h('div');
+  const svSomAlt = q.svAlt || q.typ === 'val' && q.fraga.includes('___');
+  const knappar = blanda(q.alternativ).map(alt => h('button', { class: 'alt' + (svSomAlt ? ' sv-alt' : ''), lang: svSomAlt ? 'sv' : 'en', onclick: e => {
+    const b = e.currentTarget;
+    if (alt === q.ratt) {
+      b.classList.add('ratt');
+      knappar.forEach(k => { k.disabled = true; });
+      const lucka = box.querySelector('.lucka');
+      if (lucka) lucka.textContent = alt;
+      if (q.typ === 'val' && q.fraga.includes('___')) spelaEn(q.fraga.replace('___', alt));
+      respons.replaceChildren(h('p', { class: 'respons' }, h('b', {}, 'Rätt! '), q.forklaring ? h('span', { lang: 'en' }, q.forklaring) : null), nastaKnapp());
+    } else {
+      b.classList.remove('fel'); void b.offsetWidth; b.classList.add('fel');
+      b.disabled = true;
+    }
+  } }, alt));
+  box.append(h('div', { class: 'alternativ' }, knappar), respons);
+  return box;
+}
+
+function delSaga(steg) {
+  const rader = steg.meningar.map(m => h('li', { class: 'mening' },
+    h('div', { style: 'flex:1' }, h('p', { class: 'sv', lang: 'sv' }, m.sv), h('p', { class: 'en', lang: 'en' }, m.en),
+      h('div', { class: 'reglage', style: 'margin:8px 0 0' },
+        h('button', { class: 'spela text', html: PLAY + 'Långsamt', onclick: () => spelaEn(m.sv, true) }),
+        h('button', { class: 'spela text', html: PLAY + 'Normalt', onclick: () => spelaEn(m.sv, false) })))));
+  const markeraRad = i => rader.forEach((r, j) => r.classList.toggle('nu', i === j));
+  const loopKnapp = h('button', { class: 'knapp kraver-rost', onclick: () => {
+    if (loopKnapp.dataset.pa) { stoppaAllt(); markeraRad(-1); loopKnapp.textContent = '∞ Lyssna och säg efter'; delete loopKnapp.dataset.pa; return; }
+    loopKnapp.dataset.pa = '1'; loopKnapp.textContent = '■ Stopp';
+    spelaSekvens(steg.meningar.map(m => m.sv), { markera: markeraRad, loop: true, langsam: S.fart === 'langsam', efter: tid => tid * 1.3 + 900 });
+  } }, '∞ Lyssna och säg efter');
+  return sektion('saga', '',
+    delHuvud('saga', 4, 'Säg det', 'Say it out loud.'),
+    h('ol', { lang: 'en', style: 'margin:0 0 12px;padding-left:1.2em' },
+      h('li', {}, 'Play a sentence slowly and say it at the same time as the voice.'),
+      h('li', {}, 'Then at normal speed.'),
+      h('li', {}, 'Then press ∞: it plays every sentence and leaves a pause for you to repeat. Good for doing the dishes!')),
+    h('div', { class: 'reglage' }, loopKnapp),
+    h('ol', { class: 'meningar' }, rader),
+    h('div', { class: 'knappar' }, klarknapp(steg, 'saga', 'Jag har sagt dem högt', 'Sagt')));
+}
+
+function delOrd(steg) {
+  const lista = h('ul', { class: 'ordlista' }, steg.ord.map(o => h('li', {},
+    h('button', { class: 'spela', 'aria-label': 'Lyssna: ' + o.sv, html: PLAY, onclick: () => spelaEn(o.sv) }),
+    h('div', {}, h('div', { class: 'sv-ord', lang: 'sv' }, o.sv), h('div', { class: 'en-ord', lang: 'en' }, o.en)))));
+  const knapp = h('button', { class: 'knapp', 'data-klarknapp': 'ord', 'data-text': `Spara i ordbanken (+${steg.ord.length} ord)`, 'data-klartext': 'Sparade i ordbanken',
+    onclick: () => {
+      for (const o of steg.ord) if (!S.ord[o.sv]) S.ord[o.sv] = { en: o.en, fack: 0, due: Date.now() };
+      spara();
+      markera(steg, 'ord');
+      uppdateraChip();
+    } }, '');
+  return sektion('ord', '',
+    delHuvud('ord', 5, 'Nya ord', 'New words. Save them and they will come back in a word round.'),
+    lista, h('div', { class: 'knappar' }, knapp));
+}
+
+// ---------- Ordbanken och ordrundan ----------
+function visaOrdbank() {
+  const app = document.getElementById('app');
+  const ord = Object.entries(S.ord).sort(([a], [b]) => a.replace(/^(en|ett) /, '').localeCompare(b.replace(/^(en|ett) /, ''), 'sv'));
+  const vantar = ordSomVantar().length;
+  fyll(app,
+    h('section', { class: 'steghuvud' }, h('a', { class: 'tillbaka', href: '#' }, '← Kartan'),
+      h('h1', {}, 'Ordbanken'), h('p', { class: 'en-titel', lang: 'en' }, `${ord.length} words so far. The dots show how well each word sits.`)),
+    vantar ? h('a', { class: 'knapp primar bred', href: '#runda' }, `Ordrunda: ${vantar} ord väntar`)
+      : h('p', { class: 'liten', lang: 'en' }, ord.length ? 'No words to review right now. They will come back in a few days.' : 'Finish the “Nya ord” part of a step to fill your word bank.'),
+    ord.length ? h('section', { class: 'kort' }, h('ul', { class: 'ordlista' }, ord.map(([sv, o]) => h('li', {},
+      h('button', { class: 'spela', 'aria-label': 'Lyssna: ' + sv, html: PLAY, onclick: () => spelaEn(sv) }),
+      h('div', {}, h('div', { class: 'sv-ord', lang: 'sv' }, sv), h('div', { class: 'en-ord', lang: 'en' }, o.en)),
+      h('span', { class: 'prickar fack', 'aria-label': `nivå ${o.fack} av 5` }, [1, 2, 3, 4, 5].map(n => h('span', { class: o.fack >= n ? 'pa' : '' }))))))) : null);
+}
+function visaRunda() {
+  const app = document.getElementById('app');
+  const ko = blanda(ordSomVantar());
+  const totalt = ko.length;
+  let klara = 0;
+  const yta = h('section', { class: 'kort flashkort' });
+  fyll(app, h('section', { class: 'steghuvud' }, h('a', { class: 'tillbaka', href: '#' }, '← Kartan'), h('h1', {}, 'Ordrunda'),
+    h('p', { class: 'en-titel', lang: 'en' }, 'See the Swedish word. Think of what it means. Then check.')), rostInfo(), yta);
+  const rita = () => {
+    if (!ko.length) {
+      yta.replaceChildren(h('div', { class: 'stor', style: 'font-size:2.5rem' }, totalt ? '🌟' : '✓'),
+        h('h2', { style: 'margin:8px 0' }, totalt ? 'Ordrundan klar!' : 'Inget att repetera'),
+        h('p', { lang: 'en' }, totalt ? `${totalt} words reviewed. They will come back later, a little further apart each time.` : 'Come back in a day or two.'),
+        h('a', { class: 'knapp primar', href: '#' }, 'Till kartan'));
+      if (totalt) konfetti();
+      uppdateraChip();
+      return;
+    }
+    const sv = ko[0], o = S.ord[sv];
+    const svar = h('p', { class: 'svar', lang: 'en' });
+    const knappar = h('div', { class: 'knappar', style: 'justify-content:center' });
+    const visa = h('button', { class: 'knapp primar', onclick: () => {
+      svar.textContent = o.en;
+      visa.remove();
+      knappar.append(
+        h('button', { class: 'knapp', onclick: () => { o.fack = 0; o.due = Date.now(); spara(); ko.push(ko.shift()); rita(); } }, 'Inte än'),
+        h('button', { class: 'knapp primar', onclick: () => {
+          o.fack = Math.min(o.fack + 1, INTERVALL.length - 1); o.due = Date.now() + INTERVALL[o.fack] * DAG; spara();
+          ko.shift(); klara++; rita();
+        } }, '✓ Kunde det'));
+    } }, 'Visa svaret');
+    knappar.append(visa);
+    yta.replaceChildren(h('div', { class: 'raknare' }, `${klara + 1} av ${totalt}`),
+      h('div', { class: 'sv-ord', lang: 'sv' }, sv),
+      h('button', { class: 'spela', 'aria-label': 'Lyssna', html: PLAY, onclick: () => spelaEn(sv) }),
+      svar, knappar);
+    spelaEn(sv);
+  };
+  rita();
+}
+
+// ---------- Vägvisare ----------
+function rita() {
+  stoppaAllt(); stangOrd(); stangFest();
+  const app = document.getElementById('app');
+  app.replaceChildren();
+  app.classList.remove('visa-en');
+  const vag = location.hash.replace(/^#/, '');
+  const steg = vag.startsWith('steg/') && hittaSteg(vag.slice(5));
+  if (steg && !steg.kommer) visaSteg(steg);
+  else if (vag === 'ord') visaOrdbank();
+  else if (vag === 'runda') visaRunda();
+  else visaHem();
+  uppdateraChip();
+  window.scrollTo(0, 0);
+}
+window.addEventListener('hashchange', rita);
+Tal.init();
+rita();
+</script>
+</body>
+</html>
