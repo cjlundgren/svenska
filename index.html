@@ -2179,7 +2179,9 @@ function delAha(steg) {
 function delTesta(steg) {
   const yta = h('div', { class: 'testyta', 'aria-live': 'polite' });
   let i = (S.steg[steg.id] || {}).testa ? steg.testa.length : 0;
-  const rita = () => {
+  // autoSpela: lyssningsfrågor spelas upp av sig själva bara när hon själv har klickat fram till dem,
+  // aldrig när sidan öppnas
+  const rita = (autoSpela = true) => {
     yta.replaceChildren();
     if (i >= steg.testa.length) {
       markera(steg, 'testa');
@@ -2188,12 +2190,12 @@ function delTesta(steg) {
       return;
     }
     yta.append(h('div', { class: 'raknare' }, `Fråga ${i + 1} av ${steg.testa.length}`),
-      fraga(steg.testa[i], () => { i++; rita(); }));
+      fraga(steg.testa[i], () => { i++; rita(); }, autoSpela));
   };
-  rita();
+  rita(false);
   return sektion('testa', '', delHuvud('testa', 3, 'Testa', 'Test yourself. Mistakes are fine, just try again.'), yta);
 }
-function fraga(q, nasta) {
+function fraga(q, nasta, autoSpela) {
   const box = h('div');
   const nastaKnapp = () => h('div', { class: 'knappar' }, h('button', { class: 'knapp primar', onclick: nasta }, 'Nästa →'));
   if (q.typ === 'ordna') {
@@ -2234,7 +2236,7 @@ function fraga(q, nasta) {
       h('button', { class: 'spela text', html: PLAY + 'Långsamt', onclick: () => spelaEn(q.sv, true) })),
       h('p', { class: 'fraga', lang: 'en', style: 'margin-top:14px' }, q.fraga),
       Tal.finns() ? null : h('p', {}, visaText));
-    setTimeout(() => { if (box.isConnected) spelaEn(q.sv); }, 300);
+    if (autoSpela) setTimeout(() => { if (box.isConnected) spelaEn(q.sv); }, 300);
   } else {
     const delar = q.fraga.split('___');
     box.append(h('p', { class: 'fraga', lang: delar.length > 1 ? 'sv' : 'en', style: delar.length > 1 ? '' : 'font-family:var(--sans);font-size:1.1rem' },
