@@ -250,13 +250,28 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
 .kan-en { font-weight: 600; }
 .kanlista .sv { font-size: 1.15rem; margin: 2px 0 0; }
 
+/* Feedback */
+.fb-knapp { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 15; border: 0; border-radius: 999px;
+  padding: 10px 16px; background: var(--ink); color: var(--paper); font-weight: 600; font-size: .92rem; box-shadow: 0 4px 14px rgb(0 0 0 / .2); cursor: pointer; }
+.fb-ruta { position: fixed; left: 0; right: 0; bottom: 0; z-index: 25; max-height: 90vh; overflow-y: auto; background: var(--card);
+  border-top: 1px solid var(--line); border-radius: 20px 20px 0 0; box-shadow: 0 -8px 30px rgb(0 0 0 / .18);
+  padding: 18px 16px calc(18px + env(safe-area-inset-bottom)); }
+.fb-ruta-inre { max-width: 640px; margin: 0 auto; }
+.fb-huvud { display: flex; justify-content: space-between; align-items: center; }
+.fb-val { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 12px; }
+.fb-val button { border: 1.5px solid var(--line); background: var(--card); border-radius: 999px; padding: 7px 12px; font-size: .9rem; cursor: pointer; }
+.fb-val button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.fb-ruta textarea { width: 100%; min-height: 120px; padding: 12px; border-radius: 12px; border: 1.5px solid var(--line);
+  background: var(--paper); color: var(--ink); font: inherit; resize: vertical; }
+.fb-ruta .stang, .ordruta .stang { border: 0; background: none; font-size: 1.6rem; cursor: pointer; color: var(--muted); width: 44px; height: 44px; }
+@media (min-width: 900px) { .fb-ruta { left: auto; right: 24px; bottom: 24px; width: 420px; border-radius: 20px; border: 1px solid var(--line); } }
+
 /* Ordruta (tryck på ett ord) */
 .ordruta { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--card); border-top: 1px solid var(--line);
   border-radius: 20px 20px 0 0; box-shadow: 0 -8px 30px rgb(0 0 0 / .15); padding: 18px 16px calc(18px + env(safe-area-inset-bottom)); }
 .ordruta-inre { max-width: 640px; margin: 0 auto; display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; }
 .ordruta .sv-ord { font-family: var(--serif); font-size: 1.6rem; font-weight: 600; }
 .ordruta .uttal { font-size: .9rem; color: var(--sun); font-weight: 600; }
-.ordruta .stang { border: 0; background: none; font-size: 1.6rem; cursor: pointer; color: var(--muted); width: 44px; height: 44px; }
 
 /* Ordrunda */
 .flashkort { text-align: center; padding: 36px 18px; }
@@ -285,6 +300,7 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
   <aside class="sidebar" id="nav" aria-label="Kapitel och steg"></aside>
   <main id="app"></main>
 </div>
+<button class="fb-knapp" id="fbknapp" type="button">💬 Feedback</button>
 
 <script type="application/json" id="data">
 {
@@ -1590,7 +1606,74 @@ function visaOrd(nyckel, visad) {
 }
 function stangOrd() { document.getElementById('ordruta')?.remove(); }
 document.addEventListener('click', e => { if (!e.target.closest('#ordruta')) stangOrd(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { stangOrd(); stangFest(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { stangOrd(); stangFest(); stangFeedback(); } });
+
+// ---------- Feedback ----------
+// Skickas via ett Google-formulär i användarens privata konto: sidan gör inga anrop själv, utan öppnar
+// formuläret (förifyllt) i en ny flik när hon trycker Skicka. url = formulärets .../viewform,
+// typ/text/sida = formulärfältens entry-id (t.ex. 'entry.123456'). Tills dess: telefonens dela-meny.
+const FEEDBACK = {
+  url: 'https://docs.google.com/forms/d/e/1FAIpQLScW-0jUKeZ4703WpcGw44cIEM376Yr27VpWg_k-CfMc2vSYWQ/viewform',
+  typ: 'entry.178693539', text: 'entry.1329764798', sida: 'entry.1275246363'
+};
+const FB_TYPER = ['🐞 Something is wrong', '💡 Idea', '🔁 I want to practise more …', '🐢 Too hard', '🚀 Too easy', '❤️ I liked this', '✏️ Other'];
+function platsNu() {
+  const vag = location.hash.replace(/^#/, '');
+  const steg = vag.startsWith('steg/') && hittaSteg(vag.slice(5));
+  if (steg) return `Steg ${steg.nr} · ${steg.titel}`;
+  if (vag === 'ord') return 'Ordbanken';
+  if (vag === 'runda') return 'Ordrunda';
+  if (vag.startsWith('kan/')) return `Nu kan du … (kapitel ${vag.slice(4)})`;
+  return 'Kartan';
+}
+function skickaFeedback(typ, text, plats) {
+  if (FEEDBACK.url) {
+    const q = new URLSearchParams({ usp: 'pp_url', [FEEDBACK.typ]: typ, [FEEDBACK.text]: text, [FEEDBACK.sida]: plats });
+    const a = h('a', { href: `${FEEDBACK.url}?${q}`, target: '_blank', rel: 'noopener noreferrer', referrerpolicy: 'no-referrer' });
+    document.body.append(a); a.click(); a.remove();
+    return 'formular';
+  }
+  const meddelande = `Feedback (${plats})\n${typ}\n\n${text}`.trim();
+  if (navigator.share) { navigator.share({ text: meddelande }).catch(() => {}); return 'dela'; }
+  try { navigator.clipboard.writeText(meddelande).catch(() => {}); } catch (e) {}
+  return 'kopierat';
+}
+function oppnaFeedback() {
+  stangFeedback(); stangOrd();
+  const utkast = S.fbUtkast || { typ: '', text: '' };
+  const plats = platsNu();
+  let valdTyp = utkast.typ;
+  const sparaUtkast = () => { S.fbUtkast = { typ: valdTyp, text: falt.value }; spara(); };
+  const val = h('div', { class: 'fb-val', role: 'group', 'aria-label': 'Type' }, FB_TYPER.map(t => h('button', { type: 'button', 'aria-pressed': String(t === valdTyp), onclick: () => {
+    valdTyp = valdTyp === t ? '' : t;
+    val.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.textContent === valdTyp)));
+    sparaUtkast();
+  } }, t)));
+  const falt = h('textarea', { 'aria-label': 'Your message', placeholder: 'Write in English or Swedish …', oninput: sparaUtkast });
+  falt.value = utkast.text;
+  const status = h('p', { class: 'liten', 'aria-live': 'polite', lang: 'en' });
+  const inre = h('div', { class: 'fb-ruta-inre' },
+    h('div', { class: 'fb-huvud' }, h('h2', {}, 'Feedback'), h('button', { class: 'stang', 'aria-label': 'Stäng', onclick: stangFeedback }, '×')),
+    h('p', { class: 'liten', lang: 'en' }, 'A bug, an idea, something you want to practise more, anything at all. It goes straight to the people who make this page.'),
+    val, falt,
+    h('p', { class: 'liten', lang: 'en' }, `Page: ${plats}`),
+    h('div', { class: 'knappar' }, h('button', { class: 'knapp primar', onclick: () => {
+      const text = falt.value.trim();
+      if (!text && !valdTyp) { status.textContent = 'Write something first 🙂'; return; }
+      const satt = skickaFeedback(valdTyp, text, plats);
+      S.fbUtkast = null; spara();
+      inre.replaceChildren(h('h2', {}, 'Tack! ❤️'),
+        h('p', { lang: 'en' }, satt === 'formular' ? 'A form opened in a new tab. Press “Submit” there and it’s on its way.'
+          : satt === 'dela' ? 'Choose an app to send it with, for example Messages or WhatsApp.'
+          : 'Your message is copied. Paste it into a message and send it.'),
+        h('div', { class: 'knappar' }, h('button', { class: 'knapp', onclick: stangFeedback }, 'Stäng')));
+    } }, 'Skicka')),
+    status);
+  document.body.append(h('div', { class: 'fb-ruta', id: 'fbruta', role: 'dialog', 'aria-label': 'Feedback' }, inre));
+  falt.focus();
+}
+function stangFeedback() { document.getElementById('fbruta')?.remove(); }
+document.getElementById('fbknapp').addEventListener('click', oppnaFeedback);
 
 // ---------- Fest ----------
 function konfetti() {
