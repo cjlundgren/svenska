@@ -1692,7 +1692,10 @@ const Tal = {
     if (!('speechSynthesis' in window)) { this.klar = true; uppdateraRost(); return; }
     const valj = () => {
       const roster = speechSynthesis.getVoices().filter(v => v.localService && /^sv([-_]|$)/i.test(v.lang));
-      this.rost = roster.find(v => /^sv[-_]SE/i.test(v.lang)) || roster[0] || null;
+      // bästa rösten först: Premium > Enhanced/Förbättrad > övriga, och sv-SE före andra svenska varianter
+      const poang = v => { const n = (v.name + ' ' + v.voiceURI).toLowerCase();
+        return (/premium/.test(n) ? 4 : /enhanced|förbättrad|forbattrad/.test(n) ? 2 : 0) + (/^sv[-_]se/i.test(v.lang) ? 1 : 0); };
+      this.rost = roster.sort((x, y) => poang(y) - poang(x))[0] || null;
       if (this.rost || this.klar) { this.klar = true; uppdateraRost(); }
     };
     valj();
