@@ -238,6 +238,18 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
 .forts .sv { font-size: 1.3rem; }
 .forts .en { display: block; }
 
+.vem { margin-top: 4px; font: 700 .72rem var(--sans); letter-spacing: .07em; text-transform: uppercase; color: var(--accent); }
+
+/* Nu kan du */
+.kanlista { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 10px; }
+.kanlista li { display: grid; grid-template-columns: 44px 1fr 44px; gap: 12px; align-items: center; padding: 12px; border-radius: 12px; background: var(--paper); transition: background .2s; }
+.kanlista li.pa { background: var(--ok-soft); }
+.kanbock { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--line); background: var(--card); color: transparent;
+  font-size: 1.2rem; font-weight: 700; cursor: pointer; }
+.kanlista li.pa .kanbock { background: var(--ok); border-color: var(--ok); color: #fff; }
+.kan-en { font-weight: 600; }
+.kanlista .sv { font-size: 1.15rem; margin: 2px 0 0; }
+
 /* Ordruta (tryck på ett ord) */
 .ordruta { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--card); border-top: 1px solid var(--line);
   border-radius: 20px 20px 0 0; box-shadow: 0 -8px 30px rgb(0 0 0 / .15); padding: 18px 16px calc(18px + env(safe-area-inset-bottom)); }
@@ -276,122 +288,1155 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
 
 <script type="application/json" id="data">
 {
-  "kapitel": [
+ "kapitel": [
+  {
+   "nr": 1,
+   "titel": "Erik och familjen",
+   "en": "Erik and his family",
+   "steg": [
     {
-      "nr": 1,
-      "titel": "Erik och familjen",
-      "en": "Erik and his family",
-      "steg": [
-        {
-          "id": "1-1", "nr": 1, "titel": "Hej!", "en": "Erik says hello",
-          "meningar": [
-            { "sv": "Hej!", "en": "Hi!" },
-            { "sv": "Jag heter Erik.", "en": "My name is Erik. (Word for word: I am called Erik.)" },
-            { "sv": "Jag bor i Sverige.", "en": "I live in Sweden." },
-            { "sv": "Jag bor i en lägenhet.", "en": "I live in an apartment." },
-            { "sv": "Jag har två barn.", "en": "I have two children." },
-            { "sv": "Jag dricker mycket kaffe.", "en": "I drink a lot of coffee." }
-          ],
-          "aha": {
-            "rubrik": "Swedish is English’s cousin",
-            "html": "<p>Say these words out loud. Many of them are cousins of English words:</p><table class='par'><tr><td>har</td><td>have, has</td></tr><tr><td>två</td><td>two</td></tr><tr><td>kaffe</td><td>coffee</td></tr><tr><td>dricker</td><td>drink, drinks</td></tr><tr><td>i</td><td>in</td></tr></table><p>Some cousins are hidden a little deeper:</p><ul><li><b>barn</b> (child) is still used in Scotland, where a <i>bairn</i> is a child.</li><li><b>bor</b> (lives) hides inside English <i>neigh<u>bour</u></i>: the one who lives near.</li><li><b>heter</b> (is called) is related to old English <i>hight</i>, “named”.</li></ul><p class='tips'>Tip: when you meet a new word, say it aloud and ask yourself: does it sound like an English word?</p>"
-          },
-          "testa": [
-            { "typ": "val", "fraga": "Jag ___ Erik.", "alternativ": ["heter", "har", "bor"], "ratt": "heter", "forklaring": "Jag heter Erik = My name is Erik." },
-            { "typ": "lyssna", "sv": "Jag bor i en lägenhet.", "fraga": "What did you hear?", "alternativ": ["I live in an apartment.", "I have two children.", "I drink a lot of coffee."], "ratt": "I live in an apartment." },
-            { "typ": "ordna", "ord": ["Jag", "har", "två", "barn"], "slut": "." },
-            { "typ": "val", "fraga": "Which word means “live”?", "alternativ": ["bor", "har", "heter"], "ratt": "bor", "forklaring": "Like neigh-bour: the one who lives near.", "svAlt": true }
-          ],
-          "ord": [
-            { "sv": "heter", "en": "is called, am called" },
-            { "sv": "bor", "en": "live, lives" },
-            { "sv": "en lägenhet", "en": "an apartment, a flat" },
-            { "sv": "har", "en": "have, has" },
-            { "sv": "två", "en": "two" },
-            { "sv": "ett barn", "en": "a child · två barn = two children" },
-            { "sv": "dricker", "en": "drink, drinks" },
-            { "sv": "kaffe", "en": "coffee" }
-          ],
-          "fortsattning": { "sv": "Erik har två barn. Vad heter de?", "en": "Erik has two children. What are their names?" }
-        },
-        {
-          "id": "1-2", "nr": 2, "titel": "En vanlig morgon", "en": "An ordinary morning",
-          "meningar": [
-            { "sv": "Erik har två barn.", "en": "Erik has two children." },
-            { "sv": "De heter Elsa och Olle.", "en": "Their names are Elsa and Olle." },
-            { "sv": "Elsa är sju år.", "en": "Elsa is seven (years old)." },
-            { "sv": "Olle är fyra år.", "en": "Olle is four." },
-            { "sv": "På morgonen dricker Erik kaffe.", "en": "In the morning, Erik drinks coffee." },
-            { "sv": "Barnen äter frukost.", "en": "The children eat breakfast." }
-          ],
-          "aha": {
-            "rubrik": "The verb is always number two",
-            "html": "<p>Swedish has one strong rule: in a normal sentence, <b>the verb comes second</b>.</p><div class='v2'><span>Erik</span><span class='verb'>dricker</span><span>kaffe på morgonen.</span></div><div class='v2'><span>På morgonen</span><span class='verb'>dricker</span><span>Erik kaffe.</span></div><p>When a sentence starts with a time word like <i>på morgonen</i>, the verb still takes place number two. So it jumps <b>in front of</b> Erik. Word for word: “In the morning <b>drinks</b> Erik coffee.” Strange in English, but exactly right in Swedish.</p><p class='bonus'><b>Good news:</b> Swedish verbs never change for the person. <i>Jag dricker, Erik dricker, de dricker.</i> English has <i>I drink</i> but <i>he drinks</i>.</p>"
-          },
-          "testa": [
-            { "typ": "ordna", "ord": ["På morgonen", "dricker", "Erik", "kaffe"], "slut": "." },
-            { "typ": "val", "fraga": "Which sentence is correct?", "alternativ": ["På morgonen dricker Erik kaffe.", "På morgonen Erik dricker kaffe."], "ratt": "På morgonen dricker Erik kaffe.", "forklaring": "The verb (dricker) comes second, right after På morgonen.", "svAlt": true },
-            { "typ": "val", "fraga": "Elsa ___ sju år.", "alternativ": ["är", "har", "heter"], "ratt": "är", "forklaring": "Elsa är sju år = Elsa is seven years old." },
-            { "typ": "lyssna", "sv": "Olle är fyra år.", "fraga": "How old is Olle?", "alternativ": ["4", "7", "2"], "ratt": "4" },
-            { "typ": "val", "fraga": "Barnen ___ frukost.", "alternativ": ["äter", "heter", "bor"], "ratt": "äter", "forklaring": "Barnen äter frukost = The children eat breakfast." }
-          ],
-          "ord": [
-            { "sv": "de", "en": "they (sounds like “dom”)" },
-            { "sv": "är", "en": "am, is, are (sounds like “e”)" },
-            { "sv": "sju", "en": "seven" },
-            { "sv": "fyra", "en": "four" },
-            { "sv": "ett år", "en": "a year · sju år = seven years" },
-            { "sv": "på morgonen", "en": "in the morning" },
-            { "sv": "äter", "en": "eat, eats" },
-            { "sv": "frukost", "en": "breakfast" }
-          ],
-          "fortsattning": { "sv": "Det knackar på dörren. Vem kan det vara?", "en": "Someone knocks on the door. Who can it be?" }
-        },
-        { "id": "1-3", "nr": 3, "titel": "Grannen", "en": "The neighbour", "kommer": true },
-        { "id": "1-4", "nr": 4, "titel": "I affären", "en": "At the shop", "kommer": true },
-        { "id": "1-5", "nr": 5, "titel": "Vad kostar det?", "en": "What does it cost?", "kommer": true },
-        { "id": "1-6", "nr": 6, "titel": "En helt vanlig dag", "en": "A completely ordinary day", "kommer": true }
-      ]
+     "id": "1-1",
+     "nr": 1,
+     "titel": "Hej!",
+     "en": "Erik says hello",
+     "meningar": [
+      {
+       "sv": "Hej!",
+       "en": "Hi!"
+      },
+      {
+       "sv": "Jag heter Erik.",
+       "en": "My name is Erik. (Word for word: I am called Erik.)"
+      },
+      {
+       "sv": "Jag bor i Sverige.",
+       "en": "I live in Sweden."
+      },
+      {
+       "sv": "Jag bor i en lägenhet.",
+       "en": "I live in an apartment."
+      },
+      {
+       "sv": "Jag har två barn.",
+       "en": "I have two children."
+      },
+      {
+       "sv": "Jag dricker mycket kaffe.",
+       "en": "I drink a lot of coffee."
+      }
+     ],
+     "aha": {
+      "rubrik": "Swedish is English’s cousin",
+      "html": "<p>Say these words out loud. Many of them are cousins of English words:</p><table class='par'><tr><td>har</td><td>have, has</td></tr><tr><td>två</td><td>two</td></tr><tr><td>kaffe</td><td>coffee</td></tr><tr><td>dricker</td><td>drink, drinks</td></tr><tr><td>i</td><td>in</td></tr></table><p>Some cousins are hidden a little deeper:</p><ul><li><b>barn</b> (child) is still used in Scotland, where a <i>bairn</i> is a child.</li><li><b>bor</b> (lives) hides inside English <i>neigh<u>bour</u></i>: the one who lives near.</li><li><b>heter</b> (is called) is related to old English <i>hight</i>, “named”.</li></ul><p class='tips'>Tip: when you meet a new word, say it aloud and ask yourself: does it sound like an English word?</p>"
+     },
+     "testa": [
+      {
+       "typ": "val",
+       "fraga": "Jag ___ Erik.",
+       "alternativ": [
+        "heter",
+        "har",
+        "bor"
+       ],
+       "ratt": "heter",
+       "forklaring": "Jag heter Erik = My name is Erik."
+      },
+      {
+       "typ": "lyssna",
+       "sv": "Jag bor i en lägenhet.",
+       "fraga": "What did you hear?",
+       "alternativ": [
+        "I live in an apartment.",
+        "I have two children.",
+        "I drink a lot of coffee."
+       ],
+       "ratt": "I live in an apartment."
+      },
+      {
+       "typ": "ordna",
+       "ord": [
+        "Jag",
+        "har",
+        "två",
+        "barn"
+       ],
+       "slut": "."
+      },
+      {
+       "typ": "val",
+       "fraga": "Which word means “live”?",
+       "alternativ": [
+        "bor",
+        "har",
+        "heter"
+       ],
+       "ratt": "bor",
+       "forklaring": "Like neigh-bour: the one who lives near.",
+       "svAlt": true
+      }
+     ],
+     "ord": [
+      {
+       "sv": "heter",
+       "en": "is called, am called"
+      },
+      {
+       "sv": "bor",
+       "en": "live, lives"
+      },
+      {
+       "sv": "en lägenhet",
+       "en": "an apartment, a flat"
+      },
+      {
+       "sv": "har",
+       "en": "have, has"
+      },
+      {
+       "sv": "två",
+       "en": "two"
+      },
+      {
+       "sv": "ett barn",
+       "en": "a child · två barn = two children"
+      },
+      {
+       "sv": "dricker",
+       "en": "drink, drinks"
+      },
+      {
+       "sv": "kaffe",
+       "en": "coffee"
+      }
+     ],
+     "fortsattning": {
+      "sv": "Erik har två barn. Vad heter de?",
+      "en": "Erik has two children. What are their names?"
+     }
     },
-    { "nr": 2, "titel": "På vårdcentralen", "en": "At the health centre", "kommer": true, "steg": [] }
-  ],
-  "ordlista": {
-    "hej": { "en": "hi, hello" },
-    "jag": { "en": "I", "uttal": "often said “ja”" },
-    "heter": { "en": "is called, am called" },
-    "erik": { "en": "Erik (a name)" },
-    "elsa": { "en": "Elsa (a name)" },
-    "olle": { "en": "Olle (a name)" },
-    "bor": { "en": "live, lives" },
-    "i": { "en": "in" },
-    "sverige": { "en": "Sweden" },
-    "en": { "en": "a, an (for en-words)" },
-    "lägenhet": { "en": "apartment, flat" },
-    "har": { "en": "have, has" },
-    "två": { "en": "two" },
-    "barn": { "en": "child, children (the same word!)" },
-    "barnen": { "en": "the children" },
-    "dricker": { "en": "drink, drinks" },
-    "mycket": { "en": "a lot, much" },
-    "kaffe": { "en": "coffee" },
-    "de": { "en": "they", "uttal": "said “dom”" },
-    "och": { "en": "and", "uttal": "often said “o”" },
-    "är": { "en": "am, is, are", "uttal": "said “e”" },
-    "sju": { "en": "seven", "uttal": "the sj-sound, like a soft “hw”" },
-    "år": { "en": "year, years" },
-    "fyra": { "en": "four" },
-    "på": { "en": "on, at · på morgonen = in the morning" },
-    "morgonen": { "en": "the morning" },
-    "äter": { "en": "eat, eats" },
-    "frukost": { "en": "breakfast" },
-    "vad": { "en": "what" },
-    "det": { "en": "it", "uttal": "often said “de”" },
-    "knackar": { "en": "knocks" },
-    "dörren": { "en": "the door" },
-    "vem": { "en": "who" },
-    "kan": { "en": "can" },
-    "vara": { "en": "be" }
+    {
+     "id": "1-2",
+     "nr": 2,
+     "titel": "En vanlig morgon",
+     "en": "An ordinary morning",
+     "meningar": [
+      {
+       "sv": "Erik har två barn.",
+       "en": "Erik has two children."
+      },
+      {
+       "sv": "De heter Elsa och Olle.",
+       "en": "Their names are Elsa and Olle."
+      },
+      {
+       "sv": "Elsa är sju år.",
+       "en": "Elsa is seven (years old)."
+      },
+      {
+       "sv": "Olle är fyra år.",
+       "en": "Olle is four."
+      },
+      {
+       "sv": "På morgonen dricker Erik kaffe.",
+       "en": "In the morning, Erik drinks coffee."
+      },
+      {
+       "sv": "Barnen äter frukost.",
+       "en": "The children eat breakfast."
+      }
+     ],
+     "aha": {
+      "rubrik": "The verb is always number two",
+      "html": "<p>Swedish has one strong rule: in a normal sentence, <b>the verb comes second</b>.</p><div class='v2'><span>Erik</span><span class='verb'>dricker</span><span>kaffe på morgonen.</span></div><div class='v2'><span>På morgonen</span><span class='verb'>dricker</span><span>Erik kaffe.</span></div><p>When a sentence starts with a time word like <i>på morgonen</i>, the verb still takes place number two. So it jumps <b>in front of</b> Erik. Word for word: “In the morning <b>drinks</b> Erik coffee.” Strange in English, but exactly right in Swedish.</p><p class='bonus'><b>Good news:</b> Swedish verbs never change for the person. <i>Jag dricker, Erik dricker, de dricker.</i> English has <i>I drink</i> but <i>he drinks</i>.</p>"
+     },
+     "testa": [
+      {
+       "typ": "ordna",
+       "ord": [
+        "På morgonen",
+        "dricker",
+        "Erik",
+        "kaffe"
+       ],
+       "slut": "."
+      },
+      {
+       "typ": "val",
+       "fraga": "Which sentence is correct?",
+       "alternativ": [
+        "På morgonen dricker Erik kaffe.",
+        "På morgonen Erik dricker kaffe."
+       ],
+       "ratt": "På morgonen dricker Erik kaffe.",
+       "forklaring": "The verb (dricker) comes second, right after På morgonen.",
+       "svAlt": true
+      },
+      {
+       "typ": "val",
+       "fraga": "Elsa ___ sju år.",
+       "alternativ": [
+        "är",
+        "har",
+        "heter"
+       ],
+       "ratt": "är",
+       "forklaring": "Elsa är sju år = Elsa is seven years old."
+      },
+      {
+       "typ": "lyssna",
+       "sv": "Olle är fyra år.",
+       "fraga": "How old is Olle?",
+       "alternativ": [
+        "4",
+        "7",
+        "2"
+       ],
+       "ratt": "4"
+      },
+      {
+       "typ": "val",
+       "fraga": "Barnen ___ frukost.",
+       "alternativ": [
+        "äter",
+        "heter",
+        "bor"
+       ],
+       "ratt": "äter",
+       "forklaring": "Barnen äter frukost = The children eat breakfast."
+      }
+     ],
+     "ord": [
+      {
+       "sv": "de",
+       "en": "they (sounds like “dom”)"
+      },
+      {
+       "sv": "är",
+       "en": "am, is, are (sounds like “e”)"
+      },
+      {
+       "sv": "sju",
+       "en": "seven"
+      },
+      {
+       "sv": "fyra",
+       "en": "four"
+      },
+      {
+       "sv": "ett år",
+       "en": "a year · sju år = seven years"
+      },
+      {
+       "sv": "på morgonen",
+       "en": "in the morning"
+      },
+      {
+       "sv": "äter",
+       "en": "eat, eats"
+      },
+      {
+       "sv": "frukost",
+       "en": "breakfast"
+      }
+     ],
+     "fortsattning": {
+      "sv": "Det knackar på dörren. Vem kan det vara?",
+      "en": "Someone knocks on the door. Who can it be?"
+     }
+    },
+    {
+     "id": "1-3",
+     "nr": 3,
+     "titel": "Grannen",
+     "en": "The neighbour",
+     "meningar": [
+      {
+       "sv": "Det knackar på dörren.",
+       "en": "Someone knocks on the door."
+      },
+      {
+       "vem": "Karin",
+       "sv": "Hej! Jag heter Karin.",
+       "en": "Hi! My name is Karin."
+      },
+      {
+       "vem": "Karin",
+       "sv": "Jag bor här bredvid. Jag är ny här.",
+       "en": "I live next door. I am new here."
+      },
+      {
+       "vem": "Erik",
+       "sv": "Hej! Jag heter Erik. Trevligt att träffas!",
+       "en": "Hi! My name is Erik. Nice to meet you!"
+      },
+      {
+       "vem": "Karin",
+       "sv": "Detsamma!",
+       "en": "Likewise!"
+      },
+      {
+       "vem": "Erik",
+       "sv": "Vill du ha kaffe?",
+       "en": "Would you like some coffee?"
+      },
+      {
+       "vem": "Karin",
+       "sv": "Ja, gärna!",
+       "en": "Yes, please!"
+      }
+     ],
+     "aha": {
+      "rubrik": "Ja, gärna! How Swedes say “please”",
+      "html": "<p>Two things that surprise many learners:</p><p><b>1. Everyone is <i>du</i>.</b> Swedes say <i>du</i> (you) to almost everyone: neighbours, teachers, doctors, even your boss. The polite <i>ni</i> is rarely used for one person.</p><p><b>2. There is no everyday word for “please”.</b> Instead Swedes use <i>gärna</i> (gladly) and <i>tack</i> (thanks):</p><table class='par'><tr><td>Ja, gärna!</td><td>Yes, please!</td></tr><tr><td>Ja tack.</td><td>Yes, thank you.</td></tr><tr><td>Nej tack.</td><td>No, thank you.</td></tr><tr><td>En kaffe, tack.</td><td>A coffee, please.</td></tr></table><p class='tips'>So when someone offers you something, <i>Ja, gärna!</i> is the warm, friendly answer.</p>"
+     },
+     "testa": [
+      {
+       "typ": "val",
+       "fraga": "Vill du ha kaffe? Ja, ___!",
+       "alternativ": [
+        "gärna",
+        "bredvid",
+        "ny"
+       ],
+       "ratt": "gärna",
+       "forklaring": "Ja, gärna! = Yes, please!"
+      },
+      {
+       "typ": "lyssna",
+       "sv": "Trevligt att träffas!",
+       "fraga": "What does it mean?",
+       "alternativ": [
+        "Nice to meet you!",
+        "See you later!",
+        "Come in!"
+       ],
+       "ratt": "Nice to meet you!"
+      },
+      {
+       "typ": "ordna",
+       "ord": [
+        "Jag",
+        "bor",
+        "här",
+        "bredvid"
+       ],
+       "slut": "."
+      },
+      {
+       "typ": "val",
+       "fraga": "Someone says “Trevligt att träffas!” What do you answer?",
+       "alternativ": [
+        "Detsamma!",
+        "Bredvid!",
+        "Nej tack!"
+       ],
+       "ratt": "Detsamma!",
+       "forklaring": "Detsamma = Likewise, the same to you.",
+       "svAlt": true
+      },
+      {
+       "typ": "val",
+       "fraga": "Which word do Swedes use for “you” when they talk to a doctor?",
+       "alternativ": [
+        "du",
+        "ni",
+        "han"
+       ],
+       "ratt": "du",
+       "forklaring": "Swedes say du to almost everyone.",
+       "svAlt": true
+      }
+     ],
+     "ord": [
+      {
+       "sv": "du",
+       "en": "you"
+      },
+      {
+       "sv": "här",
+       "en": "here"
+      },
+      {
+       "sv": "bredvid",
+       "en": "next to · här bredvid = next door"
+      },
+      {
+       "sv": "ny",
+       "en": "new"
+      },
+      {
+       "sv": "trevligt att träffas",
+       "en": "nice to meet you"
+      },
+      {
+       "sv": "detsamma",
+       "en": "likewise, the same to you"
+      },
+      {
+       "sv": "vill ha",
+       "en": "want · Vill du ha …? = Would you like …?"
+      },
+      {
+       "sv": "gärna",
+       "en": "gladly · Ja, gärna! = Yes, please! (sounds like “yärna”)"
+      }
+     ],
+     "fortsattning": {
+      "sv": "Men Erik har ingen mjölk …",
+      "en": "But Erik has no milk …"
+     }
+    },
+    {
+     "id": "1-4",
+     "nr": 4,
+     "titel": "I affären",
+     "en": "At the shop",
+     "meningar": [
+      {
+       "sv": "Erik går till affären.",
+       "en": "Erik goes to the shop."
+      },
+      {
+       "sv": "Han köper mjölk och bröd.",
+       "en": "He buys milk and bread."
+      },
+      {
+       "sv": "Han tar en banan och ett äpple.",
+       "en": "He takes a banana and an apple."
+      },
+      {
+       "sv": "Han köper också en glass till Elsa.",
+       "en": "He also buys an ice cream for Elsa."
+      },
+      {
+       "vem": "Kassören",
+       "sv": "Hej! Vill du ha en påse?",
+       "en": "Hi! Would you like a bag?"
+      },
+      {
+       "vem": "Erik",
+       "sv": "Nej tack.",
+       "en": "No, thank you."
+      }
+     ],
+     "aha": {
+      "rubrik": "En or ett? Every noun has a team",
+      "html": "<p>Every Swedish noun belongs to one of two teams: <b>en</b> or <b>ett</b>. Both mean “a/an”.</p><table class='par'><tr><td>en banan</td><td>a banana</td></tr><tr><td>en glass</td><td>an ice cream</td></tr><tr><td>en påse</td><td>a bag</td></tr><tr><td>ett äpple</td><td>an apple</td></tr><tr><td>ett barn</td><td>a child</td></tr></table><p>There is usually no logic to it, so learn every new word <b>together with</b> en or ett, like a first name and a surname. That is why your word bank says <i>en lägenhet</i>, not just <i>lägenhet</i>.</p><p class='tips'>Tip: about three out of four nouns are en-words. If you have to guess, guess <i>en</i>.</p><p class='bonus'><b>Careful:</b> <i>en glass</i> is an ice cream. A drinking glass is <i>ett glas</i>, with a long a. One extra s changes everything!</p>"
+     },
+     "testa": [
+      {
+       "typ": "val",
+       "fraga": "___ äpple",
+       "alternativ": [
+        "ett",
+        "en"
+       ],
+       "ratt": "ett",
+       "forklaring": "ett äpple = an apple"
+      },
+      {
+       "typ": "val",
+       "fraga": "___ banan",
+       "alternativ": [
+        "en",
+        "ett"
+       ],
+       "ratt": "en",
+       "forklaring": "en banan = a banana"
+      },
+      {
+       "typ": "lyssna",
+       "sv": "Han köper mjölk och bröd.",
+       "fraga": "What does Erik buy?",
+       "alternativ": [
+        "Milk and bread",
+        "Coffee and milk",
+        "An apple and a banana"
+       ],
+       "ratt": "Milk and bread"
+      },
+      {
+       "typ": "ordna",
+       "ord": [
+        "Han",
+        "köper",
+        "en glass",
+        "till Elsa"
+       ],
+       "slut": "."
+      },
+      {
+       "typ": "val",
+       "fraga": "Vill du ha en påse? Nej ___.",
+       "alternativ": [
+        "tack",
+        "gärna",
+        "bredvid"
+       ],
+       "ratt": "tack",
+       "forklaring": "Nej tack = No, thank you."
+      }
+     ],
+     "ord": [
+      {
+       "sv": "går",
+       "en": "go, goes, walk"
+      },
+      {
+       "sv": "en affär",
+       "en": "a shop · affären = the shop"
+      },
+      {
+       "sv": "köper",
+       "en": "buy, buys (sounds like “tjöper”)"
+      },
+      {
+       "sv": "mjölk",
+       "en": "milk"
+      },
+      {
+       "sv": "bröd",
+       "en": "bread"
+      },
+      {
+       "sv": "ett äpple",
+       "en": "an apple"
+      },
+      {
+       "sv": "en glass",
+       "en": "an ice cream (ett glas = a drinking glass)"
+      },
+      {
+       "sv": "tack",
+       "en": "thanks · ja tack, nej tack"
+      }
+     ],
+     "fortsattning": {
+      "sv": "Men vad kostar det?",
+      "en": "But what does it cost?"
+     }
+    },
+    {
+     "id": "1-5",
+     "nr": 5,
+     "titel": "Vad kostar det?",
+     "en": "What does it cost?",
+     "meningar": [
+      {
+       "vem": "Erik",
+       "sv": "Ursäkta, vad kostar glassen?",
+       "en": "Excuse me, how much is the ice cream?"
+      },
+      {
+       "vem": "Kassören",
+       "sv": "Den kostar tjugo kronor.",
+       "en": "It costs twenty kronor."
+      },
+      {
+       "vem": "Erik",
+       "sv": "Och äpplet?",
+       "en": "And the apple?"
+      },
+      {
+       "vem": "Kassören",
+       "sv": "Fem kronor. Det blir sextiofem kronor.",
+       "en": "Five kronor. That will be sixty-five kronor (in total)."
+      },
+      {
+       "vem": "Erik",
+       "sv": "Kan jag betala med kort?",
+       "en": "Can I pay by card?"
+      },
+      {
+       "vem": "Kassören",
+       "sv": "Ja, självklart.",
+       "en": "Yes, of course."
+      }
+     ],
+     "aha": {
+      "rubrik": "Numbers: same order as English",
+      "html": "<p>Swedish numbers are easy for English speakers, because they are built in the same order.</p><table class='par'><tr><td>1 en/ett</td><td>6 sex</td></tr><tr><td>2 två</td><td>7 sju</td></tr><tr><td>3 tre</td><td>8 åtta</td></tr><tr><td>4 fyra</td><td>9 nio</td></tr><tr><td>5 fem</td><td>10 tio</td></tr></table><p>The tens end in <b>-tio</b>, except twenty: <i>tjugo</i> (20), <i>trettio</i> (30), <i>fyrtio</i> (40), <i>femtio</i> (50), <i>sextio</i> (60). Then you just add: <b>sextio + fem = sextiofem</b>, like sixty-five. (German says “five-and-sixty”. Swedish doesn’t!)</p><p class='bonus'><b>Listen for it:</b> in everyday speech <i>trettio, fyrtio, femtio</i> often sound like “tretti, förti, femti”. And <i>sju</i> (7) and <i>tjugo</i> (20) start with two different soft sounds.</p>"
+     },
+     "testa": [
+      {
+       "typ": "lyssna",
+       "sv": "Den kostar tjugo kronor.",
+       "fraga": "How much does it cost?",
+       "alternativ": [
+        "20 kr",
+        "12 kr",
+        "2 kr"
+       ],
+       "ratt": "20 kr"
+      },
+      {
+       "typ": "val",
+       "fraga": "Fem och fem är ___.",
+       "alternativ": [
+        "tio",
+        "elva",
+        "tolv"
+       ],
+       "ratt": "tio",
+       "forklaring": "5 + 5 = 10, tio."
+      },
+      {
+       "typ": "ordna",
+       "ord": [
+        "Kan",
+        "jag",
+        "betala",
+        "med kort"
+       ],
+       "slut": "?"
+      },
+      {
+       "typ": "lyssna",
+       "sv": "Det blir sextiofem kronor.",
+       "fraga": "How much is it in total?",
+       "alternativ": [
+        "65 kr",
+        "56 kr",
+        "75 kr"
+       ],
+       "ratt": "65 kr"
+      },
+      {
+       "typ": "val",
+       "fraga": "How do you politely get someone’s attention?",
+       "alternativ": [
+        "Ursäkta!",
+        "Självklart!",
+        "Gärna!"
+       ],
+       "ratt": "Ursäkta!",
+       "forklaring": "Ursäkta = Excuse me.",
+       "svAlt": true
+      }
+     ],
+     "ord": [
+      {
+       "sv": "ursäkta",
+       "en": "excuse me"
+      },
+      {
+       "sv": "kostar",
+       "en": "cost, costs · Vad kostar …? = How much is …?"
+      },
+      {
+       "sv": "en krona",
+       "en": "a krona · tjugo kronor = twenty kronor"
+      },
+      {
+       "sv": "fem",
+       "en": "five"
+      },
+      {
+       "sv": "tjugo",
+       "en": "twenty"
+      },
+      {
+       "sv": "det blir",
+       "en": "that will be (about a price)"
+      },
+      {
+       "sv": "betala",
+       "en": "pay"
+      },
+      {
+       "sv": "med kort",
+       "en": "by card"
+      }
+     ],
+     "fortsattning": {
+      "sv": "Hemma väntar Elsa och Olle.",
+      "en": "At home, Elsa and Olle are waiting."
+     }
+    },
+    {
+     "id": "1-6",
+     "nr": 6,
+     "titel": "En helt vanlig dag",
+     "en": "A completely ordinary day",
+     "meningar": [
+      {
+       "sv": "Det är morgon.",
+       "en": "It is morning."
+      },
+      {
+       "sv": "Erik dricker kaffe och barnen äter frukost.",
+       "en": "Erik drinks coffee and the children eat breakfast."
+      },
+      {
+       "sv": "Sedan går Elsa till skolan och Olle till förskolan.",
+       "en": "Then Elsa goes to school and Olle to preschool."
+      },
+      {
+       "sv": "Erik går till affären och köper mjölk och bröd.",
+       "en": "Erik goes to the shop and buys milk and bread."
+      },
+      {
+       "sv": "I trappan träffar han Karin.",
+       "en": "On the stairs he meets Karin."
+      },
+      {
+       "vem": "Erik",
+       "sv": "Hej, Karin! Ska vi fika?",
+       "en": "Hi, Karin! Shall we have a fika?"
+      },
+      {
+       "vem": "Karin",
+       "sv": "Ja, gärna!",
+       "en": "Yes, please!"
+      }
+     ],
+     "aha": {
+      "rubrik": "Fika, and a look back",
+      "html": "<p><b>Fika</b> is one of the most Swedish words there is. It means having coffee (or tea) with something sweet, and above all taking a break to talk. Fika is both a verb and a noun:</p><table class='par'><tr><td>Ska vi fika?</td><td>Shall we have a fika?</td></tr><tr><td>en fika</td><td>a coffee break</td></tr></table><p>At many workplaces fika is at fixed times, and saying yes is a good way to get to know people.</p><p><b>Look back at chapter 1.</b> You have already met:</p><ul><li>the verb in place two: <i>I trappan <b>träffar</b> han Karin.</i></li><li>en and ett: <i>en banan, ett äpple</i></li><li>numbers and prices: <i>Det blir sextiofem kronor.</i></li><li>gärna and tack: <i>Ja, gärna! Nej tack.</i></li></ul>"
+     },
+     "testa": [
+      {
+       "typ": "ordna",
+       "ord": [
+        "I trappan",
+        "träffar",
+        "han",
+        "Karin"
+       ],
+       "slut": "."
+      },
+      {
+       "typ": "val",
+       "fraga": "___ lägenhet",
+       "alternativ": [
+        "en",
+        "ett"
+       ],
+       "ratt": "en",
+       "forklaring": "en lägenhet = an apartment"
+      },
+      {
+       "typ": "lyssna",
+       "sv": "Erik går till affären och köper mjölk och bröd.",
+       "fraga": "What does Erik buy?",
+       "alternativ": [
+        "Milk and bread",
+        "Coffee and an apple",
+        "An ice cream"
+       ],
+       "ratt": "Milk and bread"
+      },
+      {
+       "typ": "val",
+       "fraga": "Ska vi fika? Ja, ___!",
+       "alternativ": [
+        "gärna",
+        "ursäkta",
+        "bredvid"
+       ],
+       "ratt": "gärna",
+       "forklaring": "Ja, gärna! = Yes, please!"
+      },
+      {
+       "typ": "val",
+       "fraga": "Sedan går Elsa till ___.",
+       "alternativ": [
+        "skolan",
+        "kaffe",
+        "frukost"
+       ],
+       "ratt": "skolan",
+       "forklaring": "skolan = the school"
+      },
+      {
+       "typ": "lyssna",
+       "sv": "Olle är fyra år.",
+       "fraga": "How old is Olle?",
+       "alternativ": [
+        "4",
+        "7",
+        "5"
+       ],
+       "ratt": "4"
+      }
+     ],
+     "ord": [
+      {
+       "sv": "en morgon",
+       "en": "a morning"
+      },
+      {
+       "sv": "sedan",
+       "en": "then, after that (often said “sen”)"
+      },
+      {
+       "sv": "en skola",
+       "en": "a school · skolan = the school"
+      },
+      {
+       "sv": "en förskola",
+       "en": "a preschool"
+      },
+      {
+       "sv": "träffar",
+       "en": "meet, meets"
+      },
+      {
+       "sv": "en trappa",
+       "en": "a staircase · i trappan = on the stairs"
+      },
+      {
+       "sv": "ska vi …?",
+       "en": "shall we …?"
+      },
+      {
+       "sv": "fika",
+       "en": "have coffee and something sweet, take a break"
+      }
+     ],
+     "fortsattning": {
+      "sv": "Nästa kapitel: Karin visar sin lägenhet.",
+      "en": "Next chapter: Karin shows her apartment."
+     }
+    }
+   ],
+   "nuKanDu": [
+    {
+     "en": "Say hello and introduce yourself",
+     "sv": "Hej! Jag heter Erik. Jag bor i Sverige."
+    },
+    {
+     "en": "Talk about your family",
+     "sv": "Jag har två barn. De är sju och fyra år."
+    },
+    {
+     "en": "Greet a new neighbour",
+     "sv": "Trevligt att träffas! Vill du ha kaffe?"
+    },
+    {
+     "en": "Say yes and no politely",
+     "sv": "Ja, gärna! Nej tack."
+    },
+    {
+     "en": "Ask what something costs",
+     "sv": "Ursäkta, vad kostar glassen?"
+    },
+    {
+     "en": "Understand the price and pay",
+     "sv": "Det blir sextiofem kronor. Kan jag betala med kort?"
+    }
+   ]
+  },
+  {
+   "nr": 2,
+   "titel": "Grannen och hemmet",
+   "en": "The neighbour and the home",
+   "kommer": true,
+   "steg": []
   }
+ ],
+ "ordlista": {
+  "hej": {
+   "en": "hi, hello"
+  },
+  "jag": {
+   "en": "I",
+   "uttal": "often said “ja”"
+  },
+  "heter": {
+   "en": "is called, am called"
+  },
+  "erik": {
+   "en": "Erik (a name)"
+  },
+  "elsa": {
+   "en": "Elsa (a name)"
+  },
+  "olle": {
+   "en": "Olle (a name)"
+  },
+  "bor": {
+   "en": "live, lives"
+  },
+  "i": {
+   "en": "in"
+  },
+  "sverige": {
+   "en": "Sweden"
+  },
+  "en": {
+   "en": "a, an (for en-words)"
+  },
+  "lägenhet": {
+   "en": "apartment, flat"
+  },
+  "har": {
+   "en": "have, has"
+  },
+  "två": {
+   "en": "two"
+  },
+  "barn": {
+   "en": "child, children (the same word!)"
+  },
+  "barnen": {
+   "en": "the children"
+  },
+  "dricker": {
+   "en": "drink, drinks"
+  },
+  "mycket": {
+   "en": "a lot, much"
+  },
+  "kaffe": {
+   "en": "coffee"
+  },
+  "de": {
+   "en": "they",
+   "uttal": "said “dom”"
+  },
+  "och": {
+   "en": "and",
+   "uttal": "often said “o”"
+  },
+  "är": {
+   "en": "am, is, are",
+   "uttal": "said “e”"
+  },
+  "sju": {
+   "en": "seven",
+   "uttal": "the sj-sound, like a soft “hw”"
+  },
+  "år": {
+   "en": "year, years"
+  },
+  "fyra": {
+   "en": "four"
+  },
+  "på": {
+   "en": "on, at · på morgonen = in the morning"
+  },
+  "morgonen": {
+   "en": "the morning"
+  },
+  "äter": {
+   "en": "eat, eats"
+  },
+  "frukost": {
+   "en": "breakfast"
+  },
+  "vad": {
+   "en": "what"
+  },
+  "det": {
+   "en": "it",
+   "uttal": "often said “de”"
+  },
+  "knackar": {
+   "en": "knocks"
+  },
+  "dörren": {
+   "en": "the door"
+  },
+  "vem": {
+   "en": "who"
+  },
+  "kan": {
+   "en": "can"
+  },
+  "vara": {
+   "en": "be"
+  },
+  "karin": {
+   "en": "Karin (a name)"
+  },
+  "här": {
+   "en": "here · här bredvid = next door"
+  },
+  "bredvid": {
+   "en": "next to"
+  },
+  "ny": {
+   "en": "new"
+  },
+  "trevligt": {
+   "en": "nice · Trevligt att träffas! = Nice to meet you!"
+  },
+  "att": {
+   "en": "to (also: that)"
+  },
+  "träffas": {
+   "en": "meet (each other)"
+  },
+  "detsamma": {
+   "en": "likewise, the same to you"
+  },
+  "vill": {
+   "en": "want, want to"
+  },
+  "du": {
+   "en": "you"
+  },
+  "ha": {
+   "en": "have · Vill du ha …? = Would you like …?"
+  },
+  "ja": {
+   "en": "yes"
+  },
+  "gärna": {
+   "en": "gladly · Ja, gärna! = Yes, please!",
+   "uttal": "g before ä sounds like y: “yärna”"
+  },
+  "men": {
+   "en": "but"
+  },
+  "ingen": {
+   "en": "no, not any"
+  },
+  "mjölk": {
+   "en": "milk"
+  },
+  "går": {
+   "en": "go, goes, walk"
+  },
+  "till": {
+   "en": "to, for"
+  },
+  "affären": {
+   "en": "the shop (en affär)"
+  },
+  "han": {
+   "en": "he"
+  },
+  "köper": {
+   "en": "buy, buys",
+   "uttal": "k before ö becomes the soft tj-sound: “tjöper”"
+  },
+  "bröd": {
+   "en": "bread"
+  },
+  "tar": {
+   "en": "take, takes"
+  },
+  "banan": {
+   "en": "banana"
+  },
+  "ett": {
+   "en": "a, an (for ett-words)"
+  },
+  "äpple": {
+   "en": "apple"
+  },
+  "äpplet": {
+   "en": "the apple"
+  },
+  "också": {
+   "en": "also, too"
+  },
+  "glass": {
+   "en": "ice cream (not a drinking glass!)"
+  },
+  "glassen": {
+   "en": "the ice cream"
+  },
+  "kassören": {
+   "en": "the cashier"
+  },
+  "påse": {
+   "en": "bag"
+  },
+  "nej": {
+   "en": "no"
+  },
+  "tack": {
+   "en": "thanks · Nej tack = No, thank you"
+  },
+  "den": {
+   "en": "it (for en-words)"
+  },
+  "kostar": {
+   "en": "cost, costs"
+  },
+  "tjugo": {
+   "en": "twenty",
+   "uttal": "starts with the soft tj-sound"
+  },
+  "kronor": {
+   "en": "kronor, Swedish money (en krona)"
+  },
+  "fem": {
+   "en": "five"
+  },
+  "blir": {
+   "en": "becomes · Det blir … = That will be …"
+  },
+  "sextiofem": {
+   "en": "sixty-five"
+  },
+  "ursäkta": {
+   "en": "excuse me",
+   "uttal": "rs sounds like “sh”: “u-shäkta”"
+  },
+  "betala": {
+   "en": "pay"
+  },
+  "med": {
+   "en": "with · med kort = by card"
+  },
+  "kort": {
+   "en": "card"
+  },
+  "självklart": {
+   "en": "of course",
+   "uttal": "starts with the sj-sound"
+  },
+  "hemma": {
+   "en": "at home"
+  },
+  "väntar": {
+   "en": "wait, waits"
+  },
+  "morgon": {
+   "en": "morning"
+  },
+  "sedan": {
+   "en": "then, after that",
+   "uttal": "often said “sen”"
+  },
+  "skolan": {
+   "en": "the school (en skola)"
+  },
+  "förskolan": {
+   "en": "the preschool (en förskola)"
+  },
+  "trappan": {
+   "en": "the stairs (en trappa) · i trappan = on the stairs"
+  },
+  "träffar": {
+   "en": "meet, meets"
+  },
+  "ska": {
+   "en": "shall, will · Ska vi …? = Shall we …?"
+  },
+  "vi": {
+   "en": "we"
+  },
+  "fika": {
+   "en": "have coffee and something sweet, take a break"
+  },
+  "nästa": {
+   "en": "next"
+  },
+  "kapitel": {
+   "en": "chapter"
+  },
+  "visar": {
+   "en": "show, shows"
+  },
+  "sin": {
+   "en": "her, his (own)"
+  }
+ }
 }
 </script>
 
@@ -424,6 +1469,9 @@ const delarKlara = id => DELAR.filter(d => (S.steg[id] || {})[d]).length;
 const stegKlart = id => delarKlara(id) === DELAR.length;
 const nastaSteg = () => byggda.find(s => !stegKlart(s.id));
 const antalOrd = () => Object.keys(S.ord).length;
+const kanLista = kap => (S.kan || {})[kap.nr] || [];
+const kanAntal = kap => kanLista(kap).length;
+const kanKlart = kap => !!kap.nuKanDu && kanAntal(kap) === kap.nuKanDu.length;
 const ordSomVantar = () => Object.entries(S.ord).filter(([, o]) => o.due <= Date.now()).map(([sv]) => sv);
 
 // ---------- Små hjälpare ----------
@@ -584,7 +1632,7 @@ function markera(steg, del) {
     const kapKlart = kap.steg.every(s => !s.kommer && stegKlart(s.id));
     const nasta = nastaSteg();
     setTimeout(() => fest(kapKlart
-      ? { stor: '🏆', rubrik: `Kapitel ${kap.nr} klart!`, text: `You finished “${kap.titel}”. Fantastiskt!`, knapp: 'Till kartan', href: '#' }
+      ? { stor: '🏆', rubrik: `Kapitel ${kap.nr} klart!`, text: `You finished “${kap.titel}”. Fantastiskt!`, knapp: kap.nuKanDu ? 'Se vad du kan nu →' : 'Till kartan', href: kap.nuKanDu ? '#kan/' + kap.nr : '#' }
       : { stor: '🎉', rubrik: `Steg ${steg.nr} klart!`, text: `Bra jobbat! You have ${antalOrd()} words in your word bank now.`,
           knapp: nasta ? `Nästa: ${nasta.titel} →` : 'Till kartan', href: nasta ? '#steg/' + nasta.id : '#' }), 350);
   }
@@ -639,7 +1687,8 @@ function byggNav() {
           if (s.kommer) return h('div', { class: 'nav-item kommer' }, h('span', { class: 'nid' }, s.nr), h('span', { class: 'nt' }, s.titel), h('span', { class: 'prog' }));
           const n = delarKlara(s.id), klart = n === DELAR.length;
           return rad('#steg/' + s.id, 'steg/' + s.id, s.nr, s.titel, klart ? '✓' : n ? `${n}/5` : '', klart ? ' klar' : '');
-        }));
+        }),
+        kap.nuKanDu && rad('#kan/' + kap.nr, 'kan/' + kap.nr, '★', 'Nu kan du …', `${kanAntal(kap)}/${kap.nuKanDu.length}`, kanKlart(kap) ? ' klar' : ''));
       d.addEventListener('toggle', () => {
         const set = new Set(S.navStangd || []);
         if (d.open) set.delete(kap.nr); else set.add(kap.nr);
@@ -656,7 +1705,8 @@ function byggNav() {
     h('option', { value: 'runda' }, '↻ Ordrunda' + (vantar ? ` (${vantar} väntar)` : '')),
     ...DATA.kapitel.filter(k => !k.kommer).map(kap => h('optgroup', { label: `Kapitel ${kap.nr} · ${kap.titel}` },
       kap.steg.map(s => h('option', { value: 'steg/' + s.id, disabled: !!s.kommer },
-        `${s.nr}  ${s.titel}` + (s.kommer ? ' (kommer snart)' : stegKlart(s.id) ? '  ✓' : ''))))));
+        `${s.nr}  ${s.titel}` + (s.kommer ? ' (kommer snart)' : stegKlart(s.id) ? '  ✓' : ''))),
+      kap.nuKanDu && h('option', { value: 'kan/' + kap.nr }, '★ Nu kan du …' + (kanKlart(kap) ? '  ✓' : '')))));
   sel.value = vag;
 }
 document.getElementById('stegval').addEventListener('change', e => { location.hash = '#' + e.target.value; });
@@ -712,7 +1762,10 @@ function kapitelKort(kap, nasta) {
         s.kommer ? h('span') : h('span', { class: 'prickar', 'aria-label': `${delarKlara(s.id)} av 5 delar klara` },
           DELAR.map(d => h('span', { class: (S.steg[s.id] || {})[d] ? 'pa' : '' })))];
       return h('li', { class: klass }, s.kommer ? h('div', { class: 'las' }, innehall) : h('a', { href: '#steg/' + s.id }, innehall));
-    })));
+    }), kap.nuKanDu && h('li', { class: 'stegrad' + (kanKlart(kap) ? ' klart' : '') }, h('a', { href: '#kan/' + kap.nr },
+      h('span', { class: 'ring' }, kanKlart(kap) ? '✓' : '★'),
+      h('span', { class: 'titel' }, 'Nu kan du …', h('small', { lang: 'en' }, 'What you can do after this chapter')),
+      h('span', { class: 'liten' }, `${kanAntal(kap)}/${kap.nuKanDu.length}`)))));
 }
 function aterstall() {
   const knapp = h('button', { onclick: () => {
@@ -757,7 +1810,7 @@ function sektion(del, klass, ...barn) {
 function delLyssna(steg) {
   const rader = steg.meningar.map(m => h('li', { class: 'mening' },
     h('button', { class: 'spela', 'aria-label': 'Lyssna: ' + m.sv, html: PLAY, onclick: () => spelaEn(m.sv) }),
-    h('div', {}, h('p', { class: 'sv', lang: 'sv' }, ordKnappar(m.sv)), h('p', { class: 'en', lang: 'en' }, m.en))));
+    h('div', {}, m.vem && h('div', { class: 'vem' }, m.vem), h('p', { class: 'sv', lang: 'sv' }, ordKnappar(m.sv)), h('p', { class: 'en', lang: 'en' }, m.en))));
   const markeraRad = i => rader.forEach((r, j) => r.classList.toggle('nu', i === j));
   const fart = h('div', { class: 'vaxel', role: 'group', 'aria-label': 'Fart' },
     ['langsam', 'normal'].map(f => h('button', { 'aria-pressed': String(S.fart === f), onclick: e => {
@@ -874,7 +1927,7 @@ function fraga(q, nasta) {
 
 function delSaga(steg) {
   const rader = steg.meningar.map(m => h('li', { class: 'mening' },
-    h('div', { style: 'flex:1' }, h('p', { class: 'sv', lang: 'sv' }, m.sv), h('p', { class: 'en', lang: 'en' }, m.en),
+    h('div', { style: 'flex:1' }, m.vem && h('div', { class: 'vem' }, m.vem), h('p', { class: 'sv', lang: 'sv' }, m.sv), h('p', { class: 'en', lang: 'en' }, m.en),
       h('div', { class: 'reglage', style: 'margin:8px 0 0' },
         h('button', { class: 'spela text', html: PLAY + 'Långsamt', onclick: () => spelaEn(m.sv, true) }),
         h('button', { class: 'spela text', html: PLAY + 'Normalt', onclick: () => spelaEn(m.sv, false) })))));
@@ -909,6 +1962,36 @@ function delOrd(steg) {
   return sektion('ord', '',
     delHuvud('ord', 5, 'Nya ord', 'New words. Save them and they will come back in a word round.'),
     lista, h('div', { class: 'knappar' }, knapp));
+}
+
+// ---------- Nu kan du … (efter ett kapitel) ----------
+function visaKan(kap) {
+  const app = document.getElementById('app');
+  const lista = h('ul', { class: 'kanlista' }, kap.nuKanDu.map((k, i) => {
+    const knapp = h('button', { class: 'kanbock', 'aria-pressed': String(kanLista(kap).includes(i)), 'aria-label': 'Jag kan det: ' + k.en, onclick: () => {
+      const fore = kanKlart(kap);
+      const set = new Set(kanLista(kap));
+      if (set.has(i)) set.delete(i); else set.add(i);
+      S.kan = Object.assign({}, S.kan, { [kap.nr]: [...set] });
+      spara();
+      knapp.setAttribute('aria-pressed', String(set.has(i)));
+      li.classList.toggle('pa', set.has(i));
+      uppdateraChip();
+      if (!fore && kanKlart(kap)) fest({ stor: '🏆', rubrik: `Kapitel ${kap.nr}: allt avbockat!`,
+        text: 'You can really do all of this now. Fantastiskt!', knapp: 'Till kartan', href: '#' });
+    } }, '✓');
+    const li = h('li', { class: kanLista(kap).includes(i) ? 'pa' : '' }, knapp,
+      h('div', {}, h('div', { class: 'kan-en', lang: 'en' }, k.en), h('p', { class: 'sv', lang: 'sv' }, k.sv)),
+      h('button', { class: 'spela', 'aria-label': 'Lyssna: ' + k.sv, html: PLAY, onclick: () => spelaEn(k.sv) }));
+    return li;
+  }));
+  fyll(app,
+    h('section', { class: 'steghuvud' }, h('a', { class: 'tillbaka', href: '#' }, '← Kartan'),
+      h('div', { class: 'kicker' }, `Kapitel ${kap.nr} · ${kap.titel}`),
+      h('h1', {}, 'Nu kan du …'),
+      h('p', { class: 'en-titel', lang: 'en' }, 'Read each sentence aloud. Tick it when you feel you could do it in real life.')),
+    rostInfo(),
+    h('section', { class: 'kort' }, lista));
 }
 
 // ---------- Ordbanken och ordrundan ----------
@@ -978,6 +2061,7 @@ function rita() {
   if (steg && !steg.kommer) visaSteg(steg);
   else if (vag === 'ord') visaOrdbank();
   else if (vag === 'runda') visaRunda();
+  else if (vag.startsWith('kan/') && DATA.kapitel.some(k => k.nuKanDu && 'kan/' + k.nr === vag)) visaKan(DATA.kapitel.find(k => 'kan/' + k.nr === vag));
   else visaHem();
   uppdateraChip();
   window.scrollTo(0, 0);
