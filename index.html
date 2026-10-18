@@ -323,6 +323,9 @@ textarea.skrivfalt { min-height: 110px; resize: vertical; font-size: 1.1rem; }
 .kollista input { width: 20px; height: 20px; margin-top: 2px; }
 .exempel { background: var(--paper); border-radius: 12px; padding: 12px 14px; margin: 10px 0; }
 
+.hjalparruta { background: var(--paper); border: 1.5px dashed var(--line); }
+.hjalparruta ul { padding-left: 1.2em; margin: .4em 0; }
+
 /* Feedback */
 .fb-knapp { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 15; border: 0; border-radius: 999px;
   padding: 10px 16px; background: var(--ink); color: var(--paper); font-weight: 600; font-size: .92rem; box-shadow: 0 4px 14px rgb(0 0 0 / .2); cursor: pointer; }
@@ -2821,7 +2824,88 @@ textarea.skrivfalt { min-height: 110px; resize: vertical; font-size: 1.1rem; }
      "en": "Write a short text message",
      "sv": "Tack för senast! Vi ses på lördag!"
     }
-   ]
+   ],
+   "koll": {
+    "nr": 1,
+    "fragor": [
+     {
+      "typ": "ratta",
+      "ord": [
+       "Sen",
+       "åkte",
+       "vi",
+       "hem"
+      ],
+      "felord": [
+       "Sen",
+       "vi",
+       "åkte",
+       "hem"
+      ],
+      "slut": "."
+     },
+     {
+      "typ": "skriv",
+      "fraga": "Igår ___ vi middag hos Karin.",
+      "grund": "äta",
+      "ratt": "åt",
+      "forklaring": "Igår → past tense: äta → åt."
+     },
+     {
+      "typ": "skriv",
+      "fraga": "Vi ska ___ till parken.",
+      "grund": "åka",
+      "ratt": "åka",
+      "forklaring": "After ska: the base form."
+     },
+     {
+      "typ": "val",
+      "fraga": "Karin kom ___ fika.",
+      "alternativ": [
+       "på",
+       "för",
+       "med"
+      ],
+      "ratt": "på",
+      "forklaring": "komma på fika, gå på promenad: på, not för."
+     },
+     {
+      "typ": "minpar",
+      "par": [
+       {
+        "sv": "mat",
+        "en": "food"
+       },
+       {
+        "sv": "matt",
+        "en": "tired, dull"
+       }
+      ]
+     },
+     {
+      "typ": "skriv",
+      "fraga": "Karin har tre ___.",
+      "grund": "ett rum",
+      "ratt": "rum",
+      "forklaring": "ett rum → tre rum (no change)."
+     },
+     {
+      "typ": "diktamen",
+      "sv": "Först vaknade vi, sedan åt vi frukost."
+     }
+    ],
+    "skriv": {
+     "uppgift": "Write three sentences about what you did yesterday. Use först, sedan or efter det.",
+     "exempel": "Igår vaknade jag klockan sju. Först åt vi frukost. Sedan gick jag till affären och handlade mat.",
+     "kolla": [
+      "Past tense all the way (<i>vaknade, åt, gick</i>)",
+      "Verb in place two after <i>Igår, Först, Sedan</i>",
+      "<i>på</i> or <i>till</i>, not <i>för</i>",
+      "å, ä and ö in the right places"
+     ]
+    },
+    "tala": "Tell someone, or yourself out loud, for about 30 seconds what you did last weekend. Speak freely, don't read."
+   }
   },
   {
    "nr": 4,
@@ -3926,6 +4010,10 @@ textarea.skrivfalt { min-height: 110px; resize: vertical; font-size: 1.1rem; }
   "kom": {
    "en": "came (komma → kom)",
    "klass": "v"
+  },
+  "matt": {
+   "en": "tired, dull (short a)",
+   "klass": "a"
   }
  }
 }
@@ -3961,6 +4049,10 @@ const delarKlara = id => DELAR.filter(d => (S.steg[id] || {})[d]).length;
 const stegKlart = id => delarKlara(id) === DELAR.length;
 const nastaSteg = () => byggda.find(s => !stegKlart(s.id));
 const antalOrd = () => Object.keys(S.ord).length;
+const KOLLDELAR = ['fragor', 'skriv', 'tala', 'kansla'];
+const kollStatus = kap => (S.koll || {})[kap.nr] || {};
+const kollAntal = kap => KOLLDELAR.filter(d => kollStatus(kap)[d]).length;
+const kollKlart = kap => !!kap.koll && kollAntal(kap) === KOLLDELAR.length;
 const kanLista = kap => (S.kan || {})[kap.nr] || [];
 const kanAntal = kap => kanLista(kap).length;
 const kanKlart = kap => !!kap.nuKanDu && kanAntal(kap) === kap.nuKanDu.length;
@@ -4317,7 +4409,8 @@ function byggNav() {
           const n = delarKlara(s.id), klart = n === DELAR.length;
           return rad('#steg/' + s.id, 'steg/' + s.id, s.nr, s.titel, klart ? '✓' : n ? `${n}/5` : '', klart ? ' klar' : '');
         }),
-        kap.nuKanDu && rad('#kan/' + kap.nr, 'kan/' + kap.nr, '★', 'Nu kan du …', `${kanAntal(kap)}/${kap.nuKanDu.length}`, kanKlart(kap) ? ' klar' : ''));
+        kap.nuKanDu && rad('#kan/' + kap.nr, 'kan/' + kap.nr, '★', 'Nu kan du …', `${kanAntal(kap)}/${kap.nuKanDu.length}`, kanKlart(kap) ? ' klar' : ''),
+        kap.koll && rad('#koll/' + kap.nr, 'koll/' + kap.nr, '⚑', `Koll ${kap.koll.nr}`, kollKlart(kap) ? '✓' : `${kollAntal(kap)}/${KOLLDELAR.length}`, kollKlart(kap) ? ' klar' : ''));
       d.addEventListener('toggle', () => {
         const set = new Set(S.navStangd || []);
         if (d.open) set.delete(kap.nr); else set.add(kap.nr);
@@ -4335,7 +4428,8 @@ function byggNav() {
     ...DATA.kapitel.filter(k => !k.kommer).map(kap => h('optgroup', { label: `Kapitel ${kap.nr} · ${kap.titel}` },
       kap.steg.map(s => h('option', { value: 'steg/' + s.id, disabled: !!s.kommer },
         `${s.nr}  ${s.titel}` + (s.kommer ? ' (kommer snart)' : stegKlart(s.id) ? '  ✓' : ''))),
-      kap.nuKanDu && h('option', { value: 'kan/' + kap.nr }, '★ Nu kan du …' + (kanKlart(kap) ? '  ✓' : '')))));
+      kap.nuKanDu && h('option', { value: 'kan/' + kap.nr }, '★ Nu kan du …' + (kanKlart(kap) ? '  ✓' : '')),
+      kap.koll && h('option', { value: 'koll/' + kap.nr }, `⚑ Koll ${kap.koll.nr}` + (kollKlart(kap) ? '  ✓' : '')))));
   sel.value = vag;
 }
 document.getElementById('stegval').addEventListener('change', e => { location.hash = '#' + e.target.value; });
@@ -4394,7 +4488,11 @@ function kapitelKort(kap, nasta) {
     }), kap.nuKanDu && h('li', { class: 'stegrad' + (kanKlart(kap) ? ' klart' : '') }, h('a', { href: '#kan/' + kap.nr },
       h('span', { class: 'ring' }, kanKlart(kap) ? '✓' : '★'),
       h('span', { class: 'titel' }, 'Nu kan du …', h('small', { lang: 'en' }, 'What you can do after this chapter')),
-      h('span', { class: 'liten' }, `${kanAntal(kap)}/${kap.nuKanDu.length}`)))));
+      h('span', { class: 'liten' }, `${kanAntal(kap)}/${kap.nuKanDu.length}`))),
+      kap.koll && h('li', { class: 'stegrad' + (kollKlart(kap) ? ' klart' : '') }, h('a', { href: '#koll/' + kap.nr },
+        h('span', { class: 'ring' }, kollKlart(kap) ? '✓' : '⚑'),
+        h('span', { class: 'titel' }, `Koll ${kap.koll.nr}`, h('small', { lang: 'en' }, 'A short check-up: how is it going?')),
+        h('span', { class: 'liten' }, `${kollAntal(kap)}/${KOLLDELAR.length}`)))));
 }
 function aterstall() {
   const knapp = h('button', { onclick: () => {
@@ -4744,6 +4842,75 @@ function visaKan(kap) {
     h('section', { class: 'kort' }, lista));
 }
 
+// ---------- Koll vartannat kapitel ----------
+function visaKoll(kap) {
+  const app = document.getElementById('app');
+  const k = kap.koll;
+  const markeraKoll = (del, varde = true) => {
+    const fore = kollKlart(kap);
+    S.koll = Object.assign({}, S.koll, { [kap.nr]: Object.assign({}, kollStatus(kap), { [del]: varde }) });
+    spara();
+    document.querySelectorAll('[data-kolldel]').forEach(el => el.classList.toggle('klar', !!kollStatus(kap)[el.dataset.kolldel]));
+    uppdateraChip();
+    if (!fore && kollKlart(kap)) setTimeout(() => fest({ stor: '🌟', rubrik: `Koll ${k.nr} klar!`,
+      text: 'Well done. Every check-up shows what is going well and what to practise next.', knapp: 'Till kartan', href: '#' }), 350);
+  };
+  const del = (namn, farg, nr, titel, en, ...barn) => h('section', { class: 'del', 'data-del': farg, 'data-kolldel': namn },
+    delHuvud(farg, nr, titel, en), ...barn);
+
+  // 1. blandade frågor från tidigare kapitel
+  const yta = h('div', { class: 'testyta', 'aria-live': 'polite' });
+  let i = kollStatus(kap).fragor ? k.fragor.length : 0;
+  const ritaFragor = (autoSpela = true) => {
+    yta.replaceChildren();
+    if (i >= k.fragor.length) {
+      markeraKoll('fragor');
+      yta.append(h('p', { class: 'respons' }, h('b', {}, 'Klart! '), h('span', { lang: 'en' }, 'All questions done.')),
+        h('div', { class: 'knappar' }, h('button', { class: 'knapp', onclick: () => { i = 0; ritaFragor(); } }, 'Gör om')));
+      return;
+    }
+    yta.append(h('div', { class: 'raknare' }, `Fråga ${i + 1} av ${k.fragor.length}`), fraga(k.fragor[i], () => { i++; ritaFragor(); }, autoSpela));
+  };
+  ritaFragor(false);
+
+  // 2. skriv själv (sparas inte)
+  const skrivBox = frittFraga(k.skriv, h('div'), () => { markeraKoll('skriv'); return h('p', { class: 'respons', lang: 'en' }, '✓ Done. Great work!'); });
+
+  // 3. tala
+  const talKnapp = h('button', { class: 'knapp primar', onclick: () => { markeraKoll('tala'); talKnapp.textContent = '✓ Gjort'; talKnapp.className = 'knapp klar'; } },
+    kollStatus(kap).tala ? '✓ Gjort' : 'Jag har gjort det');
+  if (kollStatus(kap).tala) talKnapp.className = 'knapp klar';
+
+  // 4. hur kändes det?
+  const kanslor = [['latt', '😌 Easy'], ['lagom', '🙂 Just right'], ['svart', '😅 Hard']];
+  const kanslaSvar = h('div');
+  const kanslaKnappar = h('div', { class: 'fb-val', role: 'group', 'aria-label': 'How did it feel?' }, kanslor.map(([v, t]) =>
+    h('button', { type: 'button', 'aria-pressed': String(kollStatus(kap).kansla === v), onclick: () => {
+      markeraKoll('kansla', v);
+      kanslaKnappar.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.textContent === t)));
+      kanslaSvar.replaceChildren(h('p', { class: 'liten', lang: 'en' }, 'Want to let the person who helps you know? It opens the feedback form.'),
+        h('button', { class: 'knapp', onclick: () => skickaFeedback(`📊 Koll ${k.nr}`, `Kändes: ${t}`, `Koll ${k.nr} (efter kapitel ${kap.nr})`) }, 'Skicka hur det kändes'));
+    } }, t)));
+
+  fyll(app,
+    h('section', { class: 'steghuvud' }, h('a', { class: 'tillbaka', href: '#' }, '← Kartan'),
+      h('div', { class: `kicker kapfarg kap-${kap.nr}` }, `Efter kapitel ${kap.nr}`),
+      h('h1', {}, `Koll ${k.nr}`),
+      h('p', { class: 'en-titel', lang: 'en' }, 'A short check-up, about 10 minutes. It is not a test you can fail: it shows what is going well and what to practise next.')),
+    rostInfo(),
+    del('fragor', 'testa', 1, 'Blandade frågor', 'Mixed questions from the chapters so far.', yta),
+    del('skriv', 'ord', 2, 'Skriv', 'Write on your own.', skrivBox),
+    del('tala', 'saga', 3, 'Prata', 'Speak on your own.', h('p', { lang: 'en' }, '🗣️ ' + k.tala), h('div', { class: 'knappar' }, talKnapp)),
+    del('kansla', 'lyssna', 4, 'Hur kändes det?', 'How did it feel?', kanslaKnappar, kanslaSvar),
+    h('section', { class: 'kort hjalparruta' },
+      h('div', { class: 'kicker' }, 'Till dig som hjälper någon att öva'),
+      h('p', {}, 'Gör gärna en egen liten koll också: be personen skriva tre meningar om igår och prata ungefär 30 sekunder om helgen. Titta efter:'),
+      h('ul', {}, h('li', {}, 'ordföljden efter tidsord (Sen åkte vi, inte Sen vi åkte)'), h('li', {}, 'dåtid hela vägen'),
+        h('li', {}, 'en/ett och å, ä, ö'), h('li', {}, 'på/till i stället för för'), h('li', {}, 'hur flytande det går')),
+      h('p', {}, 'Berätta sedan för Claude vad du märkte, så anpassas nästa kapitel.')));
+  document.querySelectorAll('[data-kolldel]').forEach(el => el.classList.toggle('klar', !!kollStatus(kap)[el.dataset.kolldel]));
+}
+
 // ---------- Ordbanken och ordrundan ----------
 function visaOrdbank() {
   const app = document.getElementById('app');
@@ -4815,6 +4982,7 @@ function rita() {
   else if (vag === 'ord') visaOrdbank();
   else if (vag === 'runda') visaRunda();
   else if (vag.startsWith('kan/') && DATA.kapitel.some(k => k.nuKanDu && 'kan/' + k.nr === vag)) visaKan(DATA.kapitel.find(k => 'kan/' + k.nr === vag));
+  else if (vag.startsWith('koll/') && DATA.kapitel.some(k => k.koll && 'koll/' + k.nr === vag)) visaKoll(DATA.kapitel.find(k => 'koll/' + k.nr === vag));
   else visaHem();
   uppdateraChip();
   window.scrollTo(0, 0);
