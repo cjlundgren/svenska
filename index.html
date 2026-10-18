@@ -35,7 +35,7 @@
   --g-en: #1d63c9; --g-ett: #c4470f;
   --o-verb: #c53030; --o-subst: #1d63c9; --o-adj: #2f855a; --o-pron: #7556c2;
   --p-erik: #0e7c7b; --p-karin: #b83280; --p-kassoren: #64748b; --p-elsa: #b7791f; --p-olle: #4c51bf;
-  --k1: #4c51bf; --k2: #2f855a; --k3: #b7791f;
+  --k1: #4c51bf; --k2: #2f855a; --k3: #b7791f; --k4: #b83280;
   --radius: 16px;
   --serif: "Fraunces", Georgia, serif;
   --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -50,7 +50,7 @@
     --g-en: #7cb4f5; --g-ett: #f5a06b;
     --o-verb: #f28b8b; --o-subst: #7cb4f5; --o-adj: #6fc28c; --o-pron: #b39cf0;
     --p-erik: #4fd1c5; --p-karin: #f08fc4; --p-kassoren: #a0aec0; --p-elsa: #f6c26b; --p-olle: #a3a8f5;
-    --k1: #a3a8f5; --k2: #6fc28c; --k3: #f6c26b;
+    --k1: #a3a8f5; --k2: #6fc28c; --k3: #f6c26b; --k4: #f08fc4;
   }
 }
 :root[data-theme="dark"] {
@@ -62,7 +62,7 @@
   --g-en: #7cb4f5; --g-ett: #f5a06b;
   --o-verb: #f28b8b; --o-subst: #7cb4f5; --o-adj: #6fc28c; --o-pron: #b39cf0;
   --p-erik: #4fd1c5; --p-karin: #f08fc4; --p-kassoren: #a0aec0; --p-elsa: #f6c26b; --p-olle: #a3a8f5;
-  --k1: #a3a8f5; --k2: #6fc28c; --k3: #f6c26b;
+  --k1: #a3a8f5; --k2: #6fc28c; --k3: #f6c26b; --k4: #f08fc4;
 }
 
 * { box-sizing: border-box; }
@@ -300,11 +300,28 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
 .p-elsa { --p: var(--p-elsa); } .p-olle { --p: var(--p-olle); }
 .mening.tal { box-shadow: inset 4px 0 0 var(--p, var(--accent)); padding-left: 14px; }
 .mening.tal .vem { color: var(--p, var(--accent)); }
-.kap-1 { --kap: var(--k1); } .kap-2 { --kap: var(--k2); } .kap-3 { --kap: var(--k3); }
+.kap-1 { --kap: var(--k1); } .kap-2 { --kap: var(--k2); } .kap-3 { --kap: var(--k3); } .kap-4 { --kap: var(--k4); }
 .kapfarg { color: var(--kap); }
 .kort.kapitel { border-top: 5px solid var(--kap); }
 .kort.kapitel .stapel i { background: var(--kap); }
 .nav-kap h3 span { color: var(--kap, var(--accent)); }
+
+/* Skrivuppgifter, rätta meningen, minimala par */
+.skrivfalt { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--paper);
+  color: var(--ink); font: 1.2rem var(--serif); }
+.skrivfalt:focus { outline: none; border-color: var(--accent); }
+textarea.skrivfalt { min-height: 110px; resize: vertical; font-size: 1.1rem; }
+.tecken { display: flex; gap: 8px; margin: 8px 0 0; }
+.tecken .bricka { min-width: 44px; padding: 6px 12px; }
+.grundform { color: var(--muted); font-family: var(--sans); font-size: 1rem; }
+.diff span { margin-right: .3em; }
+.diff .ok { color: var(--ok); }
+.diff .fel { color: var(--fel); text-decoration: underline wavy; }
+.felmening { color: var(--fel); text-decoration: line-through; font-family: var(--serif); font-size: 1.2rem; margin: 0 0 6px; }
+.kollista { list-style: none; padding: 0; margin: 8px 0; }
+.kollista label { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; cursor: pointer; }
+.kollista input { width: 20px; height: 20px; margin-top: 2px; }
+.exempel { background: var(--paper); border-radius: 12px; padding: 12px 14px; margin: 10px 0; }
 
 /* Feedback */
 .fb-knapp { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 15; border: 0; border-radius: 999px;
@@ -453,6 +470,17 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
        "ratt": "bor",
        "forklaring": "Like neigh-bour: the one who lives near.",
        "svAlt": true
+      },
+      {
+       "typ": "skriv",
+       "fraga": "Jag ___ Erik.",
+       "grund": "heta",
+       "ratt": "heter",
+       "forklaring": "Jag heter = my name is (heta → heter)."
+      },
+      {
+       "typ": "diktamen",
+       "sv": "Jag har två barn."
       }
      ],
      "ord": [
@@ -542,17 +570,6 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
       },
       {
        "typ": "val",
-       "fraga": "Which sentence is correct?",
-       "alternativ": [
-        "På morgonen dricker Erik kaffe.",
-        "På morgonen Erik dricker kaffe."
-       ],
-       "ratt": "På morgonen dricker Erik kaffe.",
-       "forklaring": "The verb (dricker) comes second, right after På morgonen.",
-       "svAlt": true
-      },
-      {
-       "typ": "val",
        "fraga": "Elsa ___ sju år.",
        "alternativ": [
         "är",
@@ -583,6 +600,29 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
        ],
        "ratt": "äter",
        "forklaring": "Barnen äter frukost = The children eat breakfast."
+      },
+      {
+       "typ": "skriv",
+       "fraga": "Barnen ___ frukost.",
+       "grund": "äta",
+       "ratt": "äter",
+       "forklaring": "Present tense ends in -r: äta → äter."
+      },
+      {
+       "typ": "ratta",
+       "ord": [
+        "På morgonen",
+        "dricker",
+        "Erik",
+        "kaffe"
+       ],
+       "felord": [
+        "På morgonen",
+        "Erik",
+        "dricker",
+        "kaffe"
+       ],
+       "slut": "."
       }
      ],
      "ord": [
@@ -725,6 +765,17 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
        "ratt": "du",
        "forklaring": "Swedes say du to almost everyone.",
        "svAlt": true
+      },
+      {
+       "typ": "diktamen",
+       "sv": "Vill du ha kaffe?"
+      },
+      {
+       "typ": "skriv",
+       "fraga": "Karin ___ här bredvid.",
+       "grund": "bo",
+       "ratt": "bor",
+       "forklaring": "bo → bor (present tense: -r)."
       }
      ],
      "ord": [
@@ -855,6 +906,26 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
        ],
        "ratt": "tack",
        "forklaring": "Nej tack = No, thank you."
+      },
+      {
+       "typ": "minpar",
+       "par": [
+        {
+         "sv": "glass",
+         "en": "ice cream"
+        },
+        {
+         "sv": "glas",
+         "en": "a drinking glass"
+        }
+       ]
+      },
+      {
+       "typ": "skriv",
+       "fraga": "Erik ___ mjölk och bröd.",
+       "grund": "köpa",
+       "ratt": "köper",
+       "forklaring": "köpa → köper."
       }
      ],
      "ord": [
@@ -992,6 +1063,17 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
        "ratt": "Ursäkta!",
        "forklaring": "Ursäkta = Excuse me.",
        "svAlt": true
+      },
+      {
+       "typ": "skriv",
+       "fraga": "Kan jag ___ med kort?",
+       "grund": "betala",
+       "ratt": "betala",
+       "forklaring": "After kan, vill, ska, måste: the base form. Kan jag betala?"
+      },
+      {
+       "typ": "diktamen",
+       "sv": "Det blir sextiofem kronor."
       }
      ],
      "ord": [
@@ -1138,6 +1220,29 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
         "5"
        ],
        "ratt": "4"
+      },
+      {
+       "typ": "ratta",
+       "ord": [
+        "Sedan",
+        "går",
+        "Elsa",
+        "till skolan"
+       ],
+       "felord": [
+        "Sedan",
+        "Elsa",
+        "går",
+        "till skolan"
+       ],
+       "slut": "."
+      },
+      {
+       "typ": "skriv",
+       "fraga": "Sedan ___ Erik till affären.",
+       "grund": "gå",
+       "ratt": "går",
+       "forklaring": "After Sedan, the verb comes next: Sedan går Erik."
       }
      ],
      "ord": [
@@ -1306,6 +1411,16 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
        ],
        "ratt": "lägenheten",
        "forklaring": "en lägenhet → lägenheten (the apartment)"
+      },
+      {
+       "typ": "diktamen",
+       "sv": "Det här är köket."
+      },
+      {
+       "typ": "skriv",
+       "fraga": "Vi ___ köket.",
+       "grund": "gilla",
+       "ratt": "gillar"
       }
      ],
      "ord": [
@@ -1442,6 +1557,25 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
         "In the kitchen"
        ],
        "ratt": "In the bedroom"
+      },
+      {
+       "typ": "skriv",
+       "fraga": "Barnen ___ i sovrummet.",
+       "grund": "sova",
+       "ratt": "sover"
+      },
+      {
+       "typ": "minpar",
+       "par": [
+        {
+         "sv": "tak",
+         "en": "a roof, a ceiling"
+        },
+        {
+         "sv": "tack",
+         "en": "thanks"
+        }
+       ]
       }
      ],
      "ord": [
@@ -1577,6 +1711,24 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
        "ratt": "ligger",
        "forklaring": "Nyckeln ligger på bordet. Flat things lie.",
        "svAlt": true
+      },
+      {
+       "typ": "ratta",
+       "ord": [
+        "På bordet",
+        "ligger",
+        "nyckeln"
+       ],
+       "felord": [
+        "På bordet",
+        "nyckeln",
+        "ligger"
+       ],
+       "slut": "."
+      },
+      {
+       "typ": "diktamen",
+       "sv": "Var är nyckeln?"
       }
      ],
      "ord": [
@@ -1712,6 +1864,20 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
        "ratt": "Ja, alltid!",
        "forklaring": "Always clean the laundry room. Otherwise: arga lappar!",
        "svAlt": true
+      },
+      {
+       "typ": "skriv",
+       "fraga": "Du måste ___ en tid.",
+       "grund": "boka",
+       "ratt": "boka",
+       "forklaring": "After måste, the base form: måste boka."
+      },
+      {
+       "typ": "skriv",
+       "fraga": "Hur ___ man tvättstugan?",
+       "grund": "boka",
+       "ratt": "bokar",
+       "forklaring": "No helper verb here, so present tense: bokar."
       }
      ],
      "ord": [
@@ -1862,6 +2028,35 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
        "ratt": "ni",
        "forklaring": "ni = you (more than one person)",
        "svAlt": true
+      },
+      {
+       "typ": "ratta",
+       "ord": [
+        "Sen",
+        "äter",
+        "vi",
+        "middag"
+       ],
+       "felord": [
+        "Sen",
+        "vi",
+        "äter",
+        "middag"
+       ],
+       "slut": "."
+      },
+      {
+       "typ": "minpar",
+       "par": [
+        {
+         "sv": "laga",
+         "en": "cook"
+        },
+        {
+         "sv": "låga",
+         "en": "a flame"
+        }
+       ]
       }
      ],
      "ord": [
@@ -1899,8 +2094,8 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
       }
      ],
      "fortsattning": {
-      "sv": "Nästa kapitel: en dag på förskolan.",
-      "en": "Next chapter: a day at preschool."
+      "sv": "Nästa kapitel: vad gjorde familjen i helgen?",
+      "en": "Next chapter: what did the family do at the weekend?"
      }
     }
    ],
@@ -1933,6 +2128,703 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
   },
   {
    "nr": 3,
+   "titel": "Helgen",
+   "en": "The weekend",
+   "steg": [
+    {
+     "id": "3-1",
+     "nr": 12,
+     "titel": "Vad gjorde du i helgen?",
+     "en": "What did you do at the weekend?",
+     "meningar": [
+      {
+       "sv": "Det är måndag morgon. Erik träffar Karin i trappan.",
+       "en": "It is Monday morning. Erik meets Karin on the stairs."
+      },
+      {
+       "vem": "Karin",
+       "sv": "Hej Erik! Vad gjorde du i helgen?",
+       "en": "Hi Erik! What did you do at the weekend?"
+      },
+      {
+       "vem": "Erik",
+       "sv": "Vi hade en lugn helg.",
+       "en": "We had a quiet weekend."
+      },
+      {
+       "vem": "Erik",
+       "sv": "På lördagen vaknade vi sent, klockan halv tio.",
+       "en": "On Saturday we woke up late, at half past nine."
+      },
+      {
+       "vem": "Erik",
+       "sv": "Sedan städade vi lägenheten och handlade mat.",
+       "en": "Then we cleaned the apartment and went food shopping."
+      },
+      {
+       "vem": "Erik",
+       "sv": "På kvällen lagade vi soppa.",
+       "en": "In the evening we made soup."
+      },
+      {
+       "vem": "Karin",
+       "sv": "Vad mysigt!",
+       "en": "How cosy!"
+      }
+     ],
+     "aha": {
+      "rubrik": "Yesterday: the -ade ending",
+      "html": "<p>To talk about the past, most Swedish verbs simply add <b>-de</b> to the base form. The base form often ends in <i>-a</i>, so you get <b>-ade</b>:</p><table class='par'><tr><td>vakna</td><td>vaknar (now)</td><td>vakna<b>de</b> (past)</td></tr><tr><td>städa</td><td>städar</td><td>städa<b>de</b></td></tr><tr><td>handla</td><td>handlar</td><td>handla<b>de</b></td></tr><tr><td>laga</td><td>lagar</td><td>laga<b>de</b></td></tr></table><p>Just like the present tense, the past looks the same for everyone: <i>jag vaknade, vi vaknade, Karin vaknade</i>.</p><p class='tips'>When you tell a story about yesterday, keep the past tense <b>all the way</b>: <i>Vi vaknade sent. Sedan städade vi. På kvällen lagade vi soppa.</i> It is very common to slip back into <i>lagar</i> or <i>laga</i> in the middle of a story.</p><p class='bonus'><b>Careful with the time:</b> <i>halv tio</i> is 9.30, not 10.30. Swedes count the half <i>towards</i> the next hour: half (of the way) to ten.</p>"
+     },
+     "testa": [
+      {
+       "typ": "skriv",
+       "fraga": "På lördagen ___ vi sent.",
+       "grund": "vakna",
+       "ratt": "vaknade",
+       "forklaring": "vakna → vaknade"
+      },
+      {
+       "typ": "lyssna",
+       "sv": "På lördagen vaknade vi sent, klockan halv tio.",
+       "fraga": "What time did they wake up?",
+       "alternativ": [
+        "9.30",
+        "10.30",
+        "9.00"
+       ],
+       "ratt": "9.30"
+      },
+      {
+       "typ": "skriv",
+       "fraga": "Sedan ___ vi lägenheten.",
+       "grund": "städa",
+       "ratt": "städade",
+       "forklaring": "städa → städade"
+      },
+      {
+       "typ": "ratta",
+       "ord": [
+        "Sedan",
+        "lagade",
+        "vi",
+        "soppa"
+       ],
+       "felord": [
+        "Sedan",
+        "vi",
+        "lagade",
+        "soppa"
+       ],
+       "slut": "."
+      },
+      {
+       "typ": "diktamen",
+       "sv": "Vad gjorde du i helgen?"
+      }
+     ],
+     "ord": [
+      {
+       "sv": "en helg",
+       "en": "a weekend · i helgen = at the weekend"
+      },
+      {
+       "sv": "gjorde",
+       "en": "did (göra → gjorde)"
+      },
+      {
+       "sv": "hade",
+       "en": "had (ha → hade)"
+      },
+      {
+       "sv": "lugn",
+       "en": "calm, quiet"
+      },
+      {
+       "sv": "vaknade",
+       "en": "woke up"
+      },
+      {
+       "sv": "sent",
+       "en": "late"
+      },
+      {
+       "sv": "halv tio",
+       "en": "half past nine, 9.30"
+      },
+      {
+       "sv": "städade",
+       "en": "cleaned"
+      }
+     ],
+     "fortsattning": {
+      "sv": "På söndagen åkte de till parken …",
+      "en": "On Sunday they went to the park …"
+     }
+    },
+    {
+     "id": "3-2",
+     "nr": 13,
+     "titel": "En promenad i parken",
+     "en": "A walk in the park",
+     "meningar": [
+      {
+       "sv": "På söndagen åkte familjen buss till parken.",
+       "en": "On Sunday the family took the bus to the park."
+      },
+      {
+       "sv": "De gick på promenad i två timmar.",
+       "en": "They went for a walk for two hours."
+      },
+      {
+       "sv": "Elsa och Olle lekte på lekplatsen.",
+       "en": "Elsa and Olle played at the playground."
+      },
+      {
+       "sv": "Sedan drack Erik kaffe och barnen åt glass.",
+       "en": "Then Erik drank coffee and the children ate ice cream."
+      },
+      {
+       "vem": "Karin",
+       "sv": "Var det inte kallt?",
+       "en": "Wasn't it cold?"
+      },
+      {
+       "vem": "Erik",
+       "sv": "Nej, det var soligt och fint.",
+       "en": "No, it was sunny and nice."
+      }
+     ],
+     "aha": {
+      "rubrik": "Everyday verbs change their vowel",
+      "html": "<p>Some of the most common verbs don't take <i>-de</i>. They change instead, just like English <i>go → went</i>:</p><table class='par'><tr><td>går</td><td>gick</td><td>went, walked</td></tr><tr><td>äter</td><td>åt</td><td>ate</td></tr><tr><td>dricker</td><td>drack</td><td>drank</td></tr><tr><td>är</td><td>var</td><td>was, were</td></tr><tr><td>gör</td><td>gjorde</td><td>did</td></tr><tr><td>har</td><td>hade</td><td>had</td></tr></table><p>These are the verbs you use every day, so they are worth learning by heart. A few take <i>-te</i> instead of <i>-de</i>: <i>åker → åkte, leker → lekte</i>.</p><p class='bonus'><b>på, not för:</b> <i>gå <b>på</b> promenad</i> = go for a walk. In the same way: <i><b>på</b> fika, <b>till</b> middag</i>. Swedish <i>för</i> looks like English <i>for</i>, but it is often the wrong word here.</p>"
+     },
+     "testa": [
+      {
+       "typ": "skriv",
+       "fraga": "De ___ på promenad.",
+       "grund": "gå",
+       "ratt": "gick",
+       "forklaring": "gå → gick"
+      },
+      {
+       "typ": "val",
+       "fraga": "Vi gick ___ promenad.",
+       "alternativ": [
+        "på",
+        "för",
+        "till"
+       ],
+       "ratt": "på",
+       "forklaring": "gå på promenad = go for a walk. Not för!"
+      },
+      {
+       "typ": "skriv",
+       "fraga": "Barnen ___ glass.",
+       "grund": "äta",
+       "ratt": "åt",
+       "forklaring": "äta → åt"
+      },
+      {
+       "typ": "ratta",
+       "ord": [
+        "Sedan",
+        "drack",
+        "Erik",
+        "kaffe"
+       ],
+       "felord": [
+        "Sedan",
+        "Erik",
+        "drack",
+        "kaffe"
+       ],
+       "slut": "."
+      },
+      {
+       "typ": "lyssna",
+       "sv": "Nej, det var soligt och fint.",
+       "fraga": "What was the weather like?",
+       "alternativ": [
+        "Sunny and nice",
+        "Cold and rainy",
+        "Windy"
+       ],
+       "ratt": "Sunny and nice"
+      }
+     ],
+     "ord": [
+      {
+       "sv": "åkte",
+       "en": "went (by bus, car)"
+      },
+      {
+       "sv": "en buss",
+       "en": "a bus"
+      },
+      {
+       "sv": "gick",
+       "en": "went, walked (gå → gick)"
+      },
+      {
+       "sv": "på promenad",
+       "en": "for a walk"
+      },
+      {
+       "sv": "en timme",
+       "en": "an hour · två timmar = two hours"
+      },
+      {
+       "sv": "lekte",
+       "en": "played"
+      },
+      {
+       "sv": "drack",
+       "en": "drank (dricka → drack)"
+      },
+      {
+       "sv": "åt",
+       "en": "ate (äta → åt)"
+      }
+     ],
+     "fortsattning": {
+      "sv": "På måndag ska Elsa berätta om helgen i skolan.",
+      "en": "On Monday Elsa is going to tell about the weekend at school."
+     }
+    },
+    {
+     "id": "3-3",
+     "nr": 14,
+     "titel": "Elsa berättar",
+     "en": "Elsa tells her story",
+     "meningar": [
+      {
+       "sv": "I skolan berättar Elsa om helgen.",
+       "en": "At school, Elsa tells about the weekend."
+      },
+      {
+       "vem": "Elsa",
+       "sv": "Först vaknade jag tidigt.",
+       "en": "First I woke up early."
+      },
+      {
+       "vem": "Elsa",
+       "sv": "Sedan hjälpte jag pappa med frukosten.",
+       "en": "Then I helped dad with breakfast."
+      },
+      {
+       "vem": "Elsa",
+       "sv": "Efter det åkte vi till parken och lekte.",
+       "en": "After that we went to the park and played."
+      },
+      {
+       "vem": "Elsa",
+       "sv": "På kvällen tittade vi på film.",
+       "en": "In the evening we watched a film."
+      },
+      {
+       "vem": "Elsa",
+       "sv": "Till slut somnade Olle i soffan!",
+       "en": "In the end Olle fell asleep on the sofa!"
+      }
+     ],
+     "aha": {
+      "rubrik": "Först, sedan, efter det, till slut",
+      "html": "<p>These words help you tell a story in order. After each one, the <b>verb comes next</b> (place two), <b>before</b> <i>jag, vi</i> or <i>Olle</i>:</p><div class='v2'><span>Först</span><span class='verb'>vaknade</span><span>jag tidigt.</span></div><div class='v2'><span>Sedan</span><span class='verb'>hjälpte</span><span>jag pappa.</span></div><div class='v2'><span>Efter det</span><span class='verb'>åkte</span><span>vi till parken.</span></div><div class='v2'><span>Till slut</span><span class='verb'>somnade</span><span>Olle.</span></div><p class='tips'>This is the mistake almost every learner makes: <i>Sen vi åkte …</i> Say <i>Sen <b>åkte</b> vi …</i> It feels strange at first, so practise it out loud until it sounds right.</p><p class='bonus'><b>Good to know:</b> in speech, <i>sedan</i> is usually just <i>sen</i>. And <i>tidigt</i> (early) gives <i>tidigare</i> (earlier).</p>"
+     },
+     "testa": [
+      {
+       "typ": "ordna",
+       "ord": [
+        "Till slut",
+        "somnade",
+        "Olle",
+        "i soffan"
+       ],
+       "slut": "."
+      },
+      {
+       "typ": "ratta",
+       "ord": [
+        "Efter det",
+        "åkte",
+        "vi",
+        "till parken"
+       ],
+       "felord": [
+        "Efter det",
+        "vi",
+        "åkte",
+        "till parken"
+       ],
+       "slut": "."
+      },
+      {
+       "typ": "skriv",
+       "fraga": "Först ___ jag tidigt.",
+       "grund": "vakna",
+       "ratt": "vaknade",
+       "forklaring": "After Först: the verb comes next. Först vaknade jag."
+      },
+      {
+       "typ": "lyssna",
+       "sv": "På kvällen tittade vi på film.",
+       "fraga": "What did they do in the evening?",
+       "alternativ": [
+        "Watched a film",
+        "Went for a walk",
+        "Had dinner at Karin's"
+       ],
+       "ratt": "Watched a film"
+      },
+      {
+       "typ": "diktamen",
+       "sv": "Sedan hjälpte jag pappa."
+      },
+      {
+       "typ": "skriv",
+       "fraga": "Efter det ___ vi till parken.",
+       "grund": "åka",
+       "ratt": "åkte",
+       "forklaring": "After Efter det: the verb comes next. Efter det åkte vi."
+      }
+     ],
+     "ord": [
+      {
+       "sv": "först",
+       "en": "first"
+      },
+      {
+       "sv": "tidigt",
+       "en": "early · tidigare = earlier"
+      },
+      {
+       "sv": "hjälpte",
+       "en": "helped"
+      },
+      {
+       "sv": "efter det",
+       "en": "after that"
+      },
+      {
+       "sv": "tittade på film",
+       "en": "watched a film"
+      },
+      {
+       "sv": "till slut",
+       "en": "finally, in the end"
+      },
+      {
+       "sv": "somnade",
+       "en": "fell asleep"
+      },
+      {
+       "sv": "en soffa",
+       "en": "a sofa"
+      }
+     ],
+     "fortsattning": {
+      "sv": "Erik skickar ett sms till Karin.",
+      "en": "Erik sends a text message to Karin."
+     }
+    },
+    {
+     "id": "3-4",
+     "nr": 15,
+     "titel": "Ett sms till Karin",
+     "en": "A text message to Karin",
+     "meningar": [
+      {
+       "vem": "Erik",
+       "sv": "Hej Karin! Tack för senast, maten var jättegod.",
+       "en": "Hi Karin! Thanks for last time, the food was delicious."
+      },
+      {
+       "vem": "Erik",
+       "sv": "Vill du komma på fika hos oss på lördag?",
+       "en": "Would you like to come for fika at our place on Saturday?"
+      },
+      {
+       "vem": "Karin",
+       "sv": "Ja, gärna! Vilken tid ska jag komma?",
+       "en": "Yes, I'd love to! What time should I come?"
+      },
+      {
+       "vem": "Erik",
+       "sv": "Kan du komma klockan tre?",
+       "en": "Can you come at three?"
+      },
+      {
+       "vem": "Karin",
+       "sv": "Absolut! Jag tar med kakor.",
+       "en": "Absolutely! I'll bring some cookies."
+      },
+      {
+       "vem": "Erik",
+       "sv": "Toppen! Vi ses på lördag!",
+       "en": "Great! See you on Saturday!"
+      }
+     ],
+     "aha": {
+      "rubrik": "Åker or åka?",
+      "html": "<p>Three forms of the same verb, and when to use them:</p><table class='par'><tr><td>Vi <b>åker</b> hem.</td><td>now, or usually (present)</td></tr><tr><td>Vi ska <b>åka</b> hem.</td><td>after <i>vill, ska, kan, måste</i> (base form)</td></tr><tr><td>Vi <b>åkte</b> hem.</td><td>yesterday (past)</td></tr></table><p>Look at the text messages: <i>Vill du <b>komma</b>? Vilken tid ska jag <b>komma</b>? Kan du <b>komma</b>?</i> Every time there is a helper verb first, so the next verb is in the base form.</p><p class='tips'>English works the same way: <i>we go</i>, but <i>we can go</i>. Never <i>we can goes</i>.</p><p class='bonus'><b>Bra att veta:</b> <i>Tack för senast!</i> means “thanks for last time”. Swedes say or write it after they have visited someone, often the next time they meet.</p>"
+     },
+     "testa": [
+      {
+       "typ": "skriv",
+       "fraga": "Vill du ___ på fika?",
+       "grund": "komma",
+       "ratt": "komma",
+       "forklaring": "After vill: the base form."
+      },
+      {
+       "typ": "val",
+       "fraga": "Vi ska ___ hem.",
+       "alternativ": [
+        "åka",
+        "åker",
+        "åkte"
+       ],
+       "ratt": "åka",
+       "forklaring": "After ska: the base form åka."
+      },
+      {
+       "typ": "val",
+       "fraga": "Igår ___ vi hem.",
+       "alternativ": [
+        "åkte",
+        "åka",
+        "åker"
+       ],
+       "ratt": "åkte",
+       "forklaring": "Igår (yesterday) → past tense: åkte."
+      },
+      {
+       "typ": "skriv",
+       "fraga": "Karin ___ med kakor.",
+       "grund": "ta",
+       "ratt": "tar",
+       "forklaring": "No helper verb, so present tense: tar."
+      },
+      {
+       "typ": "diktamen",
+       "sv": "Vi ses på lördag!"
+      },
+      {
+       "typ": "fritt",
+       "uppgift": "Write a short text message to a friend. Invite them for fika.",
+       "exempel": "Hej! Vill du komma på fika hos mig på söndag? Kan du komma klockan två?",
+       "kolla": [
+        "After <i>vill, kan, ska</i>: the base form (<i>komma</i>)",
+        "<i>på fika</i>, not <i>för fika</i>",
+        "A day and a time (<i>på söndag, klockan två</i>)"
+       ]
+      }
+     ],
+     "ord": [
+      {
+       "sv": "tack för senast",
+       "en": "thanks for last time"
+      },
+      {
+       "sv": "komma",
+       "en": "come"
+      },
+      {
+       "sv": "på fika",
+       "en": "for fika, for coffee and something sweet"
+      },
+      {
+       "sv": "oss",
+       "en": "us · hos oss = at our place"
+      },
+      {
+       "sv": "lördag",
+       "en": "Saturday · på lördag = on Saturday"
+      },
+      {
+       "sv": "vilken tid",
+       "en": "what time"
+      },
+      {
+       "sv": "tar med",
+       "en": "bring, brings"
+      },
+      {
+       "sv": "vi ses",
+       "en": "see you"
+      }
+     ],
+     "fortsattning": {
+      "sv": "Nu är det din tur att berätta!",
+      "en": "Now it's your turn to tell!"
+     }
+    },
+    {
+     "id": "3-5",
+     "nr": 16,
+     "titel": "Nu berättar du",
+     "en": "Your turn",
+     "meningar": [
+      {
+       "sv": "Helgen var lugn och skön för familjen.",
+       "en": "The weekend was calm and nice for the family."
+      },
+      {
+       "sv": "På lördagen städade de och handlade mat.",
+       "en": "On Saturday they cleaned and went food shopping."
+      },
+      {
+       "sv": "På eftermiddagen kom Karin på fika.",
+       "en": "In the afternoon Karin came for fika."
+      },
+      {
+       "sv": "Hon tog med kakor, och barnen åt nästan alla.",
+       "en": "She brought cookies, and the children ate almost all of them."
+      },
+      {
+       "sv": "På söndagen åkte de till parken och gick på promenad.",
+       "en": "On Sunday they went to the park and went for a walk."
+      },
+      {
+       "sv": "Till slut var alla trötta men glada.",
+       "en": "In the end everyone was tired but happy."
+      },
+      {
+       "sv": "Olle somnade redan klockan sju.",
+       "en": "Olle fell asleep already at seven."
+      }
+     ],
+     "aha": {
+      "rubrik": "Your turn: tell your own story",
+      "html": "<p>You now have everything you need to tell what you did. Three things to remember:</p><ol><li><b>Past tense all the way:</b> <i>vaknade, städade, gick, åt, var, kom</i>.</li><li><b>Verb in place two</b> after time words: <i>På lördagen <b>städade</b> de. Sedan <b>åkte</b> vi.</i></li><li><b>på, not för:</b> <i>på promenad, på fika, till middag</i>.</li></ol><p class='tips'>Tip: say your story out loud first, then write it down. Afterwards, check one thing at a time: first the verbs, then the word order.</p>"
+     },
+     "testa": [
+      {
+       "typ": "skriv",
+       "fraga": "På söndagen ___ de till parken.",
+       "grund": "åka",
+       "ratt": "åkte",
+       "forklaring": "åka → åkte"
+      },
+      {
+       "typ": "ratta",
+       "ord": [
+        "Till slut",
+        "var",
+        "alla",
+        "trötta"
+       ],
+       "felord": [
+        "Till slut",
+        "alla",
+        "var",
+        "trötta"
+       ],
+       "slut": "."
+      },
+      {
+       "typ": "lyssna",
+       "sv": "Olle somnade redan klockan sju.",
+       "fraga": "When did Olle fall asleep?",
+       "alternativ": [
+        "At seven",
+        "At nine",
+        "At half past six"
+       ],
+       "ratt": "At seven"
+      },
+      {
+       "typ": "skriv",
+       "fraga": "På eftermiddagen ___ Karin på fika.",
+       "grund": "komma",
+       "ratt": "kom",
+       "forklaring": "komma → kom"
+      },
+      {
+       "typ": "diktamen",
+       "sv": "Helgen var lugn och skön."
+      },
+      {
+       "typ": "fritt",
+       "uppgift": "Write three sentences about your own weekend. Use först, sedan and till slut.",
+       "exempel": "Först vaknade vi sent. Sedan åkte vi och handlade mat. Till slut lagade vi middag tillsammans.",
+       "kolla": [
+        "Past tense all the way (<i>vaknade, åkte, gick</i>)",
+        "Verb in place two after <i>Först, Sedan, Till slut</i>",
+        "<i>på promenad, på fika</i>: på, not för"
+       ]
+      }
+     ],
+     "ord": [
+      {
+       "sv": "skön",
+       "en": "nice, comfortable"
+      },
+      {
+       "sv": "på eftermiddagen",
+       "en": "in the afternoon"
+      },
+      {
+       "sv": "kom",
+       "en": "came (komma → kom)"
+      },
+      {
+       "sv": "tog med",
+       "en": "brought"
+      },
+      {
+       "sv": "nästan",
+       "en": "almost"
+      },
+      {
+       "sv": "trött",
+       "en": "tired · trötta (plural)"
+      },
+      {
+       "sv": "glad",
+       "en": "happy · glada (plural)"
+      },
+      {
+       "sv": "redan",
+       "en": "already"
+      }
+     ],
+     "fortsattning": {
+      "sv": "Nästa kapitel: en dag på förskolan.",
+      "en": "Next chapter: a day at preschool."
+     }
+    }
+   ],
+   "nuKanDu": [
+    {
+     "en": "Tell what you did at the weekend",
+     "sv": "I helgen städade vi och handlade mat."
+    },
+    {
+     "en": "Keep the past tense all the way",
+     "sv": "Vi vaknade sent. Sedan gick vi på promenad."
+    },
+    {
+     "en": "Tell things in order",
+     "sv": "Först vaknade jag. Efter det åkte vi. Till slut somnade Olle."
+    },
+    {
+     "en": "Put the verb second after time words",
+     "sv": "På söndagen åkte vi till parken."
+    },
+    {
+     "en": "Invite someone",
+     "sv": "Vill du komma på fika på lördag?"
+    },
+    {
+     "en": "Write a short text message",
+     "sv": "Tack för senast! Vi ses på lördag!"
+    }
+   ]
+  },
+  {
+   "nr": 4,
    "titel": "Förskolan",
    "en": "Preschool",
    "kommer": true,
@@ -2427,7 +3319,7 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
    "en": "how"
   },
   "var": {
-   "en": "where"
+   "en": "where · also: was, were (vara → var)"
   },
   "många": {
    "en": "many · hur många = how many"
@@ -2700,6 +3592,340 @@ button.ord:focus-visible { outline: 2px solid var(--accent); }
    "en": "day",
    "genus": "en",
    "klass": "s"
+  },
+  "glas": {
+   "en": "a drinking glass",
+   "genus": "ett",
+   "klass": "s"
+  },
+  "tak": {
+   "en": "roof, ceiling",
+   "genus": "ett",
+   "klass": "s"
+  },
+  "låga": {
+   "en": "flame",
+   "genus": "en",
+   "klass": "s"
+  },
+  "måndag": {
+   "en": "Monday · på måndag = on Monday",
+   "genus": "en",
+   "klass": "s"
+  },
+  "gjorde": {
+   "en": "did (göra → gjorde)",
+   "klass": "v"
+  },
+  "helgen": {
+   "en": "the weekend · i helgen = at the weekend",
+   "genus": "en",
+   "klass": "s"
+  },
+  "helg": {
+   "en": "weekend",
+   "genus": "en",
+   "klass": "s"
+  },
+  "hade": {
+   "en": "had (ha → hade)",
+   "klass": "v"
+  },
+  "lugn": {
+   "en": "calm, quiet",
+   "klass": "a"
+  },
+  "lördagen": {
+   "en": "the Saturday · på lördagen = on Saturday",
+   "genus": "en",
+   "klass": "s"
+  },
+  "lördag": {
+   "en": "Saturday",
+   "genus": "en",
+   "klass": "s"
+  },
+  "vaknade": {
+   "en": "woke up (vakna → vaknade)",
+   "klass": "v"
+  },
+  "sent": {
+   "en": "late"
+  },
+  "halv": {
+   "en": "half · halv tio = 9.30"
+  },
+  "tio": {
+   "en": "ten"
+  },
+  "städade": {
+   "en": "cleaned (städa → städade)",
+   "klass": "v"
+  },
+  "handlade": {
+   "en": "shopped (handla → handlade)",
+   "klass": "v"
+  },
+  "lagade": {
+   "en": "cooked, made (laga → lagade)",
+   "klass": "v"
+  },
+  "soppa": {
+   "en": "soup",
+   "genus": "en",
+   "klass": "s"
+  },
+  "mysigt": {
+   "en": "cosy · Vad mysigt! = How cosy!",
+   "klass": "a"
+  },
+  "söndagen": {
+   "en": "the Sunday · på söndagen = on Sunday",
+   "genus": "en",
+   "klass": "s"
+  },
+  "söndag": {
+   "en": "Sunday",
+   "genus": "en",
+   "klass": "s"
+  },
+  "åkte": {
+   "en": "went (by bus, car) (åka → åkte)",
+   "klass": "v"
+  },
+  "parken": {
+   "en": "the park (en park)",
+   "genus": "en",
+   "klass": "s"
+  },
+  "park": {
+   "en": "park",
+   "genus": "en",
+   "klass": "s"
+  },
+  "familjen": {
+   "en": "the family (en familj)",
+   "genus": "en",
+   "klass": "s"
+  },
+  "buss": {
+   "en": "bus",
+   "genus": "en",
+   "klass": "s"
+  },
+  "gick": {
+   "en": "went, walked (gå → gick)",
+   "klass": "v"
+  },
+  "promenad": {
+   "en": "walk · gå på promenad = go for a walk",
+   "genus": "en",
+   "klass": "s"
+  },
+  "timmar": {
+   "en": "hours (en timme)",
+   "genus": "en",
+   "klass": "s"
+  },
+  "timme": {
+   "en": "hour",
+   "genus": "en",
+   "klass": "s"
+  },
+  "lekte": {
+   "en": "played (leka → lekte)",
+   "klass": "v"
+  },
+  "lekplatsen": {
+   "en": "the playground (en lekplats)",
+   "genus": "en",
+   "klass": "s"
+  },
+  "drack": {
+   "en": "drank (dricka → drack)",
+   "klass": "v"
+  },
+  "åt": {
+   "en": "ate (äta → åt)",
+   "klass": "v"
+  },
+  "inte": {
+   "en": "not"
+  },
+  "kallt": {
+   "en": "cold",
+   "klass": "a"
+  },
+  "soligt": {
+   "en": "sunny",
+   "klass": "a"
+  },
+  "fint": {
+   "en": "nice, fine",
+   "klass": "a"
+  },
+  "berätta": {
+   "en": "tell (a story)",
+   "klass": "v"
+  },
+  "berättar": {
+   "en": "tell, tells (a story)",
+   "klass": "v"
+  },
+  "om": {
+   "en": "about"
+  },
+  "tidigt": {
+   "en": "early · tidigare = earlier"
+  },
+  "hjälpte": {
+   "en": "helped (hjälpa → hjälpte)",
+   "klass": "v"
+  },
+  "pappa": {
+   "en": "dad",
+   "genus": "en",
+   "klass": "s"
+  },
+  "frukosten": {
+   "en": "the breakfast (en frukost)",
+   "genus": "en",
+   "klass": "s"
+  },
+  "efter": {
+   "en": "after · efter det = after that"
+  },
+  "tittade": {
+   "en": "looked, watched · tittade på film = watched a film",
+   "klass": "v"
+  },
+  "film": {
+   "en": "film, movie",
+   "genus": "en",
+   "klass": "s"
+  },
+  "slut": {
+   "en": "end · till slut = finally, in the end"
+  },
+  "somnade": {
+   "en": "fell asleep (somna → somnade)",
+   "klass": "v"
+  },
+  "soffan": {
+   "en": "the sofa (en soffa)",
+   "genus": "en",
+   "klass": "s"
+  },
+  "soffa": {
+   "en": "sofa",
+   "genus": "en",
+   "klass": "s"
+  },
+  "skickar": {
+   "en": "send, sends",
+   "klass": "v"
+  },
+  "sms": {
+   "en": "text message",
+   "genus": "ett",
+   "klass": "s"
+  },
+  "senast": {
+   "en": "last time · tack för senast = thanks for last time"
+  },
+  "komma": {
+   "en": "come",
+   "klass": "v"
+  },
+  "oss": {
+   "en": "us · hos oss = at our place",
+   "klass": "p"
+  },
+  "vilken": {
+   "en": "which, what · vilken tid = what time",
+   "klass": "p"
+  },
+  "absolut": {
+   "en": "absolutely, of course"
+  },
+  "kakor": {
+   "en": "cookies, cakes (en kaka)",
+   "genus": "en",
+   "klass": "s"
+  },
+  "kaka": {
+   "en": "cookie, cake",
+   "genus": "en",
+   "klass": "s"
+  },
+  "toppen": {
+   "en": "great!"
+  },
+  "ses": {
+   "en": "see each other · vi ses = see you",
+   "klass": "v"
+  },
+  "nu": {
+   "en": "now"
+  },
+  "din": {
+   "en": "your · din tur = your turn",
+   "klass": "p"
+  },
+  "tur": {
+   "en": "turn",
+   "genus": "en",
+   "klass": "s"
+  },
+  "hon": {
+   "en": "she",
+   "klass": "p"
+  },
+  "tog": {
+   "en": "took · tog med = brought (ta → tog)",
+   "klass": "v"
+  },
+  "nästan": {
+   "en": "almost"
+  },
+  "alla": {
+   "en": "all, everyone",
+   "klass": "p"
+  },
+  "trötta": {
+   "en": "tired (plural)",
+   "klass": "a"
+  },
+  "trött": {
+   "en": "tired",
+   "klass": "a"
+  },
+  "glada": {
+   "en": "happy (plural)",
+   "klass": "a"
+  },
+  "glad": {
+   "en": "happy",
+   "klass": "a"
+  },
+  "redan": {
+   "en": "already"
+  },
+  "först": {
+   "en": "first"
+  },
+  "eftermiddagen": {
+   "en": "the afternoon · på eftermiddagen = in the afternoon",
+   "genus": "en",
+   "klass": "s"
+  },
+  "skön": {
+   "en": "nice, comfortable",
+   "klass": "a"
+  },
+  "kom": {
+   "en": "came (komma → kom)",
+   "klass": "v"
   }
  }
 }
@@ -3270,10 +4496,14 @@ function delTesta(steg) {
 function fraga(q, nasta, autoSpela) {
   const box = h('div');
   const nastaKnapp = () => h('div', { class: 'knappar' }, h('button', { class: 'knapp primar', onclick: nasta }, 'Nästa →'));
-  if (q.typ === 'ordna') {
+  if (q.typ === 'skriv' || q.typ === 'diktamen') return skrivFraga(q, box, nastaKnapp, autoSpela);
+  if (q.typ === 'minpar') return minparFraga(q, box, nastaKnapp, autoSpela);
+  if (q.typ === 'fritt') return frittFraga(q, box, nastaKnapp);
+  if (q.typ === 'ordna' || q.typ === 'ratta') {
     const svar = q.ord.join(' ') + (q.slut || '');
-    let ordning = blanda(q.ord.map((o, k) => k));
-    while (q.ord.length > 1 && ordning.every((k, j) => k === j)) ordning = blanda(ordning);
+    // rätta meningen: brickorna börjar i den felaktiga ordningen
+    let ordning = q.felord ? q.felord.map(w => q.ord.indexOf(w)) : blanda(q.ord.map((o, k) => k));
+    while (!q.felord && q.ord.length > 1 && ordning.every((k, j) => k === j)) ordning = blanda(ordning);
     const valda = [];
     const rad = h('div', { class: 'svarsrad', 'aria-label': 'Din mening' });
     const brickor = h('div', { class: 'brickor' });
@@ -3297,7 +4527,10 @@ function fraga(q, nasta, autoSpela) {
       }
     };
     ritaOm();
-    box.append(h('p', { class: 'fraga', lang: 'en', style: 'font-family:var(--sans);font-size:1rem' }, 'Put the words in the right order:'), rad, brickor, respons);
+    if (q.felord) box.append(h('p', { class: 'fraga', lang: 'en', style: 'font-family:var(--sans);font-size:1rem' }, '🔧 This sentence has a mistake:'),
+      h('p', { class: 'felmening', lang: 'sv' }, q.felord.join(' ') + (q.slut || '')));
+    box.append(h('p', { class: 'fraga', lang: 'en', style: 'font-family:var(--sans);font-size:1rem' },
+      q.felord ? 'Put the words in the right order:' : 'Put the words in the right order:'), rad, brickor, respons);
     return box;
   }
   // val och lyssna
@@ -3331,6 +4564,113 @@ function fraga(q, nasta, autoSpela) {
     }
   } }, alt));
   box.append(h('div', { class: 'alternativ' }, knappar), respons);
+  return box;
+}
+
+// ---------- Skriv: böj verbet och diktamen ----------
+const normText = t => t.toLowerCase().replace(/[.,!?;:"“”]/g, ' ').replace(/\s+/g, ' ').trim();
+const utanPrickar = t => normText(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+function skrivFalt(onEnter, flerrad) {
+  const falt = h(flerrad ? 'textarea' : 'input', { class: 'skrivfalt', lang: 'sv', autocomplete: 'off', autocapitalize: 'off',
+    autocorrect: 'off', spellcheck: 'false', 'aria-label': 'Ditt svar', onkeydown: e => { if (e.key === 'Enter' && !flerrad) onEnter(); } });
+  if (!flerrad) falt.type = 'text';
+  const tecken = h('div', { class: 'tecken', 'aria-label': 'Svenska bokstäver' }, ['å', 'ä', 'ö'].map(t => h('button', { type: 'button', class: 'bricka', lang: 'sv',
+    onclick: () => {
+      const a = falt.selectionStart ?? falt.value.length, b = falt.selectionEnd ?? a;
+      falt.value = falt.value.slice(0, a) + t + falt.value.slice(b);
+      falt.focus(); falt.setSelectionRange(a + 1, a + 1);
+    } }, t)));
+  return { falt, tecken };
+}
+function skrivFraga(q, box, nastaKnapp, autoSpela) {
+  const diktamen = q.typ === 'diktamen';
+  const svar = diktamen ? [q.sv] : [].concat(q.ratt);
+  const helMening = diktamen ? q.sv : q.fraga.replace('___', svar[0]);
+  const respons = h('div');
+  let forsok = 0, klar = false;
+  const lyckades = () => {
+    klar = true;
+    falt.disabled = true;
+    spelaEn(helMening);
+    respons.replaceChildren(h('p', { class: 'respons' }, h('b', {}, 'Rätt! '), h('span', { lang: 'sv' }, helMening),
+      q.forklaring ? h('span', { lang: 'en' }, ' ' + q.forklaring) : null), nastaKnapp());
+  };
+  const kolla = () => {
+    if (klar || !falt.value.trim()) return;
+    const v = normText(falt.value);
+    if (svar.some(r => normText(r) === v)) return lyckades();
+    forsok++;
+    const delar = [];
+    if (svar.some(r => utanPrickar(r) === utanPrickar(falt.value))) delar.push(h('span', { lang: 'en' }, 'Almost! Check å, ä and ö.'));
+    else if (diktamen) {
+      const ratt = normText(q.sv).split(' '), hennes = v.split(' ');
+      delar.push(h('span', { lang: 'en' }, 'Not quite. Green words are right: '),
+        h('span', { class: 'diff', lang: 'sv' }, ratt.map((w, j) => h('span', { class: hennes[j] === w ? 'ok' : 'fel' }, hennes[j] === w ? w : '___'))));
+    } else delar.push(h('span', { lang: 'en' }, 'Not quite. Try again.'));
+    respons.replaceChildren();
+    fyll(respons, h('p', { class: 'respons fel' }, delar),
+      forsok >= 2 && h('div', { class: 'knappar' }, h('button', { class: 'knapp', onclick: () => {
+        falt.value = svar[0]; lyckades();
+      } }, 'Visa svaret')));
+  };
+  const { falt, tecken } = skrivFalt(kolla);
+  if (diktamen) {
+    fyll(box, h('p', { class: 'fraga', lang: 'en', style: 'font-family:var(--sans);font-size:1rem' }, '✍️ Listen and write what you hear:'),
+      h('div', { class: 'lyssnaknapp' },
+        h('button', { class: 'spela text', html: PLAY + 'Lyssna', onclick: () => spelaEn(q.sv) }),
+        h('button', { class: 'spela text', html: PLAY + 'Långsamt', onclick: () => spelaEn(q.sv, true) })));
+    if (autoSpela) setTimeout(() => { if (box.isConnected) spelaEn(q.sv); }, 300);
+  } else {
+    const [fore, efter] = q.fraga.split('___');
+    fyll(box, h('p', { class: 'fraga', lang: 'en', style: 'font-family:var(--sans);font-size:1rem' }, '🔁 Write the right form of the verb:'),
+      h('p', { class: 'fraga', lang: 'sv' }, fore, h('span', { class: 'lucka' }, '\u00a0'), efter, ' ', h('span', { class: 'grundform' }, `(${q.grund})`)));
+  }
+  box.append(h('div', { style: 'margin-top:12px' }, falt), tecken,
+    h('div', { class: 'knappar' }, h('button', { class: 'knapp primar', onclick: kolla }, 'Kolla')), respons);
+  return box;
+}
+
+// ---------- Vilket ord hör du? (minimala par) ----------
+function minparFraga(q, box, nastaKnapp, autoSpela) {
+  const spelat = q.par[Math.floor(Math.random() * q.par.length)];
+  box.dataset.ratt = spelat.sv;
+  const respons = h('div');
+  const knappar = blanda(q.par).map(o => h('button', { class: 'alt sv-alt', lang: 'sv', onclick: e => {
+    const b = e.currentTarget;
+    if (o.sv !== spelat.sv) { b.classList.remove('fel'); void b.offsetWidth; b.classList.add('fel'); b.disabled = true; return; }
+    b.classList.add('ratt');
+    knappar.forEach(k => { k.disabled = true; });
+    respons.replaceChildren(h('p', { class: 'respons' }, h('b', {}, 'Rätt! '), h('span', { lang: 'en' }, 'Listen to both:')),
+      h('ul', { class: 'ordlista' }, q.par.map(x => h('li', {},
+        h('button', { class: 'spela', 'aria-label': 'Lyssna: ' + x.sv, html: PLAY, onclick: () => spelaEn(x.sv) }),
+        h('div', {}, h('div', { class: 'sv-ord', lang: 'sv' }, x.sv), h('div', { class: 'en-ord', lang: 'en' }, x.en))))),
+      nastaKnapp());
+  } }, o.sv));
+  fyll(box, h('p', { class: 'fraga', lang: 'en', style: 'font-family:var(--sans);font-size:1rem' }, '👂 Which word do you hear?'),
+    h('div', { class: 'lyssnaknapp' },
+      h('button', { class: 'spela text', html: PLAY + 'Lyssna', onclick: () => spelaEn(spelat.sv) }),
+      h('button', { class: 'spela text', html: PLAY + 'Långsamt', onclick: () => spelaEn(spelat.sv, true) })),
+    h('div', { class: 'alternativ', style: 'margin-top:14px' }, knappar), respons);
+  if (autoSpela) setTimeout(() => { if (box.isConnected) spelaEn(spelat.sv); }, 300);
+  return box;
+}
+
+// ---------- Fri skrivuppgift (sparas inte) ----------
+function frittFraga(q, box, nastaKnapp) {
+  const respons = h('div');
+  const { falt, tecken } = skrivFalt(() => {}, true);
+  const jamfor = h('button', { class: 'knapp primar', onclick: () => {
+    if (falt.value.trim().split(/\s+/).length < 3) { respons.replaceChildren(h('p', { class: 'respons fel', lang: 'en' }, 'Write a little more first 🙂')); return; }
+    jamfor.remove();
+    respons.replaceChildren(
+      h('p', { lang: 'en', style: 'margin-top:12px' }, h('b', {}, 'Check your text:')),
+      h('ul', { class: 'kollista', lang: 'en' }, q.kolla.map(k => h('li', {}, h('label', {}, h('input', { type: 'checkbox' }), h('span', { html: k }))))),
+      h('div', { class: 'exempel' }, h('div', { class: 'kicker' }, 'Example'), h('p', { class: 'sv', lang: 'sv', style: 'font-size:1.15rem' }, farga(q.exempel))),
+      nastaKnapp());
+  } }, 'Jämför');
+  fyll(box, h('p', { class: 'fraga', lang: 'en', style: 'font-family:var(--sans);font-size:1.05rem' }, '📝 ' + q.uppgift),
+    h('p', { class: 'liten', lang: 'en' }, 'Nobody else sees what you write, and it is not saved.'),
+    falt, tecken, h('div', { class: 'knappar' }, jamfor), respons);
   return box;
 }
 
